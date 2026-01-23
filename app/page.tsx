@@ -247,32 +247,53 @@ export default function Page() {
   }
 
   // ========== 攻略 ==========
-  async function generateGuideFor(place: PlacePoint) {
-    const key = place.name;
-    setGuideError((m) => ({ ...m, [key]: "" }));
-    setGuideLoading((m) => ({ ...m, [key]: true }));
-    try {
-      const g = await postJson<GuideResp>("/api/guide", {
-        lng: place.lng,
-        lat: place.lat,
-        name: place.name,
-        cityHint: cityName.trim() || undefined,
-        cityAdcode: cityAdcode.trim() || undefined,
-      });
-      setGuideData((m) => ({ ...m, [key]: g }));
+async function generateGuideFor(place: PlacePoint) {
+  const key = place.name;
+  setGuideError((m) => ({ ...m, [key]: "" }));
+  setGuideLoading((m) => ({ ...m, [key]: true }));
 
-      const sum = await postJson<GuideSummaryResp>("/api/guide-summary", {
-        place: { name: place.name, lng: place.lng, lat: place.lat },
-        guide: g,
-        // 你后端已做 TTL 缓存和 foodPick 限定
-      });
-      setGuideSummary((m) => ({ ...m, [key]: sum }));
-    } catch (e: any) {
-      setGuideError((m) => ({ ...m, [key]: e?.message ?? String(e) }));
-    } finally {
-      setGuideLoading((m) => ({ ...m, [key]: false }));
+  try {
+    // 1) 先拉 /api/guide
+    const center = { lng: place.lng, lat: place.lat, name: place.name };
+
+    const g = await postJson<GuideResp>("/api/guide", {
+      center,
+      lng: place.lng,
+      lat: place.lat,
+      name: place.name,
+      cityHint: cityName.trim() || undefined,
+      cityAdcode: cityAdcode.trim() || undefined,
+    });
+
+    if (!g?.center || !Number.isFinite(g.center.lng) || !Number.isFinite(g.center.lat)) {
+      throw new Error("guide 返回缺少 center{lng,lat}");
     }
+    if (!Array.isArray(g?.sections) || g.sections.length === 0) {
+      throw new Error("guide 返回缺少 sections");
+    }
+
+    setGuideData((m) => ({ ...m, [key]: g }));
+
+    // 2) 再拉 /api/guide-summary
+    const raw = await postJson<any>("/api/guide-summary", {
+      place: { name: place.name, lng: place.lng, lat: place.lat },
+      sections: g.sections,
+      center: g.center,
+    });
+
+    // ✅ 兼容：后端可能返回 {summary:{...}} 或直接 {...}
+    const sum: GuideSummaryResp = raw?.summary ?? raw;
+
+    setGuideSummary((m) => ({ ...m, [key]: sum }));
+  } catch (e: any) {
+    setGuideError((m) => ({ ...m, [key]: e?.message ?? String(e) }));
+  } finally {
+    setGuideLoading((m) => ({ ...m, [key]: false }));
   }
+}
+
+
+
 
   async function useMyLocation() {
     if (!navigator.geolocation) {
