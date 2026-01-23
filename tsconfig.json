@@ -1,18 +1,17 @@
 {
   "compilerOptions": {
-    "baseUrl": ".", // 设置根路径
+    "baseUrl": ".", 
     "paths": {
       "@/*": [
         "./app/*"
-      ], // 用 @/ 来访问 app 目录
+      ],
       "@/utils": [
         "./utils"
-      ] // 用 @/utils 来访问 utils 目录
+      ]
     },
-    "strict": true, // 启用严格模式
-    "esModuleInterop": true, // 启用 ES 模块兼容
-    "skipLibCheck": true // 跳过库的类型检查
-    ,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "target": "ES2017",
     "lib": [
       "dom",
@@ -36,8 +35,7 @@
   "include": [
     "app/**/*",
     "components/**/*",
-    "utils/**/*" // 确保包括 utils 目录
-    ,
+    "utils/**/*",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
