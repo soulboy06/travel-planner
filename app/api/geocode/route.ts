@@ -51,6 +51,7 @@ async function poiSearch(cityHint: string | undefined, address: string): Promise
   url.searchParams.set("key", key);
   url.searchParams.set("keywords", address);  // 用地址进行关键词查询
   if (cityHint) url.searchParams.set("city", cityHint.trim());  // 如果提供了城市名称，进行限制查询
+  url.searchParams.set("citylimit", "true");  // 限制只搜索目标城市
 
   const resp = await fetch(url.toString(), { cache: "no-store" });
   const j = await resp.json();

@@ -73,7 +73,12 @@ function isInTargetCity(p: PlacePoint, expectAdcodePrefix?: string, cityHint?: s
   return true; // 没约束就不拦
 }
 
-async function geocodeCore(queryCity: string | undefined, address: string): Promise<PlacePoint> {
+async function geocodeCore(
+  queryCity: string | undefined,
+  expectAdcodePrefix: string | undefined,
+  cityHint: string | undefined,
+  address: string
+): Promise<PlacePoint> {
   const key = mustEnv("AMAP_WEB_KEY");
   const url = new URL("https://restapi.amap.com/v3/geocode/geo");
   url.searchParams.set("key", key);
@@ -83,20 +88,30 @@ async function geocodeCore(queryCity: string | undefined, address: string): Prom
   const resp = await fetch(url.toString(), { cache: "no-store" });
   const j = await resp.json();
 
-  const g = Array.isArray(j?.geocodes) ? j.geocodes[0] : null;
-  if (!g?.location) throw new Error(`Geocode not found: ${address}`);
+  const geocodes = Array.isArray(j?.geocodes) ? j.geocodes : [];
+  if (geocodes.length === 0) throw new Error(`Geocode not found: ${address}`);
 
-  const { lng, lat } = parseLocation(g.location);
-  return {
-    name: address,
-    lng,
-    lat,
-    location: g.location,
-    formatted_address: g.formatted_address,
-    city: g.cityname,
-    citycode: g.citycode,
-    adcode: g.adcode,
-  };
+  // 在所有候选中找第一个在目标城市内的结果
+  for (const g of geocodes) {
+    if (!g?.location) continue;
+    const { lng, lat } = parseLocation(g.location);
+    const candidate: PlacePoint = {
+      name: address,
+      lng,
+      lat,
+      location: g.location,
+      formatted_address: g.formatted_address,
+      city: g.cityname,
+      citycode: g.citycode,
+      adcode: g.adcode,
+    };
+    if (isInTargetCity(candidate, expectAdcodePrefix, cityHint)) {
+      return candidate;
+    }
+  }
+
+  // 如果没有在目标城市内的结果，抛出错误让 poiSearchBest 接管
+  throw new Error(`Geocode not found in target city: ${address}`);
 }
 
 type PoiRaw = any;
@@ -208,10 +223,7 @@ async function geocodeStrict(
 ): Promise<PlacePoint> {
   // 1) geocode
   try {
-    const g = await geocodeCore(queryCity, placeName);
-    if (!isInTargetCity(g, expectAdcodePrefix, cityHint)) {
-      throw new Error(`Out of city: ${placeName} -> ${g.city ?? g.adcode ?? "unknown"}`);
-    }
+    const g = await geocodeCore(queryCity, expectAdcodePrefix, cityHint, placeName);
     g.name = placeName;
     return g;
   } catch {
@@ -422,9 +434,9 @@ export async function POST(req: Request) {
     // 0) 如果没传 cityAdcode，尝试根据 cityHint 自动补全
     if (!body.cityAdcode && body.cityHint) {
       try {
-        // 利用 geocodeStrict 来查城市本身，通常能拿到 adcode
-        // 注意：这里查 "成都市" 或 "成都"
-        const cityInfo = await geocodeCore(undefined, body.cityHint);
+        // 利用 geocodeCore 来查城市本身，通常能拿到 adcode
+        // 注意：这里查 "成都市" 或 "成都"，此时还没有 adcode 约束
+        const cityInfo = await geocodeCore(undefined, undefined, undefined, body.cityHint);
         if (cityInfo && cityInfo.adcode) {
           body.cityAdcode = String(cityInfo.adcode);
           // 更新约束条件
