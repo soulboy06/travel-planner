@@ -10,7 +10,7 @@ type PlacePoint = {
   name: string;
   lng: number;
   lat: number;
-  location: string; // "lng,lat"
+  location: string;
   formatted_address?: string;
   city?: string;
   citycode?: string;
@@ -48,7 +48,7 @@ type GuidePoi = {
 };
 
 type GuideSection = {
-  key: string; // food/coffee/sight/metro/store...
+  key: string;
   title: string;
   items: GuidePoi[];
 };
@@ -82,9 +82,7 @@ async function postJson<T>(url: string, body: any): Promise<T> {
   let data: any = null;
   try {
     data = txt ? JSON.parse(txt) : null;
-  } catch {
-    // ignore
-  }
+  } catch { }
   if (!res.ok) {
     const msg = data?.error || txt || `Request failed: ${res.status}`;
     throw new Error(msg);
@@ -104,19 +102,12 @@ function formatDuration(s?: number) {
   if (mins < 60) return `${mins} 分钟`;
   const h = Math.floor(mins / 60);
   const r = mins % 60;
-  return `${h} 小时 ${r} 分钟`;
-}
-
-function badgeForMode(mode: "transit" | "walk") {
-  return mode === "transit"
-    ? { text: "公交/地铁", cls: "bg-blue-600/10 text-blue-700 border-blue-200" }
-    : { text: "步行", cls: "bg-emerald-600/10 text-emerald-700 border-emerald-200" };
+  return `${h}h ${r}m`;
 }
 
 function tryParseCoord(input: string): { lng: number; lat: number } | null {
   const t = input.trim();
   if (!t) return null;
-  // 支持 "lng,lat" 或 "lng lat"
   const parts = t.includes(",") ? t.split(",") : t.split(/\s+/);
   if (parts.length < 2) return null;
   const lng = Number(parts[0]);
@@ -126,73 +117,54 @@ function tryParseCoord(input: string): { lng: number; lat: number } | null {
 }
 
 export default function Page() {
-  const [tab, setTab] = useState<"input" | "result" | "guide" | "settings">("input");
-
-  // 城市
+  const [tab, setTab] = useState<"input" | "result" | "guide">("input");
   const [cityName, setCityName] = useState<string>("成都");
-  const [cityAdcode, setCityAdcode] = useState<string>(""); // 自动填充
+  const [cityAdcode, setCityAdcode] = useState<string>("");
   const [cityAutoStatus, setCityAutoStatus] = useState<string>("");
-
-  // 起点
   const [originMode, setOriginMode] = useState<"text" | "coord">("text");
   const [originText, setOriginText] = useState<string>("天府广场");
-  const [originCoordText, setOriginCoordText] = useState<string>(""); // "lng,lat"
+  const [originCoordText, setOriginCoordText] = useState<string>("");
   const [originCoordName, setOriginCoordName] = useState<string>("我的位置");
   const [locating, setLocating] = useState(false);
-
-  // 地点列表
   const [placesText, setPlacesText] = useState<string>("春熙路\n宽窄巷子\n武侯祠\n东郊记忆");
-
-  // 生成结果
   const [optimizing, setOptimizing] = useState(false);
   const [optError, setOptError] = useState<string>("");
   const [opt, setOpt] = useState<OptimizeResp | null>(null);
-
-  // 攻略缓存
   const [guideLoading, setGuideLoading] = useState<Record<string, boolean>>({});
   const [guideError, setGuideError] = useState<Record<string, string>>({});
   const [guideData, setGuideData] = useState<Record<string, GuideResp | null>>({});
   const [guideSummary, setGuideSummary] = useState<Record<string, GuideSummaryResp | null>>({});
 
   const places = useMemo(() => {
-    return placesText
-      .split("\n")
-      .map((x) => x.trim())
-      .filter(Boolean);
+    return placesText.split("\n").map((x) => x.trim()).filter(Boolean);
   }, [placesText]);
 
   const orderedPlaces = opt?.orderedPlaces ?? [];
 
-  // ========== 城市中文名 -> adcode 自动匹配（用你现有 /api/geocode） ==========
   const cityDebounceRef = useRef<any>(null);
   useEffect(() => {
     const name = cityName.trim();
     if (!name) return;
-
-    // 防抖
     if (cityDebounceRef.current) clearTimeout(cityDebounceRef.current);
     cityDebounceRef.current = setTimeout(async () => {
       try {
-        setCityAutoStatus("匹配城市代码中…");
-        // 用 geocode 直接查“成都”这种城市名，通常能拿到 adcode
+        setCityAutoStatus("匹配中…");
         const g = await postJson<PlacePoint>("/api/geocode", { city: name, address: name });
         if (g?.adcode) {
           setCityAdcode(String(g.adcode));
-          setCityAutoStatus(`已匹配：${g.adcode}`);
+          setCityAutoStatus(`✓ ${g.adcode}`);
         } else {
-          setCityAutoStatus("未匹配到 adcode（可手填）");
+          setCityAutoStatus("未匹配");
         }
       } catch {
-        setCityAutoStatus("未匹配到 adcode（可手填）");
+        setCityAutoStatus("未匹配");
       }
     }, 400);
-
     return () => {
       if (cityDebounceRef.current) clearTimeout(cityDebounceRef.current);
     };
   }, [cityName]);
 
-  // ========== 生成顺序 ==========
   async function onOptimize() {
     setOptError("");
     setOptimizing(true);
@@ -200,20 +172,17 @@ export default function Page() {
       const origin: OriginInput =
         originMode === "coord"
           ? (() => {
-              const parsed = tryParseCoord(originCoordText);
-              if (!parsed) throw new Error("坐标起点格式不对，请输入：lng,lat");
-              return { type: "coord", lng: parsed.lng, lat: parsed.lat, name: originCoordName || "起点" };
-            })()
+            const parsed = tryParseCoord(originCoordText);
+            if (!parsed) throw new Error("坐标格式错误，请输入 lng,lat");
+            return { type: "coord", lng: parsed.lng, lat: parsed.lat, name: originCoordName || "起点" };
+          })()
           : { type: "text", text: originText.trim() || "起点" };
-
       const payload = {
         origin,
         places,
         cityHint: cityName.trim() || undefined,
         cityAdcode: cityAdcode.trim() || undefined,
       };
-
-      // 关键：你同名跑外地，大概率就是这里没把 cityHint/cityAdcode 传给后端
       const data = await postJson<OptimizeResp>("/api/optimize", payload);
       setOpt(data);
       setTab("result");
@@ -224,80 +193,59 @@ export default function Page() {
     }
   }
 
-  // ========== 复制行程 ==========
   async function copyItinerary() {
     if (!opt) return;
     const lines: string[] = [];
-    lines.push(`起点：${opt.origin.name}`);
-    lines.push(`顺序：${[opt.origin.name, ...opt.orderedPlaces.map((p) => p.name)].join(" → ")}`);
+    lines.push(`🚀 起点：${opt.origin.name}`);
+    lines.push(`📍 路线：${[opt.origin.name, ...opt.orderedPlaces.map((p) => p.name)].join(" → ")}`);
     lines.push("");
-    lines.push("分段导航（webUrl）：");
     opt.legs.forEach((leg, idx) => {
-      const b = badgeForMode(leg.summary.mode);
-      lines.push(
-        `${idx + 1}. ${leg.from.name} → ${leg.to.name}｜${b.text}｜${formatDistance(leg.summary.distanceM)}｜${formatDuration(
-          leg.summary.durationS
-        )}`
-      );
+      const mode = leg.summary.mode === "transit" ? "🚇" : "🚶";
+      lines.push(`${idx + 1}. ${leg.from.name} → ${leg.to.name} ${mode} ${formatDistance(leg.summary.distanceM)} ${formatDuration(leg.summary.durationS)}`);
       lines.push(leg.amap.webUrl);
     });
-
     await navigator.clipboard.writeText(lines.join("\n"));
-    alert("已复制到剪贴板");
+    alert("已复制 ✓");
   }
 
-  // ========== 攻略 ==========
-async function generateGuideFor(place: PlacePoint) {
-  const key = place.name;
-  setGuideError((m) => ({ ...m, [key]: "" }));
-  setGuideLoading((m) => ({ ...m, [key]: true }));
-
-  try {
-    // 1) 先拉 /api/guide
-    const center = { lng: place.lng, lat: place.lat, name: place.name };
-
-    const g = await postJson<GuideResp>("/api/guide", {
-      center,
-      lng: place.lng,
-      lat: place.lat,
-      name: place.name,
-      cityHint: cityName.trim() || undefined,
-      cityAdcode: cityAdcode.trim() || undefined,
-    });
-
-    if (!g?.center || !Number.isFinite(g.center.lng) || !Number.isFinite(g.center.lat)) {
-      throw new Error("guide 返回缺少 center{lng,lat}");
+  async function generateGuideFor(place: PlacePoint) {
+    const key = place.name;
+    setGuideError((m) => ({ ...m, [key]: "" }));
+    setGuideLoading((m) => ({ ...m, [key]: true }));
+    try {
+      const center = { lng: place.lng, lat: place.lat, name: place.name };
+      const g = await postJson<GuideResp>("/api/guide", {
+        center,
+        lng: place.lng,
+        lat: place.lat,
+        name: place.name,
+        cityHint: cityName.trim() || undefined,
+        cityAdcode: cityAdcode.trim() || undefined,
+      });
+      if (!g?.center || !Number.isFinite(g.center.lng) || !Number.isFinite(g.center.lat)) {
+        throw new Error("返回数据异常");
+      }
+      if (!Array.isArray(g?.sections) || g.sections.length === 0) {
+        throw new Error("返回数据异常");
+      }
+      setGuideData((m) => ({ ...m, [key]: g }));
+      const raw = await postJson<any>("/api/guide-summary", {
+        place: { name: place.name, lng: place.lng, lat: place.lat },
+        sections: g.sections,
+        center: g.center,
+      });
+      const sum: GuideSummaryResp = raw?.summary ?? raw;
+      setGuideSummary((m) => ({ ...m, [key]: sum }));
+    } catch (e: any) {
+      setGuideError((m) => ({ ...m, [key]: e?.message ?? String(e) }));
+    } finally {
+      setGuideLoading((m) => ({ ...m, [key]: false }));
     }
-    if (!Array.isArray(g?.sections) || g.sections.length === 0) {
-      throw new Error("guide 返回缺少 sections");
-    }
-
-    setGuideData((m) => ({ ...m, [key]: g }));
-
-    // 2) 再拉 /api/guide-summary
-    const raw = await postJson<any>("/api/guide-summary", {
-      place: { name: place.name, lng: place.lng, lat: place.lat },
-      sections: g.sections,
-      center: g.center,
-    });
-
-    // ✅ 兼容：后端可能返回 {summary:{...}} 或直接 {...}
-    const sum: GuideSummaryResp = raw?.summary ?? raw;
-
-    setGuideSummary((m) => ({ ...m, [key]: sum }));
-  } catch (e: any) {
-    setGuideError((m) => ({ ...m, [key]: e?.message ?? String(e) }));
-  } finally {
-    setGuideLoading((m) => ({ ...m, [key]: false }));
   }
-}
-
-
-
 
   async function useMyLocation() {
     if (!navigator.geolocation) {
-      alert("当前浏览器不支持定位");
+      alert("浏览器不支持定位");
       return;
     }
     setLocating(true);
@@ -309,519 +257,535 @@ async function generateGuideFor(place: PlacePoint) {
         setOriginCoordText(`${lng},${lat}`);
         setLocating(false);
       },
-      (err) => {
-        console.error(err);
-        alert("定位失败：请允许浏览器定位权限");
+      () => {
+        alert("定位失败，请检查权限");
         setLocating(false);
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
   }
 
-  // 页面骨架
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100 text-slate-900">
-      <div className="mx-auto max-w-6xl px-4 py-10">
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight">Travel Planner</h1>
-          <p className="mt-2 text-sm text-slate-500">生成访问顺序 + 每段高德导航链接；攻略按需生成，不展示细步骤</p>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      {/* 装饰背景 */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-4 py-8">
+        {/* 标题区 */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold gradient-text tracking-tight">
+            ✈️ Travel Planner
+          </h1>
+          <p className="mt-3 text-slate-500">智能规划路线 · 一键导航</p>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white/70 shadow-sm backdrop-blur">
-          {/* Tabs */}
-          <div className="flex items-center justify-between px-6 pt-6">
-            <div className="inline-flex rounded-2xl bg-slate-100 p-1">
-              <TabButton active={tab === "input"} onClick={() => setTab("input")} label="插入旅行信息" />
-              <TabButton active={tab === "result"} onClick={() => setTab("result")} label="生成结果" />
-              <TabButton active={tab === "guide"} onClick={() => setTab("guide")} label="生成目的地攻略" />
-              <TabButton active={tab === "settings"} onClick={() => setTab("settings")} label="设置" />
+        {/* 主卡片 */}
+        <div className="glass rounded-3xl shadow-xl overflow-hidden">
+          {/* 导航标签 */}
+          <div className="flex items-center justify-between px-6 py-5 border-b border-white/20">
+            <div className="flex gap-2">
+              <TabButton active={tab === "input"} onClick={() => setTab("input")} icon="📝" label="输入" />
+              <TabButton active={tab === "result"} onClick={() => setTab("result")} icon="🗺️" label="路线" />
+              <TabButton active={tab === "guide"} onClick={() => setTab("guide")} icon="📖" label="攻略" />
             </div>
-
-            <div className="text-xs text-slate-500">
-              {optimizing ? (
-                <span className="inline-flex items-center gap-2">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-blue-500" />
-                  正在生成路线…
-                </span>
-              ) : opt ? (
-                <span className="inline-flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  已生成 {opt.legs.length} 段
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-slate-300" />
-                  等待生成路线
-                </span>
-              )}
-            </div>
+            <StatusBadge optimizing={optimizing} hasResult={!!opt} legCount={opt?.legs.length ?? 0} />
           </div>
 
-          <div className="grid gap-6 px-6 pb-6 pt-6 lg:grid-cols-2">
-            {/* Left column */}
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          {/* 内容区 */}
+          <div className="grid gap-6 p-6 lg:grid-cols-5">
+            {/* 左侧面板 */}
+            <div className="lg:col-span-2 space-y-6">
               {tab === "input" && (
-                <>
-                  <h2 className="text-lg font-semibold">输入旅行信息</h2>
-
-                  {/* City */}
-                  <div className="mt-5">
-                    <label className="text-sm font-medium text-slate-700">城市提示（强烈建议固定）</label>
-                    <div className="mt-2 grid gap-3 sm:grid-cols-2">
-                      <input
-                        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-400"
-                        value={cityName}
-                        onChange={(e) => setCityName(e.target.value)}
-                        placeholder="例如：成都 / 北京"
-                      />
-                      <input
-                        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-400"
-                        value={cityAdcode}
-                        onChange={(e) => setCityAdcode(e.target.value)}
-                        placeholder="城市 adcode（可自动填）"
-                      />
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500">
-                      {cityAutoStatus || "提示：固定城市能大幅减少“同名跑外地”的问题。"}
-                    </p>
-                  </div>
-
-                  {/* Origin mode */}
-                  <div className="mt-6">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-slate-700">起点（可选：文本 / 坐标）</label>
-                      <button
-                        onClick={useMyLocation}
-                        className="text-xs font-medium text-blue-600 hover:text-blue-700"
-                        disabled={locating}
-                      >
-                        {locating ? "定位中…" : "使用定位"}
-                      </button>
-                    </div>
-
-                    <div className="mt-3 flex gap-2">
-                      <button
-                        onClick={() => setOriginMode("text")}
-                        className={cn(
-                          "flex-1 rounded-xl border px-4 py-2 text-sm font-medium",
-                          originMode === "text"
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                        )}
-                      >
-                        文本输入
-                      </button>
-                      <button
-                        onClick={() => setOriginMode("coord")}
-                        className={cn(
-                          "flex-1 rounded-xl border px-4 py-2 text-sm font-medium",
-                          originMode === "coord"
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                        )}
-                      >
-                        坐标输入
-                      </button>
-                    </div>
-
-                    {originMode === "text" ? (
-                      <div className="mt-3">
-                        <input
-                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-400"
-                          value={originText}
-                          onChange={(e) => setOriginText(e.target.value)}
-                          placeholder='例如："天府广场" / "成都东站"'
-                        />
-                      </div>
-                    ) : (
-                      <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                        <input
-                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-400"
-                          value={originCoordText}
-                          onChange={(e) => setOriginCoordText(e.target.value)}
-                          placeholder="lng,lat 例如：104.06,30.67"
-                        />
-                        <input
-                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-400"
-                          value={originCoordName}
-                          onChange={(e) => setOriginCoordName(e.target.value)}
-                          placeholder="起点名称（可选）"
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Places */}
-                  <div className="mt-6">
-                    <label className="text-sm font-medium text-slate-700">地点列表（每行一个）</label>
-                    <textarea
-                      className="mt-2 h-36 w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-400"
-                      value={placesText}
-                      onChange={(e) => setPlacesText(e.target.value)}
-                      placeholder={"例如：\n春熙路\n宽窄巷子\n武侯祠"}
-                    />
-                    <p className="mt-2 text-xs text-slate-500">
-                      规则：分团（K=2）+ 最近邻 + twoOpt 微调；每段公交无方案才 fallback 步行。
-                    </p>
-                  </div>
-
-                  {/* Action */}
-                  <button
-                    onClick={onOptimize}
-                    disabled={optimizing || places.length === 0}
-                    className={cn(
-                      "mt-6 w-full rounded-2xl px-4 py-3 text-sm font-semibold shadow-sm",
-                      optimizing || places.length === 0
-                        ? "bg-slate-200 text-slate-500"
-                        : "bg-blue-600 text-white hover:bg-blue-700"
-                    )}
-                  >
-                    {optimizing ? "生成中…" : "生成顺序 + 导航"}
-                  </button>
-
-                  {optError && (
-                    <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                      {optError}
-                    </div>
-                  )}
-                </>
+                <InputPanel
+                  cityName={cityName}
+                  setCityName={setCityName}
+                  cityAdcode={cityAdcode}
+                  setCityAdcode={setCityAdcode}
+                  cityAutoStatus={cityAutoStatus}
+                  originMode={originMode}
+                  setOriginMode={setOriginMode}
+                  originText={originText}
+                  setOriginText={setOriginText}
+                  originCoordText={originCoordText}
+                  setOriginCoordText={setOriginCoordText}
+                  originCoordName={originCoordName}
+                  setOriginCoordName={setOriginCoordName}
+                  locating={locating}
+                  useMyLocation={useMyLocation}
+                  placesText={placesText}
+                  setPlacesText={setPlacesText}
+                  onOptimize={onOptimize}
+                  optimizing={optimizing}
+                  placesCount={places.length}
+                  optError={optError}
+                />
               )}
 
               {tab === "result" && (
-                <>
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold">生成结果</h2>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={copyItinerary}
-                        disabled={!opt}
-                        className={cn(
-                          "rounded-xl border px-3 py-2 text-xs font-semibold",
-                          opt ? "border-slate-200 bg-white hover:bg-slate-50" : "border-slate-200 bg-slate-100 text-slate-400"
-                        )}
-                      >
-                        一键复制路线文本
-                      </button>
-                      <button
-                        onClick={() => {
-                          setOpt(null);
-                          setTab("input");
-                        }}
-                        className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-slate-50"
-                      >
-                        重新输入
-                      </button>
-                    </div>
-                  </div>
-
-                  {!opt ? (
-                    <EmptyPanel title="还没有结果" desc="请回到“插入旅行信息”生成路线。" />
-                  ) : (
-                    <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                      <div className="text-sm font-semibold text-slate-800">
-                        {opt.origin.name} → {opt.orderedPlaces.map((p) => p.name).join(" → ")}
-                      </div>
-                      <div className="mt-2 text-xs text-slate-500">
-                        共 {opt.legs.length} 段｜点击右侧路线卡片的链接即可打开高德导航
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="mt-6">
-                    <h3 className="text-sm font-semibold text-slate-700">目的地列表</h3>
-                    <div className="mt-3 space-y-2">
-                      {(opt?.orderedPlaces ?? []).map((p, idx) => (
-                        <div
-                          key={`${p.name}-${idx}`}
-                          className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3"
-                        >
-                          <div>
-                            <div className="text-sm font-semibold">{idx + 1}. {p.name}</div>
-                            <div className="text-xs text-slate-500">{p.formatted_address || p.city || "—"}</div>
-                          </div>
-                          <button
-                            onClick={() => setTab("guide")}
-                            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-slate-50"
-                          >
-                            去生成攻略
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
+                <ResultPanel
+                  opt={opt}
+                  copyItinerary={copyItinerary}
+                  onReset={() => { setOpt(null); setTab("input"); }}
+                  onGuide={() => setTab("guide")}
+                />
               )}
 
               {tab === "guide" && (
-                <>
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold">目的地攻略</h2>
-                    <button
-                      onClick={() => setTab(opt ? "result" : "input")}
-                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-slate-50"
-                    >
-                      返回
-                    </button>
-                  </div>
-
-                  {!opt ? (
-                    <EmptyPanel title="还没有路线" desc="请先生成路线，再按目的地生成攻略。" />
-                  ) : (
-                    <div className="mt-4 space-y-3">
-                      {orderedPlaces.map((p, idx) => {
-                        const loading = !!guideLoading[p.name];
-                        const err = guideError[p.name];
-                        const sum = guideSummary[p.name];
-                        return (
-                          <div key={`${p.name}-${idx}`} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                            <div className="flex items-start justify-between gap-3">
-                              <div>
-                                <div className="text-sm font-semibold">
-                                  {idx + 1}. {p.name}
-                                </div>
-                                <div className="mt-1 text-xs text-slate-500">{p.formatted_address || "—"}</div>
-                              </div>
-                              <div className="flex gap-2">
-                                <button
-                                  onClick={() => generateGuideFor(p)}
-                                  disabled={loading}
-                                  className={cn(
-                                    "rounded-xl px-3 py-2 text-xs font-semibold",
-                                    loading ? "bg-slate-200 text-slate-500" : "bg-blue-600 text-white hover:bg-blue-700"
-                                  )}
-                                >
-                                  {loading ? "生成中…" : sum ? "重新生成" : "生成攻略"}
-                                </button>
-                                <a
-                                  className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-slate-50"
-                                  href={`https://uri.amap.com/marker?position=${p.lng},${p.lat}&name=${encodeURIComponent(p.name)}`}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  地图定位
-                                </a>
-                              </div>
-                            </div>
-
-                            {err && (
-                              <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                                {err}
-                              </div>
-                            )}
-
-                            {!sum && !loading && !err && (
-                              <div className="mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
-                                点击“生成攻略”，将依次调用：/api/guide → /api/guide-summary（服务端有 TTL 缓存）
-                              </div>
-                            )}
-
-                            {loading && (
-                              <div className="mt-4 space-y-2">
-                                <div className="h-4 w-2/3 animate-pulse rounded bg-slate-200" />
-                                <div className="h-4 w-1/2 animate-pulse rounded bg-slate-200" />
-                                <div className="h-4 w-3/4 animate-pulse rounded bg-slate-200" />
-                              </div>
-                            )}
-
-                            {sum && (
-                              <div className="mt-4 space-y-3">
-                                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                  <div className="text-sm font-semibold">{sum.title}</div>
-                                  <div className="mt-1 text-xs text-slate-600">
-                                    建议时长：{sum.duration} ｜ 最佳时间：{sum.bestTime}
-                                  </div>
-                                </div>
-
-                                <Accordion title="必做（景区怎么玩）" defaultOpen>
-                                  <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
-                                    {sum.mustDo?.map((x, i) => (
-                                      <li key={i}>{x}</li>
-                                    ))}
-                                  </ul>
-                                </Accordion>
-
-                                <Accordion title="吃什么（只从候选 POI 选）">
-                                  <div className="space-y-2">
-                                    {sum.foodPick?.map((x, i) => (
-                                      <div key={i} className="rounded-xl border border-slate-200 bg-white px-3 py-2">
-                                        <div className="text-sm font-semibold">{x.name}</div>
-                                        <div className="text-xs text-slate-600">{x.why}</div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </Accordion>
-
-                                <Accordion title="提示">
-                                  <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
-                                    {sum.tips?.map((x, i) => (
-                                      <li key={i}>{x}</li>
-                                    ))}
-                                  </ul>
-                                </Accordion>
-
-                                <Accordion title="附近 Plan B">
-                                  <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
-                                    {sum.nearbyPlanB?.map((x, i) => (
-                                      <li key={i}>{x}</li>
-                                    ))}
-                                  </ul>
-                                </Accordion>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {tab === "settings" && (
-                <>
-                  <h2 className="text-lg font-semibold">设置</h2>
-                  <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-                    <div className="font-semibold">建议</div>
-                    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-                      <li>城市提示尽量固定（成都/北京等），减少同名跑外地</li>
-                      <li>如要更强约束：后端 POI 搜索建议加 citylimit=true（你当前 poiSearch 没加）</li>
-                      <li>线路细步骤不展示没问题，导航交给高德链接即可</li>
-                    </ul>
-                  </div>
-                </>
+                <GuidePanel
+                  opt={opt}
+                  orderedPlaces={orderedPlaces}
+                  guideLoading={guideLoading}
+                  guideError={guideError}
+                  guideSummary={guideSummary}
+                  generateGuideFor={generateGuideFor}
+                  onBack={() => setTab(opt ? "result" : "input")}
+                />
               )}
             </div>
 
-            {/* Right column */}
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">路线卡片</h2>
-                {opt && (
-                  <div className="text-xs text-slate-500">
-                    总距离/时间（估算）：{" "}
-                    <span className="font-semibold text-slate-700">
-                      {formatDistance(opt.legs.reduce((s, x) => s + (x.summary.distanceM || 0), 0))}
-                    </span>{" "}
-                    ·{" "}
-                    <span className="font-semibold text-slate-700">
-                      {formatDuration(opt.legs.reduce((s, x) => s + (x.summary.durationS || 0), 0))}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {!opt ? (
-                <div className="mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-500">
-                  生成顺序后，右侧显示每段导航卡片
-                </div>
-              ) : (
-                <div className="mt-4 space-y-3">
-                  {opt.legs.map((leg, idx) => {
-                    const b = badgeForMode(leg.summary.mode);
-                    return (
-                      <div key={idx} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0">
-                            <div className="text-sm font-semibold">
-                              {leg.from.name} <span className="text-slate-400">→</span> {leg.to.name}
-                            </div>
-                            <div className="mt-1 flex flex-wrap items-center gap-2">
-                              <span className={cn("inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold", b.cls)}>
-                                {b.text}
-                              </span>
-                              <span className="text-xs text-slate-600">{formatDistance(leg.summary.distanceM)}</span>
-                              <span className="text-xs text-slate-600">{formatDuration(leg.summary.durationS)}</span>
-                              {leg.summary.mode === "transit" && typeof leg.summary.costYuan === "number" && (
-                                <span className="text-xs text-slate-600">¥{leg.summary.costYuan}</span>
-                              )}
-                              {leg.summary.note && <span className="text-xs text-amber-700">{leg.summary.note}</span>}
-                            </div>
-                          </div>
-
-                          <div className="flex gap-2">
-                            <a
-                              className="rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
-                              href={leg.amap.webUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              打开 web
-                            </a>
-                            <a
-                              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-slate-50"
-                              href={leg.amap.appUri}
-                            >
-                              打开 App
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+            {/* 右侧路线卡片 */}
+            <div className="lg:col-span-3">
+              <RouteCards opt={opt} />
             </div>
           </div>
-        </div>
-
-        <div className="mt-6 text-center text-xs text-slate-400">
-          Tips：同名跑外地通常是“没传 cityHint/cityAdcode 或后端没限制 citylimit”，这版前端已确保传参。
         </div>
       </div>
     </div>
   );
 }
 
-function TabButton({
-  active,
-  label,
-  onClick,
-}: {
-  active: boolean;
-  label: string;
-  onClick: () => void;
-}) {
+function TabButton({ active, label, icon, onClick }: { active: boolean; label: string; icon: string; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        "rounded-2xl px-4 py-2 text-sm font-semibold transition",
-        active ? "bg-blue-600 text-white shadow-sm" : "text-slate-700 hover:bg-white"
+        "flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300",
+        active
+          ? "btn-gradient text-white shadow-lg"
+          : "bg-white/50 text-slate-600 hover:bg-white/80 hover:shadow"
       )}
     >
-      {label}
+      <span>{icon}</span>
+      <span>{label}</span>
     </button>
   );
 }
 
-function EmptyPanel({ title, desc }: { title: string; desc: string }) {
+function StatusBadge({ optimizing, hasResult, legCount }: { optimizing: boolean; hasResult: boolean; legCount: number }) {
+  if (optimizing) {
+    return (
+      <span className="flex items-center gap-2 text-sm text-indigo-600">
+        <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+        生成中…
+      </span>
+    );
+  }
+  if (hasResult) {
+    return (
+      <span className="flex items-center gap-2 text-sm text-emerald-600">
+        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+        {legCount} 段路线
+      </span>
+    );
+  }
   return (
-    <div className="mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center">
-      <div className="text-sm font-semibold text-slate-800">{title}</div>
-      <div className="mt-2 text-sm text-slate-500">{desc}</div>
+    <span className="flex items-center gap-2 text-sm text-slate-400">
+      <span className="w-2 h-2 rounded-full bg-slate-300" />
+      等待输入
+    </span>
+  );
+}
+
+function InputPanel({
+  cityName, setCityName, cityAdcode, setCityAdcode, cityAutoStatus,
+  originMode, setOriginMode, originText, setOriginText,
+  originCoordText, setOriginCoordText, originCoordName, setOriginCoordName,
+  locating, useMyLocation, placesText, setPlacesText,
+  onOptimize, optimizing, placesCount, optError
+}: any) {
+  return (
+    <div className="bg-white/60 rounded-2xl p-6 shadow-sm space-y-5">
+      <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+        <span className="text-2xl">🎯</span> 旅行信息
+      </h2>
+
+      {/* 城市 */}
+      <div>
+        <label className="text-sm font-medium text-slate-600">城市</label>
+        <div className="mt-2 grid gap-3 sm:grid-cols-2">
+          <input
+            className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+            value={cityName}
+            onChange={(e) => setCityName(e.target.value)}
+            placeholder="成都"
+          />
+          <div className="relative">
+            <input
+              className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+              value={cityAdcode}
+              onChange={(e) => setCityAdcode(e.target.value)}
+              placeholder="城市代码"
+            />
+            {cityAutoStatus && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">{cityAutoStatus}</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 起点 */}
+      <div>
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-medium text-slate-600">起点</label>
+          <button
+            onClick={useMyLocation}
+            disabled={locating}
+            className="text-xs font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+          >
+            📍 {locating ? "定位中…" : "当前位置"}
+          </button>
+        </div>
+        <div className="mt-2 flex gap-2">
+          <button
+            onClick={() => setOriginMode("text")}
+            className={cn(
+              "flex-1 py-2.5 rounded-xl text-sm font-medium transition-all",
+              originMode === "text"
+                ? "btn-gradient text-white shadow"
+                : "bg-white/80 text-slate-600 ring-1 ring-slate-200 hover:bg-white"
+            )}
+          >
+            文本
+          </button>
+          <button
+            onClick={() => setOriginMode("coord")}
+            className={cn(
+              "flex-1 py-2.5 rounded-xl text-sm font-medium transition-all",
+              originMode === "coord"
+                ? "btn-gradient text-white shadow"
+                : "bg-white/80 text-slate-600 ring-1 ring-slate-200 hover:bg-white"
+            )}
+          >
+            坐标
+          </button>
+        </div>
+        {originMode === "text" ? (
+          <input
+            className="mt-3 w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+            value={originText}
+            onChange={(e) => setOriginText(e.target.value)}
+            placeholder="天府广场"
+          />
+        ) : (
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <input
+              className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+              value={originCoordText}
+              onChange={(e) => setOriginCoordText(e.target.value)}
+              placeholder="104.06,30.67"
+            />
+            <input
+              className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+              value={originCoordName}
+              onChange={(e) => setOriginCoordName(e.target.value)}
+              placeholder="起点名称"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* 地点 */}
+      <div>
+        <label className="text-sm font-medium text-slate-600">目的地（每行一个）</label>
+        <textarea
+          className="mt-2 h-32 w-full resize-none rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+          value={placesText}
+          onChange={(e) => setPlacesText(e.target.value)}
+          placeholder="春熙路&#10;宽窄巷子&#10;武侯祠"
+        />
+      </div>
+
+      {/* 生成按钮 */}
+      <button
+        onClick={onOptimize}
+        disabled={optimizing || placesCount === 0}
+        className={cn(
+          "w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-300",
+          optimizing || placesCount === 0
+            ? "bg-slate-200 text-slate-400 cursor-not-allowed"
+            : "btn-gradient text-white shadow-lg hover:shadow-xl"
+        )}
+      >
+        {optimizing ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            生成中…
+          </span>
+        ) : (
+          "🚀 生成路线"
+        )}
+      </button>
+
+      {optError && (
+        <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+          ⚠️ {optError}
+        </div>
+      )}
     </div>
   );
 }
 
-function Accordion({
-  title,
-  children,
-  defaultOpen = false,
-}: {
-  title: string;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}) {
+function ResultPanel({ opt, copyItinerary, onReset, onGuide }: any) {
+  if (!opt) {
+    return (
+      <div className="bg-white/60 rounded-2xl p-8 text-center">
+        <div className="text-4xl mb-3">🗺️</div>
+        <div className="text-slate-500">请先生成路线</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white/60 rounded-2xl p-6 shadow-sm space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-bold text-slate-800">🎉 路线已生成</h2>
+        <div className="flex gap-2">
+          <button onClick={copyItinerary} className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200 transition">
+            📋 复制
+          </button>
+          <button onClick={onReset} className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200 transition">
+            🔄 重置
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
+        <div className="text-sm font-semibold text-slate-700">
+          {opt.origin.name} → {opt.orderedPlaces.map((p: any) => p.name).join(" → ")}
+        </div>
+        <div className="mt-2 text-xs text-slate-500">
+          共 {opt.legs.length} 段
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        {opt.orderedPlaces.map((p: any, idx: number) => (
+          <div key={`${p.name}-${idx}`} className="flex items-center justify-between bg-white rounded-xl px-4 py-3 shadow-sm ring-1 ring-slate-100">
+            <div>
+              <div className="text-sm font-semibold text-slate-700">{idx + 1}. {p.name}</div>
+              <div className="text-xs text-slate-400">{p.formatted_address || p.city || ""}</div>
+            </div>
+            <button onClick={onGuide} className="text-xs font-medium text-indigo-600 hover:text-indigo-700">
+              查看攻略 →
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GuidePanel({ opt, orderedPlaces, guideLoading, guideError, guideSummary, generateGuideFor, onBack }: any) {
+  if (!opt) {
+    return (
+      <div className="bg-white/60 rounded-2xl p-8 text-center">
+        <div className="text-4xl mb-3">📖</div>
+        <div className="text-slate-500">请先生成路线</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white/60 rounded-2xl p-6 shadow-sm space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-bold text-slate-800">📖 目的地攻略</h2>
+        <button onClick={onBack} className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200 transition">
+          ← 返回
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {orderedPlaces.map((p: any, idx: number) => {
+          const loading = !!guideLoading[p.name];
+          const err = guideError[p.name];
+          const sum = guideSummary[p.name];
+          return (
+            <div key={`${p.name}-${idx}`} className="bg-white rounded-2xl p-5 shadow-sm ring-1 ring-slate-100">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="text-sm font-semibold text-slate-700">{idx + 1}. {p.name}</div>
+                  <div className="text-xs text-slate-400">{p.formatted_address || ""}</div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => generateGuideFor(p)}
+                    disabled={loading}
+                    className={cn(
+                      "px-3 py-2 rounded-lg text-xs font-semibold transition",
+                      loading ? "bg-slate-200 text-slate-400" : "btn-gradient text-white"
+                    )}
+                  >
+                    {loading ? "生成中…" : sum ? "刷新" : "生成"}
+                  </button>
+                  <a
+                    className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200"
+                    href={`https://uri.amap.com/marker?position=${p.lng},${p.lat}&name=${encodeURIComponent(p.name)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    📍 地图
+                  </a>
+                </div>
+              </div>
+
+              {err && <div className="mt-3 rounded-lg bg-red-50 px-4 py-2 text-sm text-red-600">⚠️ {err}</div>}
+
+              {loading && (
+                <div className="mt-4 space-y-2">
+                  <div className="h-4 w-2/3 animate-pulse rounded bg-slate-200" />
+                  <div className="h-4 w-1/2 animate-pulse rounded bg-slate-200" />
+                </div>
+              )}
+
+              {sum && (
+                <div className="mt-4 space-y-3">
+                  <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
+                    <div className="text-sm font-bold text-slate-700">{sum.title}</div>
+                    <div className="mt-1 text-xs text-slate-500">
+                      ⏱ {sum.duration} · 🕐 {sum.bestTime}
+                    </div>
+                  </div>
+
+                  <Accordion title="🎯 必玩" defaultOpen>
+                    <ul className="space-y-1 text-sm text-slate-600">
+                      {sum.mustDo?.map((x: string, i: number) => <li key={i}>• {x}</li>)}
+                    </ul>
+                  </Accordion>
+
+                  <Accordion title="🍜 美食">
+                    <div className="space-y-2">
+                      {sum.foodPick?.map((x: any, i: number) => (
+                        <div key={i} className="bg-slate-50 rounded-lg px-3 py-2">
+                          <div className="text-sm font-medium text-slate-700">{x.name}</div>
+                          <div className="text-xs text-slate-500">{x.why}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </Accordion>
+
+                  <Accordion title="💡 提示">
+                    <ul className="space-y-1 text-sm text-slate-600">
+                      {sum.tips?.map((x: string, i: number) => <li key={i}>• {x}</li>)}
+                    </ul>
+                  </Accordion>
+
+                  <Accordion title="🔄 备选">
+                    <ul className="space-y-1 text-sm text-slate-600">
+                      {sum.nearbyPlanB?.map((x: string, i: number) => <li key={i}>• {x}</li>)}
+                    </ul>
+                  </Accordion>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function RouteCards({ opt }: { opt: OptimizeResp | null }) {
+  if (!opt) {
+    return (
+      <div className="h-full flex items-center justify-center bg-white/40 rounded-2xl p-8">
+        <div className="text-center">
+          <div className="text-6xl mb-4 animate-float">🗺️</div>
+          <div className="text-slate-400">路线卡片将显示在这里</div>
+        </div>
+      </div>
+    );
+  }
+
+  const totalDist = opt.legs.reduce((s, x) => s + (x.summary.distanceM || 0), 0);
+  const totalTime = opt.legs.reduce((s, x) => s + (x.summary.durationS || 0), 0);
+
+  return (
+    <div className="bg-white/60 rounded-2xl p-6 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold text-slate-800">🚗 路线详情</h2>
+        <div className="text-xs text-slate-500">
+          <span className="font-semibold text-slate-700">{formatDistance(totalDist)}</span>
+          {" · "}
+          <span className="font-semibold text-slate-700">{formatDuration(totalTime)}</span>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {opt.legs.map((leg, idx) => (
+          <div key={idx} className="bg-white rounded-2xl p-5 shadow-sm ring-1 ring-slate-100 card-hover">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-semibold text-slate-700">
+                  {leg.from.name}
+                  <span className="mx-2 text-slate-300">→</span>
+                  {leg.to.name}
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <span className={cn(
+                    "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold",
+                    leg.summary.mode === "transit" ? "badge-transit" : "badge-walk"
+                  )}>
+                    {leg.summary.mode === "transit" ? "🚇 公交" : "🚶 步行"}
+                  </span>
+                  <span className="text-xs text-slate-500">{formatDistance(leg.summary.distanceM)}</span>
+                  <span className="text-xs text-slate-500">{formatDuration(leg.summary.durationS)}</span>
+                  {leg.summary.mode === "transit" && typeof leg.summary.costYuan === "number" && (
+                    <span className="text-xs text-amber-600">¥{leg.summary.costYuan}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-2 flex-shrink-0">
+                <a
+                  className="px-4 py-2 rounded-xl text-xs font-semibold btn-gradient text-white"
+                  href={leg.amap.webUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  🌐 网页
+                </a>
+                <a
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-white shadow-sm ring-1 ring-slate-200 hover:shadow"
+                  href={leg.amap.appUri}
+                >
+                  📱 App
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Accordion({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white">
+    <div className="rounded-xl ring-1 ring-slate-200 overflow-hidden">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between px-4 py-3 text-left"
+        className="flex w-full items-center justify-between px-4 py-3 bg-white hover:bg-slate-50 transition"
       >
-        <div className="text-sm font-semibold">{title}</div>
-        <div className="text-slate-400">{open ? "—" : "+"}</div>
+        <span className="text-sm font-medium text-slate-700">{title}</span>
+        <span className="text-slate-400 transition-transform duration-200" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+          ▼
+        </span>
       </button>
-      {open && <div className="border-t border-slate-200 px-4 py-3">{children}</div>}
+      {open && <div className="px-4 py-3 bg-slate-50 border-t border-slate-100">{children}</div>}
     </div>
   );
 }
