@@ -433,18 +433,26 @@ export async function POST(req: Request) {
     }
 
     // 2) 地点：强制城市 + 选最可能
+    // 并发 Geocoding
+    const geocodedResults = await Promise.allSettled(
+      body.places.map(async (name) => {
+        const p = await geocodeStrict(queryCity, expectAdcodePrefix, body.cityHint, name);
+        p.name = name;
+        return p;
+      })
+    );
+
     const geocoded: PlacePoint[] = [];
     const failed: { name: string; reason: string }[] = [];
 
-    for (const name of body.places) {
-      try {
-        const p = await geocodeStrict(queryCity, expectAdcodePrefix, body.cityHint, name);
-        p.name = name;
-        geocoded.push(p);
-      } catch (e: any) {
-        failed.push({ name, reason: e?.message ?? "not found" });
+    geocodedResults.forEach((res, idx) => {
+      const name = body.places[idx];
+      if (res.status === "fulfilled") {
+        geocoded.push(res.value);
+      } else {
+        failed.push({ name, reason: res.reason?.message ?? "not found" });
       }
-    }
+    });
 
     if (geocoded.length === 0) {
       return NextResponse.json(
@@ -459,23 +467,30 @@ export async function POST(req: Request) {
     // 3) 排序（分团 + twoOpt）
     const orderedPlaces = clusteredOrder(originPoint, geocoded);
 
-    // 4) legs：公交优先（city1/city2 用 adcode）
-    const legs: UiLeg[] = [];
+    // 4) legs：并发 Route Planning
+    // 为了保证顺序，我们先构建 pair 数组，再并发请求，最后按顺序组装
+    const legPairs: { from: PlacePoint; to: PlacePoint }[] = [];
     let cur = originPoint;
     for (const nxt of orderedPlaces) {
-      const { summary, segments } = await transitOrWalk(body.cityAdcode, cur, nxt);
-      legs.push({
-        from: cur,
-        to: nxt,
-        summary,
-        segments,
-        amap: buildAmapLinks(cur, nxt),
-      });
+      legPairs.push({ from: cur, to: nxt });
       cur = nxt;
     }
 
+    const legResults = await Promise.all(
+      legPairs.map(async ({ from, to }) => {
+        const { summary, segments } = await transitOrWalk(body.cityAdcode, from, to);
+        return {
+          from,
+          to,
+          summary,
+          segments,
+          amap: buildAmapLinks(from, to),
+        } as UiLeg;
+      })
+    );
+
     return NextResponse.json(
-      { origin: originPoint, orderedPlaces, legs, failed },
+      { origin: originPoint, orderedPlaces, legs: legResults, failed },
       { status: 200, headers: { "Content-Type": "application/json; charset=utf-8" } }
     );
   } catch (e: any) {
