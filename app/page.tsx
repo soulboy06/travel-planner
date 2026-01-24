@@ -92,14 +92,14 @@ async function postJson<T>(url: string, body: any): Promise<T> {
 
 function formatDistance(m?: number) {
   if (!m && m !== 0) return "—";
-  if (m < 1000) return `${Math.round(m)} m`;
-  return `${(m / 1000).toFixed(1)} km`;
+  if (m < 1000) return `${Math.round(m)}m`;
+  return `${(m / 1000).toFixed(1)}km`;
 }
 
 function formatDuration(s?: number) {
   if (!s && s !== 0) return "—";
   const mins = Math.round(s / 60);
-  if (mins < 60) return `${mins} 分钟`;
+  if (mins < 60) return `${mins}m`;
   const h = Math.floor(mins / 60);
   const r = mins % 60;
   return `${h}h ${r}m`;
@@ -266,136 +266,94 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      {/* 装饰背景 */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-8">
+      {/* 整个主应用容器 - Apple Window Style */}
+      <div className="w-full max-w-6xl apple-glass rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[85vh]">
 
-      <div className="relative mx-auto max-w-6xl px-4 py-8">
-        {/* 标题区 */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold gradient-text tracking-tight">
-            ✈️ Travel Planner
-          </h1>
-          <p className="mt-3 text-slate-500">智能规划路线 · 一键导航</p>
+        {/* 顶部栏 / Window Toolbar */}
+        <div className="flex-none px-6 py-4 border-b border-black/5 flex items-center justify-between bg-white/40 backdrop-blur-md z-10">
+          <div className="flex items-center gap-4">
+            <div className="flex gap-2">
+              <div className="w-3 h-3 rounded-full bg-[#FF5F57] border border-[#E0443E]/20" />
+              <div className="w-3 h-3 rounded-full bg-[#FEBC2E] border border-[#D89E24]/20" />
+              <div className="w-3 h-3 rounded-full bg-[#28C840] border border-[#1AAB29]/20" />
+            </div>
+            <h1 className="text-sm font-semibold text-gray-800/80 ml-2">Travel Planner</h1>
+          </div>
+
+          {/* iOS Segmented Control */}
+          <div className="segmented-control">
+            <button onClick={() => setTab("input")} className={cn("segmented-item", tab === "input" && "active")}>输入</button>
+            <button onClick={() => setTab("result")} className={cn("segmented-item", tab === "result" && "active")}>路线</button>
+            <button onClick={() => setTab("guide")} className={cn("segmented-item", tab === "guide" && "active")}>攻略</button>
+          </div>
+
+          <div className="w-20 flex justify-end">
+            {/* 占位，保持平衡 */}
+          </div>
         </div>
 
-        {/* 主卡片 */}
-        <div className="glass rounded-3xl shadow-xl overflow-hidden">
-          {/* 导航标签 */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-white/20">
-            <div className="flex gap-2">
-              <TabButton active={tab === "input"} onClick={() => setTab("input")} icon="📝" label="输入" />
-              <TabButton active={tab === "result"} onClick={() => setTab("result")} icon="🗺️" label="路线" />
-              <TabButton active={tab === "guide"} onClick={() => setTab("guide")} icon="📖" label="攻略" />
-            </div>
-            <StatusBadge optimizing={optimizing} hasResult={!!opt} legCount={opt?.legs.length ?? 0} />
+        {/* 内容区域 - Split View Style */}
+        <div className="flex-1 flex overflow-hidden">
+
+          {/* 左侧边栏 / Sidebar */}
+          <div className="w-[380px] flex-none border-r border-black/5 bg-white/30 backdrop-blur-md overflow-y-auto p-6 space-y-6">
+            {tab === "input" && (
+              <InputPanel
+                cityName={cityName}
+                setCityName={setCityName}
+                cityAdcode={cityAdcode}
+                setCityAdcode={setCityAdcode}
+                cityAutoStatus={cityAutoStatus}
+                originMode={originMode}
+                setOriginMode={setOriginMode}
+                originText={originText}
+                setOriginText={setOriginText}
+                originCoordText={originCoordText}
+                setOriginCoordText={setOriginCoordText}
+                originCoordName={originCoordName}
+                setOriginCoordName={setOriginCoordName}
+                locating={locating}
+                useMyLocation={useMyLocation}
+                placesText={placesText}
+                setPlacesText={setPlacesText}
+                onOptimize={onOptimize}
+                optimizing={optimizing}
+                placesCount={places.length}
+                optError={optError}
+              />
+            )}
+
+            {tab === "result" && (
+              <ResultPanel
+                opt={opt}
+                copyItinerary={copyItinerary}
+                onReset={() => { setOpt(null); setTab("input"); }}
+                onGuide={() => setTab("guide")}
+              />
+            )}
+
+            {tab === "guide" && (
+              <GuidePanel
+                opt={opt}
+                orderedPlaces={orderedPlaces}
+                guideLoading={guideLoading}
+                guideError={guideError}
+                guideSummary={guideSummary}
+                generateGuideFor={generateGuideFor}
+                onBack={() => setTab(opt ? "result" : "input")}
+              />
+            )}
           </div>
 
-          {/* 内容区 */}
-          <div className="grid gap-6 p-6 lg:grid-cols-5">
-            {/* 左侧面板 */}
-            <div className="lg:col-span-2 space-y-6">
-              {tab === "input" && (
-                <InputPanel
-                  cityName={cityName}
-                  setCityName={setCityName}
-                  cityAdcode={cityAdcode}
-                  setCityAdcode={setCityAdcode}
-                  cityAutoStatus={cityAutoStatus}
-                  originMode={originMode}
-                  setOriginMode={setOriginMode}
-                  originText={originText}
-                  setOriginText={setOriginText}
-                  originCoordText={originCoordText}
-                  setOriginCoordText={setOriginCoordText}
-                  originCoordName={originCoordName}
-                  setOriginCoordName={setOriginCoordName}
-                  locating={locating}
-                  useMyLocation={useMyLocation}
-                  placesText={placesText}
-                  setPlacesText={setPlacesText}
-                  onOptimize={onOptimize}
-                  optimizing={optimizing}
-                  placesCount={places.length}
-                  optError={optError}
-                />
-              )}
-
-              {tab === "result" && (
-                <ResultPanel
-                  opt={opt}
-                  copyItinerary={copyItinerary}
-                  onReset={() => { setOpt(null); setTab("input"); }}
-                  onGuide={() => setTab("guide")}
-                />
-              )}
-
-              {tab === "guide" && (
-                <GuidePanel
-                  opt={opt}
-                  orderedPlaces={orderedPlaces}
-                  guideLoading={guideLoading}
-                  guideError={guideError}
-                  guideSummary={guideSummary}
-                  generateGuideFor={generateGuideFor}
-                  onBack={() => setTab(opt ? "result" : "input")}
-                />
-              )}
-            </div>
-
-            {/* 右侧路线卡片 */}
-            <div className="lg:col-span-3">
-              <RouteCards opt={opt} />
-            </div>
+          {/* 右侧主视口 / Main Viewport */}
+          <div className="flex-1 bg-white/50 backdrop-blur-sm overflow-y-auto p-8 relative">
+            <RouteCards opt={opt} />
           </div>
+
         </div>
       </div>
     </div>
-  );
-}
-
-function TabButton({ active, label, icon, onClick }: { active: boolean; label: string; icon: string; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300",
-        active
-          ? "btn-gradient text-white shadow-lg"
-          : "bg-white/50 text-slate-600 hover:bg-white/80 hover:shadow"
-      )}
-    >
-      <span>{icon}</span>
-      <span>{label}</span>
-    </button>
-  );
-}
-
-function StatusBadge({ optimizing, hasResult, legCount }: { optimizing: boolean; hasResult: boolean; legCount: number }) {
-  if (optimizing) {
-    return (
-      <span className="flex items-center gap-2 text-sm text-indigo-600">
-        <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-        生成中…
-      </span>
-    );
-  }
-  if (hasResult) {
-    return (
-      <span className="flex items-center gap-2 text-sm text-emerald-600">
-        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-        {legCount} 段路线
-      </span>
-    );
-  }
-  return (
-    <span className="flex items-center gap-2 text-sm text-slate-400">
-      <span className="w-2 h-2 rounded-full bg-slate-300" />
-      等待输入
-    </span>
   );
 }
 
@@ -407,179 +365,135 @@ function InputPanel({
   onOptimize, optimizing, placesCount, optError
 }: any) {
   return (
-    <div className="bg-white/60 rounded-2xl p-6 shadow-sm space-y-5">
-      <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-        <span className="text-2xl">🎯</span> 旅行信息
-      </h2>
+    <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-500">
 
-      {/* 城市 */}
-      <div>
-        <label className="text-sm font-medium text-slate-600">城市</label>
-        <div className="mt-2 grid gap-3 sm:grid-cols-2">
+      {/* City Section */}
+      <div className="space-y-2">
+        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">City</label>
+        <div className="flex gap-2">
           <input
-            className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+            className="ios-input w-full px-3 py-2"
             value={cityName}
-            onChange={(e) => setCityName(e.target.value)}
-            placeholder="成都"
+            onChange={e => setCityName(e.target.value)}
+            placeholder="City Name"
           />
-          <div className="relative">
+          <div className="relative w-24 flex-none">
             <input
-              className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+              className="ios-input w-full px-3 py-2 text-center"
               value={cityAdcode}
-              onChange={(e) => setCityAdcode(e.target.value)}
-              placeholder="城市代码"
+              onChange={e => setCityAdcode(e.target.value)}
+              placeholder="Code"
             />
-            {cityAutoStatus && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">{cityAutoStatus}</span>
-            )}
+            {cityAutoStatus && <div className="absolute -top-5 right-0 text-[10px] text-blue-500 font-medium whitespace-nowrap">{cityAutoStatus}</div>}
           </div>
         </div>
       </div>
 
-      {/* 起点 */}
-      <div>
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-600">起点</label>
-          <button
-            onClick={useMyLocation}
-            disabled={locating}
-            className="text-xs font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
-          >
-            📍 {locating ? "定位中…" : "当前位置"}
+      {/* Origin Section */}
+      <div className="space-y-2">
+        <div className="flex justify-between items-center px-1">
+          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Start Point</label>
+          <button onClick={useMyLocation} disabled={locating} className="text-[11px] font-medium text-blue-500 hover:text-blue-600">
+            {locating ? "Locating..." : "Use Current Location"}
           </button>
         </div>
-        <div className="mt-2 flex gap-2">
-          <button
-            onClick={() => setOriginMode("text")}
-            className={cn(
-              "flex-1 py-2.5 rounded-xl text-sm font-medium transition-all",
-              originMode === "text"
-                ? "btn-gradient text-white shadow"
-                : "bg-white/80 text-slate-600 ring-1 ring-slate-200 hover:bg-white"
-            )}
-          >
-            文本
-          </button>
-          <button
-            onClick={() => setOriginMode("coord")}
-            className={cn(
-              "flex-1 py-2.5 rounded-xl text-sm font-medium transition-all",
-              originMode === "coord"
-                ? "btn-gradient text-white shadow"
-                : "bg-white/80 text-slate-600 ring-1 ring-slate-200 hover:bg-white"
-            )}
-          >
-            坐标
-          </button>
+
+        {/* Pseudo Segmented Control for Mode */}
+        <div className="bg-gray-100/50 p-1 rounded-lg flex gap-1 mb-2">
+          <button onClick={() => setOriginMode("text")} className={cn("flex-1 py-1 text-xs font-medium rounded-md transition-all", originMode === "text" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-gray-700")}>Text</button>
+          <button onClick={() => setOriginMode("coord")} className={cn("flex-1 py-1 text-xs font-medium rounded-md transition-all", originMode === "coord" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-gray-700")}>Coordinate</button>
         </div>
+
         {originMode === "text" ? (
           <input
-            className="mt-3 w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+            className="ios-input w-full px-3 py-2"
             value={originText}
             onChange={(e) => setOriginText(e.target.value)}
-            placeholder="天府广场"
+            placeholder='e.g. "Tianfu Square"'
           />
         ) : (
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2">
             <input
-              className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+              className="ios-input w-full px-3 py-2"
               value={originCoordText}
               onChange={(e) => setOriginCoordText(e.target.value)}
-              placeholder="104.06,30.67"
+              placeholder="lng,lat"
             />
             <input
-              className="w-full rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+              className="ios-input w-full px-3 py-2"
               value={originCoordName}
               onChange={(e) => setOriginCoordName(e.target.value)}
-              placeholder="起点名称"
+              placeholder="Name"
             />
           </div>
         )}
       </div>
 
-      {/* 地点 */}
-      <div>
-        <label className="text-sm font-medium text-slate-600">目的地（每行一个）</label>
+      {/* Destinations Section */}
+      <div className="space-y-2">
+        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">Destinations</label>
         <textarea
-          className="mt-2 h-32 w-full resize-none rounded-xl border-0 bg-white/80 px-4 py-3 text-sm shadow-sm ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-400 input-glow transition"
+          className="ios-input w-full p-3 h-32 resize-none"
           value={placesText}
           onChange={(e) => setPlacesText(e.target.value)}
-          placeholder="春熙路&#10;宽窄巷子&#10;武侯祠"
+          placeholder="One place per line..."
         />
       </div>
 
-      {/* 生成按钮 */}
+      {/* Action Button */}
       <button
         onClick={onOptimize}
         disabled={optimizing || placesCount === 0}
         className={cn(
-          "w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-300",
-          optimizing || placesCount === 0
-            ? "bg-slate-200 text-slate-400 cursor-not-allowed"
-            : "btn-gradient text-white shadow-lg hover:shadow-xl"
+          "w-full py-3 ios-btn-primary shadow-lg shadow-blue-500/30",
+          (optimizing || placesCount === 0) && "opacity-50 cursor-not-allowed shadow-none"
         )}
       >
-        {optimizing ? (
-          <span className="flex items-center justify-center gap-2">
-            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            生成中…
-          </span>
-        ) : (
-          "🚀 生成路线"
-        )}
+        {optimizing ? "Optimizing..." : "Generate Route"}
       </button>
 
-      {optError && (
-        <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
-          ⚠️ {optError}
-        </div>
-      )}
+      {optError && <div className="text-xs text-red-500 px-2 font-medium">{optError}</div>}
+
     </div>
   );
 }
 
 function ResultPanel({ opt, copyItinerary, onReset, onGuide }: any) {
-  if (!opt) {
-    return (
-      <div className="bg-white/60 rounded-2xl p-8 text-center">
-        <div className="text-4xl mb-3">🗺️</div>
-        <div className="text-slate-500">请先生成路线</div>
-      </div>
-    );
-  }
+  if (!opt) return <EmptyState icon="🗺️" text="Ready to plan your trip." />;
 
   return (
-    <div className="bg-white/60 rounded-2xl p-6 shadow-sm space-y-4">
+    <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-800">🎉 路线已生成</h2>
+        <h2 className="text-lg font-bold text-gray-800">Route Ready</h2>
         <div className="flex gap-2">
-          <button onClick={copyItinerary} className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200 transition">
-            📋 复制
-          </button>
-          <button onClick={onReset} className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200 transition">
-            🔄 重置
-          </button>
+          <button onClick={copyItinerary} className="ios-btn-secondary px-3 py-1 text-xs">Copy</button>
+          <button onClick={onReset} className="text-gray-400 hover:text-gray-600 px-2 text-xs">Reset</button>
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
-        <div className="text-sm font-semibold text-slate-700">
-          {opt.origin.name} → {opt.orderedPlaces.map((p: any) => p.name).join(" → ")}
-        </div>
-        <div className="mt-2 text-xs text-slate-500">
-          共 {opt.legs.length} 段
+      <div className="bg-white/40 rounded-xl p-4 border border-black/5">
+        <div className="text-xs font-medium text-gray-500 uppercase mb-2">Sequence</div>
+        <div className="flex flex-wrap gap-2 items-center text-sm text-gray-800">
+          <span className="font-semibold">{opt.origin.name}</span>
+          {opt.orderedPlaces.map((p: any) => (
+            <React.Fragment key={p.name}>
+              <span className="text-gray-400">→</span>
+              <span>{p.name}</span>
+            </React.Fragment>
+          ))}
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
+        <div className="text-xs font-medium text-gray-500 uppercase ml-1">Details</div>
         {opt.orderedPlaces.map((p: any, idx: number) => (
-          <div key={`${p.name}-${idx}`} className="flex items-center justify-between bg-white rounded-xl px-4 py-3 shadow-sm ring-1 ring-slate-100">
+          <div key={`${p.name}-${idx}`} className="apple-card rounded-xl p-3 flex justify-between items-center group cursor-default transition-all hover:bg-white/80">
             <div>
-              <div className="text-sm font-semibold text-slate-700">{idx + 1}. {p.name}</div>
-              <div className="text-xs text-slate-400">{p.formatted_address || p.city || ""}</div>
+              <div className="text-sm font-semibold">{idx + 1}. {p.name}</div>
+              <div className="text-[10px] text-gray-500 mt-0.5">{p.formatted_address || p.city}</div>
             </div>
-            <button onClick={onGuide} className="text-xs font-medium text-indigo-600 hover:text-indigo-700">
-              查看攻略 →
+            <button onClick={onGuide} className="opacity-0 group-hover:opacity-100 transition-all text-xs text-blue-500 font-medium bg-blue-50 px-2 py-1 rounded-md">
+              Guide
             </button>
           </div>
         ))}
@@ -589,106 +503,50 @@ function ResultPanel({ opt, copyItinerary, onReset, onGuide }: any) {
 }
 
 function GuidePanel({ opt, orderedPlaces, guideLoading, guideError, guideSummary, generateGuideFor, onBack }: any) {
-  if (!opt) {
-    return (
-      <div className="bg-white/60 rounded-2xl p-8 text-center">
-        <div className="text-4xl mb-3">📖</div>
-        <div className="text-slate-500">请先生成路线</div>
-      </div>
-    );
-  }
+  if (!opt) return <EmptyState icon="📖" text="Generate a route first." />;
 
   return (
-    <div className="bg-white/60 rounded-2xl p-6 shadow-sm space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-800">📖 目的地攻略</h2>
-        <button onClick={onBack} className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200 transition">
-          ← 返回
+    <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500">
+      <div className="flex items-center justify-between mb-2">
+        <button onClick={onBack} className="text-blue-500 flex items-center gap-1 text-sm font-medium hover:opacity-70 transition">
+          <span className="text-lg">‹</span> Back
         </button>
+        <h2 className="text-sm font-semibold text-gray-800">City Guides</h2>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {orderedPlaces.map((p: any, idx: number) => {
           const loading = !!guideLoading[p.name];
           const err = guideError[p.name];
           const sum = guideSummary[p.name];
+
           return (
-            <div key={`${p.name}-${idx}`} className="bg-white rounded-2xl p-5 shadow-sm ring-1 ring-slate-100">
-              <div className="flex items-start justify-between gap-3">
+            <div key={`${p.name}-${idx}`} className="apple-card rounded-xl overflow-hidden transition-all">
+              {/* Card Header */}
+              <div className="p-4 flex items-center justify-between border-b border-gray-100">
                 <div>
-                  <div className="text-sm font-semibold text-slate-700">{idx + 1}. {p.name}</div>
-                  <div className="text-xs text-slate-400">{p.formatted_address || ""}</div>
+                  <div className="text-sm font-bold text-gray-900">{p.name}</div>
+                  <div className="text-[10px] text-gray-500">{p.formatted_address}</div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => generateGuideFor(p)}
-                    disabled={loading}
-                    className={cn(
-                      "px-3 py-2 rounded-lg text-xs font-semibold transition",
-                      loading ? "bg-slate-200 text-slate-400" : "btn-gradient text-white"
-                    )}
-                  >
-                    {loading ? "生成中…" : sum ? "刷新" : "生成"}
-                  </button>
-                  <a
-                    className="px-3 py-2 rounded-lg text-xs font-medium bg-white shadow-sm hover:shadow ring-1 ring-slate-200"
-                    href={`https://uri.amap.com/marker?position=${p.lng},${p.lat}&name=${encodeURIComponent(p.name)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    📍 地图
-                  </a>
-                </div>
+                <button
+                  onClick={() => generateGuideFor(p)}
+                  disabled={loading}
+                  className={cn("text-xs font-medium px-3 py-1.5 rounded-full transition-all", loading ? "bg-gray-100 text-gray-400" : sum ? "bg-gray-100 text-gray-600 hover:bg-gray-200" : "bg-blue-500 text-white shadow-sm")}
+                >
+                  {loading ? "Loading..." : sum ? "Refresh" : "Generate"}
+                </button>
               </div>
 
-              {err && <div className="mt-3 rounded-lg bg-red-50 px-4 py-2 text-sm text-red-600">⚠️ {err}</div>}
+              {/* Content Area */}
+              <div className="p-4 bg-gray-50/50">
+                {loading && <div className="space-y-2 animate-pulse"><div className="h-2 bg-gray-200 rounded w-3/4"></div><div className="h-2 bg-gray-200 rounded w-1/2"></div></div>}
 
-              {loading && (
-                <div className="mt-4 space-y-2">
-                  <div className="h-4 w-2/3 animate-pulse rounded bg-slate-200" />
-                  <div className="h-4 w-1/2 animate-pulse rounded bg-slate-200" />
-                </div>
-              )}
+                {err && <div className="text-xs text-red-500">{err}</div>}
 
-              {sum && (
-                <div className="mt-4 space-y-3">
-                  <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
-                    <div className="text-sm font-bold text-slate-700">{sum.title}</div>
-                    <div className="mt-1 text-xs text-slate-500">
-                      ⏱ {sum.duration} · 🕐 {sum.bestTime}
-                    </div>
-                  </div>
+                {sum && <GuideSummaryView sum={sum} />}
 
-                  <Accordion title="🎯 必玩" defaultOpen>
-                    <ul className="space-y-1 text-sm text-slate-600">
-                      {sum.mustDo?.map((x: string, i: number) => <li key={i}>• {x}</li>)}
-                    </ul>
-                  </Accordion>
-
-                  <Accordion title="🍜 美食">
-                    <div className="space-y-2">
-                      {sum.foodPick?.map((x: any, i: number) => (
-                        <div key={i} className="bg-slate-50 rounded-lg px-3 py-2">
-                          <div className="text-sm font-medium text-slate-700">{x.name}</div>
-                          <div className="text-xs text-slate-500">{x.why}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </Accordion>
-
-                  <Accordion title="💡 提示">
-                    <ul className="space-y-1 text-sm text-slate-600">
-                      {sum.tips?.map((x: string, i: number) => <li key={i}>• {x}</li>)}
-                    </ul>
-                  </Accordion>
-
-                  <Accordion title="🔄 备选">
-                    <ul className="space-y-1 text-sm text-slate-600">
-                      {sum.nearbyPlanB?.map((x: string, i: number) => <li key={i}>• {x}</li>)}
-                    </ul>
-                  </Accordion>
-                </div>
-              )}
+                {!sum && !loading && !err && <div className="text-[10px] text-gray-400 text-center py-2">Tap generate to see tips & food.</div>}
+              </div>
             </div>
           );
         })}
@@ -697,95 +555,120 @@ function GuidePanel({ opt, orderedPlaces, guideLoading, guideError, guideSummary
   );
 }
 
+function GuideSummaryView({ sum }: { sum: GuideSummaryResp }) {
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-4 text-xs text-gray-600 font-medium pb-2 border-b border-gray-200/50">
+        <span>⏱ {sum.duration}</span>
+        <span>🕐 {sum.bestTime}</span>
+      </div>
+
+      <div className="space-y-2">
+        <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Must Do</div>
+        <ul className="text-sm space-y-1 text-gray-800">
+          {sum.mustDo?.slice(0, 3).map((x, i) => <li key={i} className="flex gap-2"><span className="text-blue-500">•</span> {x}</li>)}
+        </ul>
+      </div>
+
+      <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+        <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-2">Food Pick</div>
+        <div className="space-y-2">
+          {sum.foodPick?.slice(0, 2).map((x, i) => (
+            <div key={i}>
+              <div className="text-sm font-medium text-gray-900">{x.name}</div>
+              <div className="text-xs text-gray-500 leading-tight mt-0.5">{x.why}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function RouteCards({ opt }: { opt: OptimizeResp | null }) {
   if (!opt) {
     return (
-      <div className="h-full flex items-center justify-center bg-white/40 rounded-2xl p-8">
-        <div className="text-center">
-          <div className="text-6xl mb-4 animate-float">🗺️</div>
-          <div className="text-slate-400">路线卡片将显示在这里</div>
+      <div className="h-full flex flex-col items-center justify-center text-gray-400 space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl shadow-sm border border-white/30">
+          ✈️
         </div>
+        <p className="text-sm font-medium">Select destinations to start planning</p>
       </div>
     );
   }
 
   const totalDist = opt.legs.reduce((s, x) => s + (x.summary.distanceM || 0), 0);
-  const totalTime = opt.legs.reduce((s, x) => s + (x.summary.durationS || 0), 0);
 
   return (
-    <div className="bg-white/60 rounded-2xl p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-slate-800">🚗 路线详情</h2>
-        <div className="text-xs text-slate-500">
-          <span className="font-semibold text-slate-700">{formatDistance(totalDist)}</span>
-          {" · "}
-          <span className="font-semibold text-slate-700">{formatDuration(totalTime)}</span>
+    <div className="space-y-6 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
+      <div className="flex items-center justify-between pb-4 border-b border-black/5">
+        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Your Itinerary</h2>
+        <div className="text-sm font-medium text-gray-500 bg-white/50 px-3 py-1 rounded-full backdrop-blur-md shadow-sm">
+          Total {formatDistance(totalDist)}
         </div>
       </div>
 
-      <div className="space-y-3">
-        {opt.legs.map((leg, idx) => (
-          <div key={idx} className="bg-white rounded-2xl p-5 shadow-sm ring-1 ring-slate-100 card-hover">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold text-slate-700">
-                  {leg.from.name}
-                  <span className="mx-2 text-slate-300">→</span>
-                  {leg.to.name}
-                </div>
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <span className={cn(
-                    "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold",
-                    leg.summary.mode === "transit" ? "badge-transit" : "badge-walk"
-                  )}>
-                    {leg.summary.mode === "transit" ? "🚇 公交" : "🚶 步行"}
-                  </span>
-                  <span className="text-xs text-slate-500">{formatDistance(leg.summary.distanceM)}</span>
-                  <span className="text-xs text-slate-500">{formatDuration(leg.summary.durationS)}</span>
-                  {leg.summary.mode === "transit" && typeof leg.summary.costYuan === "number" && (
-                    <span className="text-xs text-amber-600">¥{leg.summary.costYuan}</span>
-                  )}
-                </div>
-              </div>
+      <div className="relative border-l-2 border-dashed border-gray-300 ml-4 space-y-8 pb-4">
+        {/* Start Point Pin */}
+        <div className="-ml-[9px] absolute top-0 flex items-center gap-4">
+          <div className="w-4 h-4 bg-gray-900 rounded-full ring-4 ring-gray-100 shadow-sm" />
+          <div className="text-sm font-bold text-gray-900">{opt.origin.name}</div>
+        </div>
 
-              <div className="flex gap-2 flex-shrink-0">
-                <a
-                  className="px-4 py-2 rounded-xl text-xs font-semibold btn-gradient text-white"
-                  href={leg.amap.webUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  🌐 网页
-                </a>
-                <a
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-white shadow-sm ring-1 ring-slate-200 hover:shadow"
-                  href={leg.amap.appUri}
-                >
-                  📱 App
-                </a>
+        <div className="pt-8 space-y-8">
+          {opt.legs.map((leg, idx) => (
+            <div key={idx} className="relative pl-8">
+              {/* Connection Line & Badge */}
+              <div className="absolute -left-[9px] top-6 w-4 h-4 bg-blue-500 rounded-full ring-4 ring-blue-50 shadow-sm z-10" />
+
+              <div className="apple-card p-5 rounded-2xl transition hover:scale-[1.01] duration-300">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">{leg.to.name}</h3>
+                    <div className="text-xs text-gray-500 mt-1">{leg.to.formatted_address || "Destination"}</div>
+                  </div>
+                  <span className={cn("px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider", leg.summary.mode === "transit" ? "bg-blue-100 text-blue-600" : "bg-green-100 text-green-600")}>
+                    {leg.summary.mode}
+                  </span>
+                </div>
+
+                <div className="bg-gray-50/80 rounded-xl p-3 flex items-center justify-between mb-4 border border-gray-100">
+                  <div className="flex gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] uppercase text-gray-400 font-bold">Distance</span>
+                      <span className="text-xs font-semibold text-gray-700">{formatDistance(leg.summary.distanceM)}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[10px] uppercase text-gray-400 font-bold">Duration</span>
+                      <span className="text-xs font-semibold text-gray-700">{formatDuration(leg.summary.durationS)}</span>
+                    </div>
+                    {leg.summary.costYuan && (
+                      <div className="flex flex-col">
+                        <span className="text-[10px] uppercase text-gray-400 font-bold">Cost</span>
+                        <span className="text-xs font-semibold text-gray-700">¥{leg.summary.costYuan}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <a href={leg.amap.webUrl} target="_blank" rel="noreferrer" className="ios-btn-secondary py-2 text-center text-xs hover:bg-blue-100 transition">Open Web Map</a>
+                  <a href={leg.amap.appUri} className="ios-btn-secondary py-2 text-center text-xs hover:bg-blue-100 transition">Open App</a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-function Accordion({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen);
+function EmptyState({ icon, text }: { icon: string, text: string }) {
   return (
-    <div className="rounded-xl ring-1 ring-slate-200 overflow-hidden">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between px-4 py-3 bg-white hover:bg-slate-50 transition"
-      >
-        <span className="text-sm font-medium text-slate-700">{title}</span>
-        <span className="text-slate-400 transition-transform duration-200" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-          ▼
-        </span>
-      </button>
-      {open && <div className="px-4 py-3 bg-slate-50 border-t border-slate-100">{children}</div>}
+    <div className="flex flex-col items-center justify-center py-12 text-center opacity-60">
+      <div className="text-4xl mb-2 grayscale">{icon}</div>
+      <div className="text-sm font-medium text-gray-500">{text}</div>
     </div>
-  );
+  )
 }
