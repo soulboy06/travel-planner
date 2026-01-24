@@ -266,23 +266,24 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-8">
+    <div className="min-h-screen flex items-center justify-center p-2 sm:p-6 md:p-8">
       {/* 整个主应用容器 - Apple Window Style */}
-      <div className="w-full max-w-6xl apple-glass rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[85vh]">
+      {/* 响应式：高度在移动端自动适配，md以上固定高度 */}
+      <div className="w-full max-w-6xl apple-glass rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[92vh] md:h-[85vh]">
 
         {/* 顶部栏 / Window Toolbar */}
-        <div className="flex-none px-6 py-4 border-b border-black/5 flex items-center justify-between bg-white/40 backdrop-blur-md z-10">
-          <div className="flex items-center gap-4">
-            <div className="flex gap-2">
+        <div className="flex-none px-4 py-3 md:px-6 md:py-4 border-b border-black/5 flex items-center justify-between bg-white/40 backdrop-blur-md z-10 shrink-0">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex gap-1.5 md:gap-2">
               <div className="w-3 h-3 rounded-full bg-[#FF5F57] border border-[#E0443E]/20" />
               <div className="w-3 h-3 rounded-full bg-[#FEBC2E] border border-[#D89E24]/20" />
               <div className="w-3 h-3 rounded-full bg-[#28C840] border border-[#1AAB29]/20" />
             </div>
-            <h1 className="text-sm font-semibold text-gray-800/80 ml-2">Travel Planner</h1>
+            <h1 className="text-sm font-semibold text-gray-800/80 ml-1 md:ml-2 truncate">Travel Planner</h1>
           </div>
 
           {/* iOS Segmented Control */}
-          <div className="segmented-control">
+          <div className="segmented-control scale-90 md:scale-100 origin-right md:origin-center">
             <button onClick={() => setTab("input")} className={cn("segmented-item", tab === "input" && "active")}>输入</button>
             <button onClick={() => setTab("result")} className={cn("segmented-item", tab === "result" && "active")}>路线</button>
             <button onClick={() => setTab("guide")} className={cn("segmented-item", tab === "guide" && "active")}>攻略</button>
@@ -293,11 +294,15 @@ export default function Page() {
           </div>
         </div>
 
-        {/* 内容区域 - Split View Style */}
-        <div className="flex-1 flex overflow-hidden">
+        {/* 内容区域 - Split View Style on Desktop, Stack on Mobile */}
+        <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
 
           {/* 左侧边栏 / Sidebar */}
-          <div className="w-[380px] flex-none border-r border-black/5 bg-white/30 backdrop-blur-md overflow-y-auto p-6 space-y-6">
+          <div className={cn(
+            "md:w-[380px] flex-none border-b md:border-b-0 md:border-r border-black/5 bg-white/30 backdrop-blur-md overflow-y-auto p-4 md:p-6 space-y-6 transition-all",
+            "w-full h-full md:h-auto absolute inset-0 md:relative z-20 md:z-0 bg-white/80 md:bg-white/30",
+            tab === "input" ? "block" : (tab === "guide" ? "block" : "hidden md:block")
+          )}>
             {tab === "input" && (
               <InputPanel
                 cityName={cityName}
@@ -325,12 +330,14 @@ export default function Page() {
             )}
 
             {tab === "result" && (
-              <ResultPanel
-                opt={opt}
-                copyItinerary={copyItinerary}
-                onReset={() => { setOpt(null); setTab("input"); }}
-                onGuide={() => setTab("guide")}
-              />
+              <div className="md:block hidden">
+                <ResultPanel
+                  opt={opt}
+                  copyItinerary={copyItinerary}
+                  onReset={() => { setOpt(null); setTab("input"); }}
+                  onGuide={() => setTab("guide")}
+                />
+              </div>
             )}
 
             {tab === "guide" && (
@@ -347,7 +354,21 @@ export default function Page() {
           </div>
 
           {/* 右侧主视口 / Main Viewport */}
-          <div className="flex-1 bg-white/50 backdrop-blur-sm overflow-y-auto p-8 relative">
+          <div className={cn(
+            "flex-1 bg-white/50 backdrop-blur-sm overflow-y-auto p-4 md:p-8 relative",
+            tab === "result" ? "block w-full h-full absolute inset-0 md:relative z-20 md:z-0 bg-gray-50 md:bg-white/50" : "hidden md:block"
+          )}>
+            {tab === "result" && (
+              <div className="md:hidden mb-4">
+                <ResultPanel
+                  opt={opt}
+                  copyItinerary={copyItinerary}
+                  onReset={() => { setOpt(null); setTab("input"); }}
+                  onGuide={() => setTab("guide")}
+                  mobileMode
+                />
+              </div>
+            )}
             <RouteCards opt={opt} />
           </div>
 
@@ -377,7 +398,7 @@ function InputPanel({
             onChange={e => setCityName(e.target.value)}
             placeholder="City Name"
           />
-          <div className="relative w-24 flex-none">
+          <div className="relative w-24 flex-none hidden md:block">
             <input
               className="ios-input w-full px-3 py-2 text-center"
               value={cityAdcode}
@@ -458,8 +479,8 @@ function InputPanel({
   );
 }
 
-function ResultPanel({ opt, copyItinerary, onReset, onGuide }: any) {
-  if (!opt) return <EmptyState icon="🗺️" text="Ready to plan your trip." />;
+function ResultPanel({ opt, copyItinerary, onReset, onGuide, mobileMode }: any) {
+  if (!opt) return mobileMode ? null : <EmptyState icon="🗺️" text="Ready to plan your trip." />;
 
   return (
     <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -566,14 +587,14 @@ function GuideSummaryView({ sum }: { sum: GuideSummaryResp }) {
       <div className="space-y-2">
         <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Must Do</div>
         <ul className="text-sm space-y-1 text-gray-800">
-          {sum.mustDo?.slice(0, 3).map((x, i) => <li key={i} className="flex gap-2"><span className="text-blue-500">•</span> {x}</li>)}
+          {sum.mustDo?.map((x, i) => <li key={i} className="flex gap-2"><span className="text-blue-500">•</span> {x}</li>)}
         </ul>
       </div>
 
       <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
         <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-2">Food Pick</div>
         <div className="space-y-2">
-          {sum.foodPick?.slice(0, 2).map((x, i) => (
+          {sum.foodPick?.map((x, i) => (
             <div key={i}>
               <div className="text-sm font-medium text-gray-900">{x.name}</div>
               <div className="text-xs text-gray-500 leading-tight mt-0.5">{x.why}</div>

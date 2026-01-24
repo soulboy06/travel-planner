@@ -411,12 +411,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "origin and places[] are required" }, { status: 400 });
     }
 
-    const { queryCity, expectAdcodePrefix } = getCityConstraint(body.cityHint, body.cityAdcode);
+    let { queryCity, expectAdcodePrefix } = getCityConstraint(body.cityHint, body.cityAdcode);
 
     // 如果你想“强制必须限定城市”，可以打开这段：
     // if (!queryCity) {
     //   return NextResponse.json({ error: "cityHint or cityAdcode is required to avoid ambiguous places" }, { status: 400 });
     // }
+
+
+    // 0) 如果没传 cityAdcode，尝试根据 cityHint 自动补全
+    if (!body.cityAdcode && body.cityHint) {
+      try {
+        // 利用 geocodeStrict 来查城市本身，通常能拿到 adcode
+        // 注意：这里查 "成都市" 或 "成都"
+        const cityInfo = await geocodeCore(undefined, body.cityHint);
+        if (cityInfo && cityInfo.adcode) {
+          body.cityAdcode = String(cityInfo.adcode);
+          // 更新约束条件
+          const newCons = getCityConstraint(body.cityHint, body.cityAdcode);
+          expectAdcodePrefix = newCons.expectAdcodePrefix;
+          // QueryCity 也可以更新，但一般保持原样也没事，因为 geocodeStrict 内部会处理
+        }
+      } catch (e) {
+        console.warn("Auto-match city adcode failed:", e);
+        // 失败了就不填，继续往下走，只不过可能没有 prefix 约束
+      }
+    }
 
     // 1) 起点
     let originPoint: PlacePoint;
