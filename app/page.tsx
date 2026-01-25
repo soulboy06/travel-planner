@@ -1,6 +1,30 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  MapPin,
+  Navigation,
+  Compass,
+  Clock,
+  Route,
+  Copy,
+  RotateCcw,
+  BookOpen,
+  ChevronLeft,
+  Plane,
+  Map,
+  ExternalLink,
+  Smartphone,
+  Loader2,
+  Sparkles,
+  Utensils,
+  CheckCircle2,
+  AlertCircle,
+  Info,
+  Locate,
+  Globe,
+  ArrowRight,
+} from "lucide-react";
 
 type OriginInput =
   | { type: "coord"; lng: number; lat: number; name?: string }
@@ -99,7 +123,7 @@ function formatDistance(m?: number) {
 function formatDuration(s?: number) {
   if (!s && s !== 0) return "—";
   const mins = Math.round(s / 60);
-  if (mins < 60) return `${mins}m`;
+  if (mins < 60) return `${mins} 分钟`;
   const h = Math.floor(mins / 60);
   const r = mins % 60;
   return `${h}h ${r}m`;
@@ -266,41 +290,47 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-2 sm:p-6 md:p-8">
-      {/* 整个主应用容器 - Apple Window Style */}
-      {/* 响应式：高度在移动端自动适配，md以上固定高度 */}
-      <div className="w-full max-w-6xl apple-glass rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[92vh] md:h-[85vh]">
+    <div className="min-h-screen aurora-bg aurora-animated flex items-center justify-center p-3 sm:p-6 md:p-8">
+      <div className="w-full max-w-6xl main-container rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col h-[94vh] md:h-[88vh]">
 
-        {/* 顶部栏 / Window Toolbar */}
-        <div className="flex-none px-4 py-3 md:px-6 md:py-4 border-b border-black/5 flex items-center justify-between bg-white/40 backdrop-blur-md z-10 shrink-0">
-          <div className="flex items-center gap-3 md:gap-4">
-            <div className="flex gap-1.5 md:gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#FF5F57] border border-[#E0443E]/20" />
-              <div className="w-3 h-3 rounded-full bg-[#FEBC2E] border border-[#D89E24]/20" />
-              <div className="w-3 h-3 rounded-full bg-[#28C840] border border-[#1AAB29]/20" />
+        {/* Header */}
+        <header className="flex-none px-4 py-3 md:px-6 md:py-4 border-b border-[var(--border)] flex items-center justify-between bg-white/60 backdrop-blur-md z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-md">
+              <Plane className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-sm font-semibold text-gray-800/80 ml-1 md:ml-2 truncate">Travel Planner</h1>
+            <div>
+              <h1 className="text-base font-semibold text-[var(--text-primary)]">Travel Planner</h1>
+              <p className="text-xs text-[var(--text-muted)] hidden sm:block">智能行程规划</p>
+            </div>
           </div>
 
-          {/* iOS Segmented Control */}
-          <div className="segmented-control scale-90 md:scale-100 origin-right md:origin-center">
-            <button onClick={() => setTab("input")} className={cn("segmented-item", tab === "input" && "active")}>输入</button>
-            <button onClick={() => setTab("result")} className={cn("segmented-item", tab === "result" && "active")}>路线</button>
-            <button onClick={() => setTab("guide")} className={cn("segmented-item", tab === "guide" && "active")}>攻略</button>
+          {/* Tab Control */}
+          <div className="tab-control">
+            <button onClick={() => setTab("input")} className={cn("tab-item", tab === "input" && "active")}>
+              <span className="hidden sm:inline">输入</span>
+              <Compass className="w-4 h-4 sm:hidden" />
+            </button>
+            <button onClick={() => setTab("result")} className={cn("tab-item", tab === "result" && "active")}>
+              <span className="hidden sm:inline">路线</span>
+              <Route className="w-4 h-4 sm:hidden" />
+            </button>
+            <button onClick={() => setTab("guide")} className={cn("tab-item", tab === "guide" && "active")}>
+              <span className="hidden sm:inline">攻略</span>
+              <BookOpen className="w-4 h-4 sm:hidden" />
+            </button>
           </div>
 
-          <div className="w-20 flex justify-end">
-            {/* 占位，保持平衡 */}
-          </div>
-        </div>
+          <div className="w-10 md:w-20" />
+        </header>
 
-        {/* 内容区域 - Split View Style on Desktop, Stack on Mobile */}
+        {/* Main Content */}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
 
-          {/* 左侧边栏 / Sidebar */}
-          <div className={cn(
-            "md:w-[380px] flex-none border-b md:border-b-0 md:border-r border-black/5 bg-white/30 backdrop-blur-md overflow-y-auto p-4 md:p-6 space-y-6 transition-all",
-            "w-full h-full md:h-auto absolute inset-0 md:relative z-20 md:z-0 bg-white/80 md:bg-white/30",
+          {/* Sidebar */}
+          <aside className={cn(
+            "md:w-[400px] flex-none border-b md:border-b-0 md:border-r border-[var(--border)] bg-white/40 backdrop-blur-md overflow-y-auto p-4 md:p-6 transition-all",
+            "w-full h-full md:h-auto absolute inset-0 md:relative z-20 md:z-0",
             tab === "input" ? "block" : (tab === "guide" ? "block" : "hidden md:block")
           )}>
             {tab === "input" && (
@@ -330,7 +360,7 @@ export default function Page() {
             )}
 
             {tab === "result" && (
-              <div className="md:block hidden">
+              <div className="hidden md:block">
                 <ResultPanel
                   opt={opt}
                   copyItinerary={copyItinerary}
@@ -351,12 +381,12 @@ export default function Page() {
                 onBack={() => setTab(opt ? "result" : "input")}
               />
             )}
-          </div>
+          </aside>
 
-          {/* 右侧主视口 / Main Viewport */}
-          <div className={cn(
-            "flex-1 bg-white/50 backdrop-blur-sm overflow-y-auto p-4 md:p-8 relative",
-            tab === "result" ? "block w-full h-full absolute inset-0 md:relative z-20 md:z-0 bg-gray-50 md:bg-white/50" : "hidden md:block"
+          {/* Main Viewport */}
+          <main className={cn(
+            "flex-1 bg-[var(--bg-secondary)]/30 overflow-y-auto p-4 md:p-8 relative",
+            tab === "result" ? "block w-full h-full absolute inset-0 md:relative z-20 md:z-0" : "hidden md:block"
           )}>
             {tab === "result" && (
               <div className="md:hidden mb-4">
@@ -370,8 +400,7 @@ export default function Page() {
               </div>
             )}
             <RouteCards opt={opt} />
-          </div>
-
+          </main>
         </div>
       </div>
     </div>
@@ -386,65 +415,90 @@ function InputPanel({
   onOptimize, optimizing, placesCount, optError
 }: any) {
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-500">
+    <div className="space-y-6 animate-slide-left">
 
       {/* City Section */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">City</label>
+        <label className="label flex items-center gap-2">
+          <Globe className="w-3.5 h-3.5" />
+          目标城市
+        </label>
         <div className="flex gap-2">
           <input
-            className="ios-input w-full px-3 py-2"
+            className="input-field flex-1"
             value={cityName}
             onChange={e => setCityName(e.target.value)}
-            placeholder="City Name"
+            placeholder="输入城市名称"
           />
           <div className="relative w-24 flex-none hidden md:block">
             <input
-              className="ios-input w-full px-3 py-2 text-center"
+              className="input-field w-full text-center text-sm"
               value={cityAdcode}
               onChange={e => setCityAdcode(e.target.value)}
-              placeholder="Code"
+              placeholder="区号"
             />
-            {cityAutoStatus && <div className="absolute -top-5 right-0 text-[10px] text-blue-500 font-medium whitespace-nowrap">{cityAutoStatus}</div>}
+            {cityAutoStatus && (
+              <div className="absolute -top-5 right-0 text-[10px] text-[var(--primary)] font-medium whitespace-nowrap">
+                {cityAutoStatus}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Origin Section */}
-      <div className="space-y-2">
-        <div className="flex justify-between items-center px-1">
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Start Point</label>
-          <button onClick={useMyLocation} disabled={locating} className="text-[11px] font-medium text-blue-500 hover:text-blue-600">
-            {locating ? "Locating..." : "Use Current Location"}
+      <div className="space-y-3">
+        <div className="flex justify-between items-center">
+          <label className="label flex items-center gap-2 mb-0">
+            <Navigation className="w-3.5 h-3.5" />
+            出发点
+          </label>
+          <button
+            onClick={useMyLocation}
+            disabled={locating}
+            className="btn-ghost text-xs flex items-center gap-1.5 text-[var(--primary)]"
+          >
+            {locating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Locate className="w-3.5 h-3.5" />}
+            {locating ? "定位中..." : "使用当前位置"}
           </button>
         </div>
 
-        {/* Pseudo Segmented Control for Mode */}
-        <div className="bg-gray-100/50 p-1 rounded-lg flex gap-1 mb-2">
-          <button onClick={() => setOriginMode("text")} className={cn("flex-1 py-1 text-xs font-medium rounded-md transition-all", originMode === "text" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-gray-700")}>Text</button>
-          <button onClick={() => setOriginMode("coord")} className={cn("flex-1 py-1 text-xs font-medium rounded-md transition-all", originMode === "coord" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-gray-700")}>Coordinate</button>
+        {/* Mode Toggle */}
+        <div className="mode-toggle">
+          <button
+            onClick={() => setOriginMode("text")}
+            className={cn("mode-toggle-item", originMode === "text" && "active")}
+          >
+            文字地址
+          </button>
+          <button
+            onClick={() => setOriginMode("coord")}
+            className={cn("mode-toggle-item", originMode === "coord" && "active")}
+          >
+            精确坐标
+          </button>
         </div>
 
         {originMode === "text" ? (
           <input
-            className="ios-input w-full px-3 py-2"
+            className="input-field"
             value={originText}
             onChange={(e) => setOriginText(e.target.value)}
-            placeholder='e.g. "Tianfu Square"'
+            placeholder="例如：天府广场、春熙路"
           />
         ) : (
           <div className="grid grid-cols-2 gap-2">
             <input
-              className="ios-input w-full px-3 py-2"
+              className="input-field"
               value={originCoordText}
               onChange={(e) => setOriginCoordText(e.target.value)}
-              placeholder="lng,lat"
+              placeholder="经度,纬度"
             />
             <input
-              className="ios-input w-full px-3 py-2"
+              className="input-field"
               value={originCoordName}
               onChange={(e) => setOriginCoordName(e.target.value)}
-              placeholder="Name"
+              placeholder="位置名称"
             />
           </div>
         )}
@@ -452,12 +506,18 @@ function InputPanel({
 
       {/* Destinations Section */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">Destinations</label>
+        <label className="label flex items-center gap-2">
+          <MapPin className="w-3.5 h-3.5" />
+          目的地列表
+          <span className="ml-auto font-normal text-[var(--text-muted)]">
+            {placesCount} 个地点
+          </span>
+        </label>
         <textarea
-          className="ios-input w-full p-3 h-32 resize-none"
+          className="textarea-field h-36"
           value={placesText}
           onChange={(e) => setPlacesText(e.target.value)}
-          placeholder="One place per line..."
+          placeholder="每行输入一个目的地&#10;例如：&#10;春熙路&#10;宽窄巷子&#10;武侯祠"
         />
       </div>
 
@@ -466,55 +526,98 @@ function InputPanel({
         onClick={onOptimize}
         disabled={optimizing || placesCount === 0}
         className={cn(
-          "w-full py-3 ios-btn-primary shadow-lg shadow-blue-500/30",
-          (optimizing || placesCount === 0) && "opacity-50 cursor-not-allowed shadow-none"
+          "w-full btn-primary",
+          (optimizing || placesCount === 0) && "opacity-50 cursor-not-allowed"
         )}
       >
-        {optimizing ? "Optimizing..." : "Generate Route"}
+        {optimizing ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            规划中...
+          </>
+        ) : (
+          <>
+            <Sparkles className="w-5 h-5" />
+            生成最优路线
+          </>
+        )}
       </button>
 
-      {optError && <div className="text-xs text-red-500 px-2 font-medium">{optError}</div>}
-
+      {optError && (
+        <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
+          <AlertCircle className="w-4 h-4 flex-none mt-0.5" />
+          {optError}
+        </div>
+      )}
     </div>
   );
 }
 
 function ResultPanel({ opt, copyItinerary, onReset, onGuide, mobileMode }: any) {
-  if (!opt) return mobileMode ? null : <EmptyState icon="🗺️" text="Ready to plan your trip." />;
+  if (!opt) return mobileMode ? null : <EmptyState icon="route" text="准备规划您的旅程" />;
 
   return (
-    <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500">
+    <div className="space-y-5 animate-slide-right">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-gray-800">Route Ready</h2>
+        <h2 className="text-lg font-bold text-[var(--text-primary)]">路线已生成</h2>
         <div className="flex gap-2">
-          <button onClick={copyItinerary} className="ios-btn-secondary px-3 py-1 text-xs">Copy</button>
-          <button onClick={onReset} className="text-gray-400 hover:text-gray-600 px-2 text-xs">Reset</button>
+          <button onClick={copyItinerary} className="btn-secondary">
+            <Copy className="w-4 h-4" />
+            复制
+          </button>
+          <button onClick={onReset} className="btn-ghost">
+            <RotateCcw className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
-      <div className="bg-white/40 rounded-xl p-4 border border-black/5">
-        <div className="text-xs font-medium text-gray-500 uppercase mb-2">Sequence</div>
-        <div className="flex flex-wrap gap-2 items-center text-sm text-gray-800">
-          <span className="font-semibold">{opt.origin.name}</span>
-          {opt.orderedPlaces.map((p: any) => (
+      {/* Route Sequence */}
+      <div className="summary-card">
+        <div className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-3">
+          行程顺序
+        </div>
+        <div className="flex flex-wrap gap-2 items-center text-sm text-[var(--text-primary)]">
+          <span className="font-semibold flex items-center gap-1">
+            <Navigation className="w-3.5 h-3.5 text-[var(--primary)]" />
+            {opt.origin.name}
+          </span>
+          {opt.orderedPlaces.map((p: any, idx: number) => (
             <React.Fragment key={p.name}>
-              <span className="text-gray-400">→</span>
-              <span>{p.name}</span>
+              <ArrowRight className="w-4 h-4 text-[var(--text-light)]" />
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-[var(--accent)]" />
+                {p.name}
+              </span>
             </React.Fragment>
           ))}
         </div>
       </div>
 
+      {/* Place List */}
       <div className="space-y-3">
-        <div className="text-xs font-medium text-gray-500 uppercase ml-1">Details</div>
+        <div className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide">
+          详细信息
+        </div>
         {opt.orderedPlaces.map((p: any, idx: number) => (
-          <div key={`${p.name}-${idx}`} className="apple-card rounded-xl p-3 flex justify-between items-center group cursor-default transition-all hover:bg-white/80">
-            <div>
-              <div className="text-sm font-semibold">{idx + 1}. {p.name}</div>
-              <div className="text-[10px] text-gray-500 mt-0.5">{p.formatted_address || p.city}</div>
+          <div
+            key={`${p.name}-${idx}`}
+            className="glass-card p-4 flex justify-between items-center group cursor-pointer"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent)] to-[var(--accent-dark)] flex items-center justify-center text-white font-semibold text-sm">
+                {idx + 1}
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-[var(--text-primary)]">{p.name}</div>
+                <div className="text-xs text-[var(--text-muted)] mt-0.5">{p.formatted_address || p.city}</div>
+              </div>
             </div>
-            <button onClick={onGuide} className="opacity-0 group-hover:opacity-100 transition-all text-xs text-blue-500 font-medium bg-blue-50 px-2 py-1 rounded-md">
-              Guide
+            <button
+              onClick={onGuide}
+              className="opacity-0 group-hover:opacity-100 transition-all btn-secondary text-xs px-3 py-1.5"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              攻略
             </button>
           </div>
         ))}
@@ -524,15 +627,17 @@ function ResultPanel({ opt, copyItinerary, onReset, onGuide, mobileMode }: any) 
 }
 
 function GuidePanel({ opt, orderedPlaces, guideLoading, guideError, guideSummary, generateGuideFor, onBack }: any) {
-  if (!opt) return <EmptyState icon="📖" text="Generate a route first." />;
+  if (!opt) return <EmptyState icon="book" text="请先生成路线规划" />;
 
   return (
-    <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500">
+    <div className="space-y-5 animate-slide-right">
       <div className="flex items-center justify-between mb-2">
-        <button onClick={onBack} className="text-blue-500 flex items-center gap-1 text-sm font-medium hover:opacity-70 transition">
-          <span className="text-lg">‹</span> Back
+        <button onClick={onBack} className="btn-ghost flex items-center gap-1 text-[var(--primary)]">
+          <ChevronLeft className="w-5 h-5" />
+          返回
         </button>
-        <h2 className="text-sm font-semibold text-gray-800">City Guides</h2>
+        <h2 className="text-sm font-semibold text-[var(--text-primary)]">目的地攻略</h2>
+        <div className="w-16" />
       </div>
 
       <div className="space-y-4">
@@ -542,31 +647,68 @@ function GuidePanel({ opt, orderedPlaces, guideLoading, guideError, guideSummary
           const sum = guideSummary[p.name];
 
           return (
-            <div key={`${p.name}-${idx}`} className="apple-card rounded-xl overflow-hidden transition-all">
-              {/* Card Header */}
-              <div className="p-4 flex items-center justify-between border-b border-gray-100">
-                <div>
-                  <div className="text-sm font-bold text-gray-900">{p.name}</div>
-                  <div className="text-[10px] text-gray-500">{p.formatted_address}</div>
+            <div key={`${p.name}-${idx}`} className="guide-card">
+              <div className="guide-header">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center text-white font-semibold text-sm">
+                    {idx + 1}
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-[var(--text-primary)]">{p.name}</div>
+                    <div className="text-xs text-[var(--text-muted)]">{p.formatted_address}</div>
+                  </div>
                 </div>
                 <button
                   onClick={() => generateGuideFor(p)}
                   disabled={loading}
-                  className={cn("text-xs font-medium px-3 py-1.5 rounded-full transition-all", loading ? "bg-gray-100 text-gray-400" : sum ? "bg-gray-100 text-gray-600 hover:bg-gray-200" : "bg-blue-500 text-white shadow-sm")}
+                  className={cn(
+                    "btn-secondary text-xs",
+                    loading && "opacity-50 cursor-not-allowed"
+                  )}
                 >
-                  {loading ? "Loading..." : sum ? "Refresh" : "Generate"}
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      加载中
+                    </>
+                  ) : sum ? (
+                    <>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      刷新
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      生成
+                    </>
+                  )}
                 </button>
               </div>
 
-              {/* Content Area */}
-              <div className="p-4 bg-gray-50/50">
-                {loading && <div className="space-y-2 animate-pulse"><div className="h-2 bg-gray-200 rounded w-3/4"></div><div className="h-2 bg-gray-200 rounded w-1/2"></div></div>}
+              <div className="guide-content">
+                {loading && (
+                  <div className="space-y-2">
+                    <div className="skeleton h-3 w-3/4" />
+                    <div className="skeleton h-3 w-1/2" />
+                    <div className="skeleton h-3 w-2/3" />
+                  </div>
+                )}
 
-                {err && <div className="text-xs text-red-500">{err}</div>}
+                {err && (
+                  <div className="flex items-start gap-2 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4 flex-none mt-0.5" />
+                    {err}
+                  </div>
+                )}
 
                 {sum && <GuideSummaryView sum={sum} />}
 
-                {!sum && !loading && !err && <div className="text-[10px] text-gray-400 text-center py-2">Tap generate to see tips & food.</div>}
+                {!sum && !loading && !err && (
+                  <div className="text-center py-4 text-[var(--text-muted)] text-sm flex flex-col items-center gap-2">
+                    <Info className="w-5 h-5" />
+                    点击生成获取攻略和美食推荐
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -578,105 +720,46 @@ function GuidePanel({ opt, orderedPlaces, guideLoading, guideError, guideSummary
 
 function GuideSummaryView({ sum }: { sum: GuideSummaryResp }) {
   return (
-    <div className="space-y-3">
-      <div className="flex gap-4 text-xs text-gray-600 font-medium pb-2 border-b border-gray-200/50">
-        <span>⏱ {sum.duration}</span>
-        <span>🕐 {sum.bestTime}</span>
+    <div className="space-y-4 animate-fade-in">
+      {/* Time Info */}
+      <div className="flex gap-4 text-sm text-[var(--text-secondary)] font-medium pb-3 border-b border-[var(--border-light)]">
+        <span className="flex items-center gap-1.5">
+          <Clock className="w-4 h-4 text-[var(--primary)]" />
+          {sum.duration}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-[var(--accent)]" />
+          {sum.bestTime}
+        </span>
       </div>
 
+      {/* Must Do */}
       <div className="space-y-2">
-        <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">Must Do</div>
-        <ul className="text-sm space-y-1 text-gray-800">
-          {sum.mustDo?.map((x, i) => <li key={i} className="flex gap-2"><span className="text-blue-500">•</span> {x}</li>)}
+        <div className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wide flex items-center gap-1.5">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[var(--success)]" />
+          必打卡
+        </div>
+        <ul className="text-sm space-y-1.5 text-[var(--text-primary)]">
+          {sum.mustDo?.map((x, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] mt-2 flex-none" />
+              {x}
+            </li>
+          ))}
         </ul>
       </div>
 
-      <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-        <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-2">Food Pick</div>
-        <div className="space-y-2">
+      {/* Food Pick */}
+      <div className="bg-white rounded-xl p-4 shadow-sm border border-[var(--border-light)]">
+        <div className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3 flex items-center gap-1.5">
+          <Utensils className="w-3.5 h-3.5 text-[var(--accent)]" />
+          美食推荐
+        </div>
+        <div className="space-y-3">
           {sum.foodPick?.map((x, i) => (
             <div key={i}>
-              <div className="text-sm font-medium text-gray-900">{x.name}</div>
-              <div className="text-xs text-gray-500 leading-tight mt-0.5">{x.why}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function RouteCards({ opt }: { opt: OptimizeResp | null }) {
-  if (!opt) {
-    return (
-      <div className="h-full flex flex-col items-center justify-center text-gray-400 space-y-4">
-        <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl shadow-sm border border-white/30">
-          ✈️
-        </div>
-        <p className="text-sm font-medium">Select destinations to start planning</p>
-      </div>
-    );
-  }
-
-  const totalDist = opt.legs.reduce((s, x) => s + (x.summary.distanceM || 0), 0);
-
-  return (
-    <div className="space-y-6 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
-      <div className="flex items-center justify-between pb-4 border-b border-black/5">
-        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Your Itinerary</h2>
-        <div className="text-sm font-medium text-gray-500 bg-white/50 px-3 py-1 rounded-full backdrop-blur-md shadow-sm">
-          Total {formatDistance(totalDist)}
-        </div>
-      </div>
-
-      <div className="relative border-l-2 border-dashed border-gray-300 ml-4 space-y-8 pb-4">
-        {/* Start Point Pin */}
-        <div className="-ml-[9px] absolute top-0 flex items-center gap-4">
-          <div className="w-4 h-4 bg-gray-900 rounded-full ring-4 ring-gray-100 shadow-sm" />
-          <div className="text-sm font-bold text-gray-900">{opt.origin.name}</div>
-        </div>
-
-        <div className="pt-8 space-y-8">
-          {opt.legs.map((leg, idx) => (
-            <div key={idx} className="relative pl-8">
-              {/* Connection Line & Badge */}
-              <div className="absolute -left-[9px] top-6 w-4 h-4 bg-blue-500 rounded-full ring-4 ring-blue-50 shadow-sm z-10" />
-
-              <div className="apple-card p-5 rounded-2xl transition hover:scale-[1.01] duration-300">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900">{leg.to.name}</h3>
-                    <div className="text-xs text-gray-500 mt-1">{leg.to.formatted_address || "Destination"}</div>
-                  </div>
-                  <span className={cn("px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider", leg.summary.mode === "transit" ? "bg-blue-100 text-blue-600" : "bg-green-100 text-green-600")}>
-                    {leg.summary.mode}
-                  </span>
-                </div>
-
-                <div className="bg-gray-50/80 rounded-xl p-3 flex items-center justify-between mb-4 border border-gray-100">
-                  <div className="flex gap-4">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] uppercase text-gray-400 font-bold">Distance</span>
-                      <span className="text-xs font-semibold text-gray-700">{formatDistance(leg.summary.distanceM)}</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[10px] uppercase text-gray-400 font-bold">Duration</span>
-                      <span className="text-xs font-semibold text-gray-700">{formatDuration(leg.summary.durationS)}</span>
-                    </div>
-                    {leg.summary.costYuan && (
-                      <div className="flex flex-col">
-                        <span className="text-[10px] uppercase text-gray-400 font-bold">Cost</span>
-                        <span className="text-xs font-semibold text-gray-700">¥{leg.summary.costYuan}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <a href={leg.amap.webUrl} target="_blank" rel="noreferrer" className="ios-btn-secondary py-2 text-center text-xs hover:bg-blue-100 transition">Open Web Map</a>
-                  <a href={leg.amap.appUri} className="ios-btn-secondary py-2 text-center text-xs hover:bg-blue-100 transition">Open App</a>
-                </div>
-              </div>
+              <div className="text-sm font-semibold text-[var(--text-primary)]">{x.name}</div>
+              <div className="text-xs text-[var(--text-muted)] leading-relaxed mt-0.5">{x.why}</div>
             </div>
           ))}
         </div>
@@ -685,11 +768,138 @@ function RouteCards({ opt }: { opt: OptimizeResp | null }) {
   );
 }
 
-function EmptyState({ icon, text }: { icon: string, text: string }) {
+function RouteCards({ opt }: { opt: OptimizeResp | null }) {
+  if (!opt) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center">
+        <div className="empty-state">
+          <div className="empty-icon animate-pulse-glow">
+            <Plane className="w-8 h-8" />
+          </div>
+          <p className="empty-text">选择目的地，开始规划旅程</p>
+        </div>
+      </div>
+    );
+  }
+
+  const totalDist = opt.legs.reduce((s, x) => s + (x.summary.distanceM || 0), 0);
+  const totalTime = opt.legs.reduce((s, x) => s + (x.summary.durationS || 0), 0);
+
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-center opacity-60">
-      <div className="text-4xl mb-2 grayscale">{icon}</div>
-      <div className="text-sm font-medium text-gray-500">{text}</div>
+    <div className="space-y-6 max-w-2xl mx-auto animate-slide-up">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">您的行程</h2>
+        <div className="flex gap-3">
+          <div className="text-sm font-medium text-[var(--text-secondary)] bg-white/80 px-4 py-2 rounded-full shadow-sm border border-[var(--border)]">
+            <Route className="w-4 h-4 inline mr-1.5 text-[var(--primary)]" />
+            {formatDistance(totalDist)}
+          </div>
+          <div className="text-sm font-medium text-[var(--text-secondary)] bg-white/80 px-4 py-2 rounded-full shadow-sm border border-[var(--border)]">
+            <Clock className="w-4 h-4 inline mr-1.5 text-[var(--accent)]" />
+            {formatDuration(totalTime)}
+          </div>
+        </div>
+      </div>
+
+      {/* Timeline */}
+      <div className="timeline space-y-6">
+        {/* Start Point */}
+        <div className="relative pl-8">
+          <div className="timeline-dot timeline-dot-start top-1" />
+          <div className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <Navigation className="w-4 h-4 text-[var(--text-primary)]" />
+            {opt.origin.name}
+          </div>
+          <div className="text-xs text-[var(--text-muted)] mt-0.5">出发点</div>
+        </div>
+
+        {/* Legs */}
+        {opt.legs.map((leg, idx) => (
+          <div key={idx} className="relative pl-8 animate-fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
+            <div className="timeline-dot" style={{ top: '24px' }} />
+
+            <div className="route-card">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-[var(--accent)]" />
+                    {leg.to.name}
+                  </h3>
+                  <div className="text-xs text-[var(--text-muted)] mt-1">
+                    {leg.to.formatted_address || "目的地"}
+                  </div>
+                </div>
+                <span className={cn(
+                  "badge",
+                  leg.summary.mode === "transit" ? "badge-transit" : "badge-walk"
+                )}>
+                  {leg.summary.mode === "transit" ? (
+                    <>
+                      <Route className="w-3 h-3" />
+                      公交
+                    </>
+                  ) : (
+                    <>
+                      <Navigation className="w-3 h-3" />
+                      步行
+                    </>
+                  )}
+                </span>
+              </div>
+
+              <div className="info-grid mb-4">
+                <div className="info-item">
+                  <div className="info-label">距离</div>
+                  <div className="info-value">{formatDistance(leg.summary.distanceM)}</div>
+                </div>
+                <div className="info-item">
+                  <div className="info-label">时间</div>
+                  <div className="info-value">{formatDuration(leg.summary.durationS)}</div>
+                </div>
+                {leg.summary.costYuan && (
+                  <div className="info-item">
+                    <div className="info-label">费用</div>
+                    <div className="info-value">¥{leg.summary.costYuan}</div>
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href={leg.amap.webUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-secondary py-2.5 text-center"
+                >
+                  <Map className="w-4 h-4" />
+                  网页地图
+                </a>
+                <a
+                  href={leg.amap.appUri}
+                  className="btn-secondary py-2.5 text-center"
+                >
+                  <Smartphone className="w-4 h-4" />
+                  打开App
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
+}
+
+function EmptyState({ icon, text }: { icon: string; text: string }) {
+  const IconComponent = icon === "route" ? Route : icon === "book" ? BookOpen : Plane;
+
+  return (
+    <div className="empty-state">
+      <div className="empty-icon">
+        <IconComponent className="w-8 h-8" />
+      </div>
+      <p className="empty-text">{text}</p>
+    </div>
+  );
 }
