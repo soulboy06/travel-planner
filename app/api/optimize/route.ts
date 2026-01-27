@@ -66,24 +66,53 @@ function getCityConstraint(cityHint?: string, cityAdcode?: string) {
   return { queryCity, expectAdcodePrefix };
 }
 
+// 城市校验：宽松模式
 function isInTargetCity(p: PlacePoint, expectAdcodePrefix?: string, cityHint?: string) {
-  if (expectAdcodePrefix && p.adcode) return String(p.adcode).startsWith(expectAdcodePrefix);
-  // 没有 cityAdcode 时退而求其次：用 city 字段包含判断（不如 adcode 稳，但比不管强）
-  if (cityHint?.trim() && p.city) return String(p.city).includes(cityHint.trim());
-  return true; // 没约束就不拦
+  // 1. 如果有 adcode 前缀约束，且地点有 adcode，优先匹配前缀
+  // 注意：adcode 可能是 6 位字符串，前缀通常是前 4 位 (如 1101xx -> 1101)
+  if (expectAdcodePrefix && p.adcode && String(p.adcode).startsWith(expectAdcodePrefix)) {
+    return true;
+  }
+
+  // 2. 如果 adcode 没匹配上（或者没传前缀），尝试用文本匹配
+  const target = (cityHint || "").trim();
+  if (!target) return true; // 没指定城市，就不拦截
+
+  const pCity = String(p.city || "").trim();
+  const pAddr = String(p.formatted_address || "").trim();
+  const pAdcode = String(p.adcode || "");
+
+  // 3. 核心逻辑：只要地点的城市名、详细地址、或者 adcode 归属包含目标城市，就算通过
+  // 例如：target="北京", pCity="北京市" -> ok
+  // target="北京", pAddr="北京市东城区..." -> ok
+  if (pCity.includes(target) || target.includes(pCity)) return true;
+  if (pAddr.includes(target)) return true;
+
+  // 4. 特殊兜底：直辖市处理 (北京/上海/天津/重庆)
+  // 有时候 adcode 是区级别的，但 city 字段可能是空的或者写的区名
+  const isDirectCity = ["北京", "上海", "天津", "重庆"].some(c => target.includes(c));
+  if (isDirectCity) {
+    if (pAdcode.startsWith(target === "北京" ? "11" : target === "上海" ? "31" : target === "天津" ? "12" : "50")) return true;
+  }
+
+  return false;
 }
 
+// 宽松的 Geocode：先在目标城市找，找不到这在全国找
 async function geocodeCore(
   queryCity: string | undefined,
   expectAdcodePrefix: string | undefined,
   cityHint: string | undefined,
-  address: string
+  address: string,
+  strictCity: boolean = true // 新增参数：是否严格限制城市
 ): Promise<PlacePoint> {
   const key = mustEnv("AMAP_WEB_KEY");
   const url = new URL("https://restapi.amap.com/v3/geocode/geo");
   url.searchParams.set("key", key);
   url.searchParams.set("address", address);
-  if (queryCity) url.searchParams.set("city", queryCity);
+
+  // 只有在严格模式下才传 city
+  if (strictCity && queryCity) url.searchParams.set("city", queryCity);
 
   const resp = await fetch(url.toString(), { cache: "no-store" });
   const j = await resp.json();
@@ -91,32 +120,42 @@ async function geocodeCore(
   const geocodes = Array.isArray(j?.geocodes) ? j.geocodes : [];
   if (geocodes.length === 0) throw new Error(`Geocode not found: ${address}`);
 
-  // 在所有候选中找第一个在目标城市内的结果
-  for (const g of geocodes) {
-    if (!g?.location) continue;
+  // 如果是严格模式，必须校验城市
+  if (strictCity) {
+    for (const g of geocodes) {
+      if (!g?.location) continue;
+      const { lng, lat } = parseLocation(g.location);
+      const candidate: PlacePoint = {
+        name: address,
+        lng, lat,
+        location: g.location,
+        formatted_address: g.formatted_address,
+        city: g.cityname,
+        citycode: g.citycode,
+        adcode: g.adcode,
+      };
+      if (isInTargetCity(candidate, expectAdcodePrefix, cityHint)) {
+        return candidate;
+      }
+    }
+    throw new Error(`Geocode not found in target city: ${address}`);
+  } else {
+    // 非严格模式（全国搜索），直接取第一个结果
+    const g = geocodes[0];
     const { lng, lat } = parseLocation(g.location);
-    const candidate: PlacePoint = {
+    return {
       name: address,
-      lng,
-      lat,
+      lng, lat,
       location: g.location,
       formatted_address: g.formatted_address,
       city: g.cityname,
       citycode: g.citycode,
       adcode: g.adcode,
     };
-    if (isInTargetCity(candidate, expectAdcodePrefix, cityHint)) {
-      return candidate;
-    }
   }
-
-  // 如果没有在目标城市内的结果，抛出错误让 poiSearchBest 接管
-  throw new Error(`Geocode not found in target city: ${address}`);
 }
 
-type PoiRaw = any;
-
-function scorePoi(query: string, poi: PoiRaw) {
+function scorePoi(query: string, poi: any) {
   // 评分规则：越像“你输入的那个地方”分越高
   const q = query.trim();
   const name = String(poi?.name ?? "");
@@ -149,17 +188,19 @@ async function poiSearchBest(
   queryCity: string | undefined,
   expectAdcodePrefix: string | undefined,
   cityHint: string | undefined,
-  query: string
+  query: string,
+  strictCity: boolean = true
 ): Promise<PlacePoint | null> {
   const key = mustEnv("AMAP_WEB_KEY");
   const url = new URL("https://restapi.amap.com/v3/place/text");
   url.searchParams.set("key", key);
   url.searchParams.set("keywords", query);
 
-  if (queryCity) url.searchParams.set("city", queryCity);
-  // 关键：只在该城市内搜索，避免外地同名
-  url.searchParams.set("citylimit", "true");
-  // 多拿一些候选，方便打分选择最可能
+  if (strictCity && queryCity) {
+    url.searchParams.set("city", queryCity);
+    url.searchParams.set("citylimit", "true");
+  }
+
   url.searchParams.set("offset", "10");
   url.searchParams.set("page", "1");
   url.searchParams.set("extensions", "all");
@@ -170,26 +211,20 @@ async function poiSearchBest(
 
   if (pois.length === 0) return null;
 
-  // 先过滤：必须在目标城市内（优先按 adcode 前缀）
-  const filtered = pois.filter((p: any) => {
-    const adcode = String(p?.adcode ?? "");
-    const cityname = String(p?.cityname ?? "");
-    const pp: PlacePoint = {
-      name: String(p?.name ?? query),
-      lng: 0,
-      lat: 0,
-      location: String(p?.location ?? ""),
-      formatted_address: String(p?.address ?? ""),
-      city: cityname,
-      citycode: String(p?.citycode ?? ""),
-      adcode,
-    };
-    return isInTargetCity(pp, expectAdcodePrefix, cityHint);
-  });
+  // 严格模式下过滤
+  let candidates = pois;
+  if (strictCity) {
+    const filtered = pois.filter((p: any) => {
+      const adcode = String(p?.adcode ?? "");
+      const cityname = String(p?.cityname ?? "");
+      const pp = { city: cityname, adcode } as PlacePoint;
+      return isInTargetCity(pp, expectAdcodePrefix, cityHint);
+    });
+    candidates = filtered.length ? filtered : [];
+  }
 
-  const candidates = filtered.length ? filtered : pois; // 如果过滤后空，退一步用原候选（但 citylimit=true 一般不至于）
+  if (candidates.length === 0) return null;
 
-  // 选得分最高的
   candidates.sort((a: any, b: any) => scorePoi(query, b) - scorePoi(query, a));
   const best = candidates[0];
   if (!best?.location) return null;
@@ -199,8 +234,7 @@ async function poiSearchBest(
 
   return {
     name: String(best?.name ?? query),
-    lng,
-    lat,
+    lng, lat,
     location: String(best.location),
     formatted_address: String(best?.address ?? ""),
     city: String(best?.cityname ?? ""),
@@ -210,10 +244,11 @@ async function poiSearchBest(
 }
 
 /**
- * ✅ 强制城市 + 选最可能：
- * - 先 geocode（带 city）
- * - 如果结果不在目标城市：当作失败
- * - 再 POI 搜索（citylimit=true）选最可能
+ * ✅ 严格城市 + 智能容错：
+ * - 必须在目标城市内搜索
+ * - 先尝试精确 Geocode
+ * - 失败则尝试 POI 搜索（模糊匹配）
+ * - 绝对不进行全国搜索
  */
 async function geocodeStrict(
   queryCity: string | undefined,
@@ -221,18 +256,31 @@ async function geocodeStrict(
   cityHint: string | undefined,
   placeName: string
 ): Promise<PlacePoint> {
-  // 1) geocode
+  // 1) 尝试城市内精准地址解析
   try {
-    const g = await geocodeCore(queryCity, expectAdcodePrefix, cityHint, placeName);
+    const g = await geocodeCore(queryCity, expectAdcodePrefix, cityHint, placeName, true);
     g.name = placeName;
     return g;
-  } catch {
-    // 2) poi fallback（只在城市内）
-    const poi = await poiSearchBest(queryCity, expectAdcodePrefix, cityHint, placeName);
-    if (!poi) throw new Error(`Geocode not found in target city: ${placeName}`);
-    poi.name = placeName;
-    return poi;
+  } catch (e) {
+    // ignore
   }
+
+  // 2) 尝试城市内 POI 搜索 (模糊匹配，但严格限制城市)
+  try {
+    const p = await poiSearchBest(queryCity, expectAdcodePrefix, cityHint, placeName, true);
+    if (p) {
+      p.name = placeName;
+      return p;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  // 3) ❌ 移除所有全局搜索 fallback
+  // 如果在目标城市找不到，那就是找不到。不要去外地找同名地点。
+
+  // 这里的错误信息会传到 failed 数组中，前端会显示给用户
+  throw new Error(`在 ${cityHint || queryCity || '目标城市'} 未找到该地点，请核对名称`);
 }
 
 function buildAmapLinks(from: PlacePoint, to: PlacePoint) {
@@ -274,9 +322,13 @@ async function transitOrWalk(
 
   if (Array.isArray(transits) && transits.length > 0) {
     const best = transits[0];
-    const distanceM = Number(best?.distance) || undefined;
-    const durationS = Number(best?.duration) || undefined;
-    const costYuan = best?.cost ? Number(best.cost) : undefined;
+    const parseNum = (v: any) => {
+      const n = Number(v);
+      return isNaN(n) ? undefined : n;
+    };
+    const distanceM = parseNum(best?.distance);
+    const durationS = parseNum(best?.duration);
+    const costYuan = parseNum(best?.cost);
 
     return {
       summary: { mode: "transit", distanceM, durationS, costYuan },

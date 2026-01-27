@@ -1,233 +1,366 @@
+// Guide Summary API with Bocha Search Integration
 import { NextResponse } from "next/server";
 
 type PoiItem = {
-  name: string;
-  address?: string;
-  location?: string;
-  distanceM?: number;
-  tel?: string;
-  type?: string;
-  rating?: number;
+    name: string;
+    address?: string;
+    location?: string;
+    distanceM?: number;
+    tel?: string;
+    type?: string;
+    rating?: number;
 };
 
 type GuideSummaryReq = {
-  place: { name: string; lng: number; lat: number; cityHint?: string };
-  sections: Array<{ key: string; title: string; items: PoiItem[] }>;
-  preferences?: {
-    budget?: "low" | "mid" | "high";
-    vibe?: "classic" | "family" | "photo" | "food" | "night";
-    pace?: "slow" | "normal" | "fast";
-  };
+    place: { name: string; lng: number; lat: number; cityHint?: string };
+    sections: Array<{ key: string; title: string; items: PoiItem[] }>;
+    preferences?: {
+        budget?: "low" | "mid" | "high";
+        vibe?: "classic" | "family" | "photo" | "food" | "night";
+        pace?: "slow" | "normal" | "fast";
+    };
+};
+
+type ReferenceItem = {
+    name: string;
+    snippet: string;
+    url?: string;
+    source?: string;
 };
 
 type GuideSummary = {
-  title: string;
-  duration: string;
-  bestTime: string[];
-  mustDo: string[];
-  foodPick: Array<{ name: string; reason: string; distanceM?: number }>;
-  tips: string[];
-  nearbyPlanB: string[];
+    title: string;
+    duration: string;
+    bestTime: string[];
+    mustDo: string[];
+    foodPick: Array<{ name: string; reason: string; distanceM?: number }>;
+    tips: string[];
+    nearbyPlanB: string[];
+    references?: ReferenceItem[];
 };
 
 function mustEnv(name: string) {
-  const v = process.env[name];
-  if (!v) throw new Error(`Missing ${name} in .env.local`);
-  return v;
+    const v = process.env[name];
+    if (!v) throw new Error(`Missing ${name} in .env.local`);
+    return v;
 }
 
 function safeJsonParse(text: string): any {
-  try {
-    return JSON.parse(text);
-  } catch {
-    const m = text.match(/\{[\s\S]*\}/);
-    if (m) return JSON.parse(m[0]);
-    throw new Error("Model did not return valid JSON");
-  }
+    try {
+        return JSON.parse(text);
+    } catch {
+        const m = text.match(/\{[\s\S]*\}/);
+        if (m) {
+            try {
+                return JSON.parse(m[0]);
+            } catch {
+                return null;
+            }
+        }
+        return null;
+    }
 }
 
 function round4(n: number) {
-  return Math.round(n * 10000) / 10000;
-}
-function simpleHash(s: string) {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return (h >>> 0).toString(16);
+    return Math.round(n * 10000) / 10000;
 }
 
-/** 10 分钟 TTL 内存缓存 */
+function simpleHash(s: string) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(16);
+}
+
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const cache = new Map<string, { exp: number; value: GuideSummary }>();
 
 function getCache(key: string): GuideSummary | null {
-  const hit = cache.get(key);
-  if (!hit) return null;
-  if (Date.now() > hit.exp) {
-    cache.delete(key);
-    return null;
-  }
-  return hit.value;
+    const hit = cache.get(key);
+    if (!hit) return null;
+    if (Date.now() > hit.exp) {
+        cache.delete(key);
+        return null;
+    }
+    return hit.value;
 }
+
 function setCache(key: string, value: GuideSummary) {
-  cache.set(key, { exp: Date.now() + CACHE_TTL_MS, value });
+    cache.set(key, { exp: Date.now() + CACHE_TTL_MS, value });
 }
 
 function buildCacheKey(req: GuideSummaryReq) {
-  const prefsKey = JSON.stringify(req.preferences || {});
-  const topNames = req.sections
-    .map((s) => `${s.key}:${(s.items || []).slice(0, 10).map((x) => x.name).join("|")}`)
-    .join(";");
-  const base = [req.place.name, `${round4(req.place.lng)},${round4(req.place.lat)}`, prefsKey, topNames].join("::");
-  return simpleHash(base);
+    const prefsKey = JSON.stringify(req.preferences || {});
+    const topNames = req.sections
+        .map((s) => `${s.key}:${(s.items || []).slice(0, 10).map((x) => x.name).join("|")}`)
+        .join(";");
+    const base = [req.place.name, `${round4(req.place.lng)},${round4(req.place.lat)}`, prefsKey, topNames].join("::");
+    return simpleHash(base);
 }
 
 function pickTop(items: PoiItem[] | undefined, n: number) {
-  const arr = Array.isArray(items) ? items : [];
-  return [...arr]
-    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
-    .slice(0, n)
-    .map((x) => ({
-      name: x.name,
-      rating: x.rating ?? 0,
-      distanceM: x.distanceM,
-      address: x.address,
-    }));
+    const arr = Array.isArray(items) ? items : [];
+    return [...arr]
+        .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+        .slice(0, n)
+        .map((x) => ({
+            name: x.name,
+            rating: x.rating ?? 0,
+            distanceM: x.distanceM,
+            address: x.address,
+        }));
 }
 
-async function callDoubao(req: GuideSummaryReq): Promise<GuideSummary> {
-  const apiKey = mustEnv("ARK_API_KEY");
-  const model = mustEnv("ARK_MODEL_ID");
-  const base = (process.env.ARK_BASE_URL || "https://ark.cn-beijing.volces.com/api/v3").replace(/\/+$/, "");
-  const url = `${base}/chat/completions`;
+async function callBochaSearch(query: string): Promise<ReferenceItem[]> {
+    const apiKey = process.env.BOCHA_API_KEY;
+    if (!apiKey) {
+        console.warn("⚠️ BOCHA_API_KEY not set");
+        return [];
+    }
 
-  const sec = (k: string) => req.sections.find((s) => s.key === k)?.items;
+    try {
+        console.log("🔍 Calling Bocha with query:", query);
+        const res = await fetch("https://api.bochaai.com/v1/web-search", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                query: query,
+                count: 20
+            })
+        });
 
-  const foodCandidates = pickTop(sec("food"), 10);
-  const sightCandidates = pickTop(sec("sight"), 10);
-  const metroCandidates = pickTop(sec("metro"), 8);
+        if (!res.ok) {
+            console.error(`❌ Bocha API Error: ${res.status}`);
+            return [];
+        }
 
-  const system = [
-    "你是一个本地旅行攻略编辑。",
-    "你只能使用用户提供的数据生成攻略：目的地信息 + 候选POI列表。",
-    "严禁编造不存在的店名/地点/具体规定（例如具体票价、具体开放时间若未提供）。",
-    "输出必须是严格 JSON，不能包含任何多余文本、注释、markdown。",
-    "内容用中文，建议可执行、简短有重点。",
-    "",
-    "关键要求：mustDo 只写“景区/目的地本身怎么玩”，不要写吃喝。吃喝内容只能出现在 foodPick。",
-    "强约束：foodPick 只能从 foodCandidates 里选择，name 必须完全一致。",
-  ].join("\n");
+        const json = await res.json();
+        console.log("📦 Bocha response structure:", Object.keys(json));
 
-  const schemaHint = {
-    title: "string",
-    duration: "string",
-    bestTime: ["string"],
-    mustDo: ["string(只写景区本身玩法，不得出现餐厅/咖啡/美食等吃喝词)"],
-    foodPick: [{ name: "string(必须来自foodCandidates)", reason: "string", distanceM: "number(optional)" }],
-    tips: ["string(可以包含交通/排队/拍照/预约等，但不要推荐吃喝地点到 tips 里)"],
-    nearbyPlanB: ["string(备选：公园/博物馆/室内场馆等，禁止编造店名)"],
-  };
+        let items: any[] = [];
+        if (json?.data?.webPages?.value) items = json.data.webPages.value;
+        else if (json?.data?.results) items = json.data.results;
+        else if (json?.results) items = json.results;
+        else if (Array.isArray(json?.data)) items = json.data;
+        else if (Array.isArray(json)) items = json;
 
-  const user = {
-    task: "生成到达目的地后的攻略卡片。",
-    outputSchema: schemaHint,
-    place: req.place,
-    preferences: req.preferences ?? {},
-    candidates: {
-      sightCandidates,
-      metroCandidates,
-      foodCandidates,
-    },
-    rules: [
-      "bestTime 给 2-3 条",
-      "mustDo 给 5-8 条：围绕目的地本身（游览顺序/拍照点/节奏/避开人群/路线组织）。允许提及 sightCandidates 作为“顺路可加”的景点，但不要出现吃喝地点。",
-      "foodPick 最多 3 个，只能从 foodCandidates 里选；name 必须完全一致；理由写清楚（距离/评分/适合时段）",
-      "tips 给 4-6 条：预约/排队/交通/入园准备/雨天方案，不要写去吃什么",
-      "nearbyPlanB 给 3-5 条：只写类别或从 sightCandidates 里选，禁止编造具体店名",
-    ],
-  };
+        console.log(`📊 Found ${items.length} raw items`);
 
-  const body = {
-    model,
-    messages: [
-      { role: "system", content: system },
-      { role: "user", content: JSON.stringify(user) },
-    ],
-    temperature: 0.6,
-  };
+        const mapped = items.map((item: any) => {
+            const url = item.url || item.link || "";
+            let source = "Web";
+            let priority = 1;
 
-  const resp = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify(body),
-  });
+            // 优先级：小红书 > 知乎 > 大众点评 > 马蜂窝 > 其他
+            if (url.includes("xiaohongshu")) {
+                source = "小红书";
+                priority = 100;
+            } else if (url.includes("zhihu")) {
+                source = "知乎";
+                priority = 95;
+            } else if (url.includes("dianping")) {
+                source = "大众点评";
+                priority = 90;
+            } else if (url.includes("mafengwo")) {
+                source = "马蜂窝";
+                priority = 50;
+            } else if (url.includes("ctrip") || url.includes("qunar")) {
+                source = "旅游网站";
+                priority = 20;
+            }
 
-  const json = await resp.json().catch(() => ({} as any));
-  if (!resp.ok) {
-    const msg = json?.error?.message || json?.message || `Doubao request failed: HTTP ${resp.status}`;
-    throw new Error(msg);
-  }
+            return {
+                name: item.name || item.title || "未知标题",
+                snippet: item.snippet || item.summary || item.description || "",
+                url: url,
+                source,
+                priority
+            };
+        }).filter((x: any) => x.name !== "未知标题" && x.url && x.snippet);
 
-  const content: string | undefined = json?.choices?.[0]?.message?.content;
-  if (!content) throw new Error("Doubao response missing choices[0].message.content");
+        console.log(`✅ After filter: ${mapped.length} items`);
+        mapped.sort((a: any, b: any) => b.priority - a.priority);
 
-  const parsed = safeJsonParse(content);
+        const final = mapped.slice(0, 10).map(({ priority, ...rest }: any) => rest);
+        console.log(`📋 Returning ${final.length} references`);
+        return final;
 
-  if (
-    !parsed ||
-    typeof parsed.title !== "string" ||
-    !Array.isArray(parsed.mustDo) ||
-    !Array.isArray(parsed.tips) ||
-    !Array.isArray(parsed.bestTime) ||
-    !Array.isArray(parsed.nearbyPlanB) ||
-    !Array.isArray(parsed.foodPick)
-  ) {
-    throw new Error("Doubao returned JSON but schema mismatch");
-  }
+    } catch (e) {
+        console.error("❌ Bocha Search Failed:", e);
+        return [];
+    }
+}
 
-  // foodPick 强约束过滤
-  const allowedFood = new Set(foodCandidates.map((x) => x.name));
-  parsed.foodPick = (parsed.foodPick || [])
-    .filter((x: any) => x?.name && allowedFood.has(x.name))
-    .slice(0, 3);
+async function callDoubao(req: GuideSummaryReq, references: ReferenceItem[]): Promise<GuideSummary> {
+    const apiKey = mustEnv("ARK_API_KEY");
+    const model = mustEnv("ARK_MODEL_ID");
+    const base = (process.env.ARK_BASE_URL || "https://ark.cn-beijing.volces.com/api/v3").replace(/\/+$/, "");
+    const url = `${base}/chat/completions`;
 
-  // mustDo 兜底过滤（防模型写吃喝）
-  const badWords = ["餐", "吃", "美食", "饭", "咖啡", "奶茶", "火锅", "烧烤", "小吃", "甜品"];
-  parsed.mustDo = (parsed.mustDo || []).filter((x: string) => !badWords.some((w) => x.includes(w)));
+    const sec = (k: string) => req.sections.find((s) => s.key === k)?.items;
+    const foodCandidates = pickTop(sec("food"), 15);
+    const sightCandidates = pickTop(sec("sight"), 10);
 
-  return parsed as GuideSummary;
+    const searchContext = references.length > 0
+        ? references.map((r, i) => `【${r.source}】${r.name}\n${r.snippet}`).join("\n\n")
+        : "暂无网友评论";
+
+    const system = [
+        "🎯 你是小红书旅游博主，基于网友真实笔记生成攻略。",
+        "",
+        "📌 核心规则：",
+        "1. tips 前3-5条必须是【避雷】，格式：'❌避雷：具体问题（来自【小红书/知乎/大众点评】）'",
+        "2. foodPick 优先推荐笔记提到+在列表中+高分+近距离的店",
+        "3. 如果笔记未提美食，就选高分近店，reason写'高德POI推荐，Xx⭐'",
+        "4. 禁止推荐不在foodCandidates中的店",
+        "",
+        "📋 输出JSON：",
+        "{",
+        "  title: 标题（emoji）",
+        "  duration: 时长",
+        "  bestTime: 时间数组",
+        "  mustDo: 必打卡（引用笔记）",
+        "  foodPick: [{name, reason, distanceM}] 至少3个",
+        "  tips: 建议（前3-5条避雷）",
+        "  nearbyPlanB: 备选",
+        "}"
+    ].join("\n");
+
+    const userMsg = {
+        "地点": req.place.name,
+        "真实笔记": searchContext,
+        "可选美食": foodCandidates.map(f => `${f.name} ${f.rating}⭐ ${f.distanceM}m`),
+        "要求": [
+            "1. tips前3条避雷，标注来源",
+            "2. foodPick至少3个，优先笔记提到的，其次高分近店",
+            "3. 禁止编造店名"
+        ]
+    };
+
+    const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model,
+            messages: [
+                { role: "system", content: system },
+                { role: "user", content: JSON.stringify(userMsg, null, 2) }
+            ],
+            temperature: 0.7
+        }),
+    });
+
+    if (!resp.ok) {
+        throw new Error(`Doubao API Error: ${resp.status}`);
+    }
+
+    const json = await resp.json();
+    const content = json?.choices?.[0]?.message?.content;
+    if (!content) throw new Error("No content from model");
+
+    const parsed = safeJsonParse(content);
+    if (!parsed || !Array.isArray(parsed.mustDo)) {
+        throw new Error("Invalid JSON structure from model");
+    }
+
+    // 放宽过滤条件：只要名字在列表中就保留
+    const allowedFood = new Set(foodCandidates.map((x) => x.name));
+    parsed.foodPick = (parsed.foodPick || [])
+        .filter((x: any) => {
+            if (!x?.name) return false;
+            // 模糊匹配：如果 foodPick 中的店名包含在 candidates 中，或反之
+            return Array.from(allowedFood).some(allowed =>
+                x.name.includes(allowed) || allowed.includes(x.name)
+            );
+        })
+        .slice(0, 5);
+
+    // 如果过滤后没有美食，自动补充高分近店
+    if (parsed.foodPick.length === 0) {
+        console.warn("⚠️ No valid foodPick, adding fallback recommendations");
+        parsed.foodPick = foodCandidates.slice(0, 3).map(f => ({
+            name: f.name,
+            reason: `高德POI推荐，评分${f.rating}⭐`,
+            distanceM: f.distanceM
+        }));
+    }
+
+    parsed.references = references;
+    return parsed as GuideSummary;
 }
 
 export async function POST(req: Request) {
-  try {
-    const body = (await req.json()) as GuideSummaryReq;
-    if (!body?.place?.name || !Array.isArray(body?.sections)) {
-      return NextResponse.json({ error: "place and sections are required" }, { status: 400 });
+    try {
+        const body = (await req.json()) as GuideSummaryReq;
+        if (!body?.place?.name || !Array.isArray(body?.sections)) {
+            return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+        }
+
+        const cacheKey = buildCacheKey(body);
+        const hit = getCache(cacheKey);
+        if (hit) {
+            console.log("✅ Cache hit");
+            return NextResponse.json({ summary: hit, cached: true });
+        }
+
+        const placeName = body.place.name;
+        const cityHint = body.place.cityHint || "";
+
+        // 构建精确搜索关键词
+        const baseQuery = cityHint ? `${cityHint} ${placeName}` : placeName;
+
+        // 多轮搜索策略：精确限定，避免无关结果
+        let allReferences: ReferenceItem[] = [];
+
+        // 第1轮：避雷专项（优先）
+        const pileiQuery = `"${placeName}" ${cityHint} 避雷 避坑 踩坑`;
+        console.log("🔍 Round 1 (避雷):", pileiQuery);
+        const pileiRefs = await callBochaSearch(pileiQuery);
+        allReferences.push(...pileiRefs);
+
+        // 第2轮：小红书/知乎攻略
+        const guideQuery = `"${placeName}" ${cityHint} 攻略 打卡 推荐`;
+        console.log("🔍 Round 2 (攻略):", guideQuery);
+        const guideRefs = await callBochaSearch(guideQuery);
+        allReferences.push(...guideRefs.filter(r => !allReferences.find(x => x.url === r.url)));
+
+        // 第3轮：大众点评美食
+        const foodQuery = `"${placeName}" ${cityHint} 美食 餐厅`;
+        console.log("🔍 Round 3 (美食):", foodQuery);
+        const foodRefs = await callBochaSearch(foodQuery);
+        allReferences.push(...foodRefs.filter(r => !allReferences.find(x => x.url === r.url)));
+
+        // 去重并按优先级排序
+        const uniqueRefs = Array.from(new Map(allReferences.map(r => [r.url, r])).values());
+
+        // 过滤掉明显不相关的结果
+        const filteredRefs = uniqueRefs.filter(ref => {
+            const text = `${ref.name} ${ref.snippet}`.toLowerCase();
+            const placeNameLower = placeName.toLowerCase();
+            // 必须包含景点名称
+            return text.includes(placeNameLower);
+        });
+
+        console.log(`✅ Total ${filteredRefs.length} relevant references (filtered from ${uniqueRefs.length})`);
+        console.log(`📋 Sources:`, filteredRefs.reduce((acc: any, r) => {
+            acc[r.source || 'Unknown'] = (acc[r.source || 'Unknown'] || 0) + 1;
+            return acc;
+        }, {}));
+
+        const summary = await callDoubao(body, filteredRefs.slice(0, 15));
+        setCache(cacheKey, summary);
+
+        return NextResponse.json({ summary, cached: false });
+    } catch (e: any) {
+        console.error("GUIDE_SUMMARY_ERROR:", e);
+        return NextResponse.json({ error: e?.message ?? String(e) }, { status: 500 });
     }
-
-    const cacheKey = buildCacheKey(body);
-    const hit = getCache(cacheKey);
-    if (hit) {
-      return NextResponse.json(
-        { summary: hit, cached: true },
-        { status: 200, headers: { "Content-Type": "application/json; charset=utf-8" } }
-      );
-    }
-
-    const summary = await callDoubao(body);
-    setCache(cacheKey, summary);
-
-    return NextResponse.json(
-      { summary, cached: false },
-      { status: 200, headers: { "Content-Type": "application/json; charset=utf-8" } }
-    );
-  } catch (e: any) {
-    console.error("GUIDE_SUMMARY_ERROR:", e);
-    return NextResponse.json(
-      { error: e?.message ?? String(e), stack: e?.stack ?? null },
-      { status: 500, headers: { "Content-Type": "application/json; charset=utf-8" } }
-    );
-  }
 }

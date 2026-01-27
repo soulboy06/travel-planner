@@ -5,10 +5,16 @@ export const metadata = {
   description: "Route optimizer + Amap links + on-demand guides",
 };
 
+import { ToastProvider } from "./contexts/ToastContext";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN">
-      <body>{children}</body>
+      <body>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
+      </body>
     </html>
   );
 }

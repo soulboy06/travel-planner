@@ -1,0 +1,10 @@
+﻿
+> travel-planner@0.1.0 build
+> next build
+
+鈻?Next.js 16.1.4 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+鉁?Compiled successfully in 1833.2ms
+  Running TypeScript ...

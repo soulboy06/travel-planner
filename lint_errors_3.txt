@@ -1,0 +1,76 @@
+﻿
+> travel-planner@0.1.0 lint
+> eslint
+
+
+C:\Users\yyy\Desktop\travel-planner\app\api\_json.ts
+  3:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\api\city-adcode\route.ts
+  27:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  69:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\api\geocode\route.ts
+  109:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\api\guide-summary\route.ts
+   48:39  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  145:20  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  154:41  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  184:23  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  187:25  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  187:33  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  189:50  warning  'priority' is defined but never used                      @typescript-eslint/no-unused-vars
+  189:71  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  207:11  warning  'sightCandidates' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  210:30  warning  'i' is defined but never used                             @typescript-eslint/no-unused-vars
+  277:21  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  318:15  warning  'baseQuery' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  321:13  error    'allReferences' is never reassigned. Use 'const' instead  prefer-const
+  353:62  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  362:17  error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\api\guide\route.ts
+   26:22  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   31:23  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   38:10  warning  'sortByRatingDesc' is defined but never used  @typescript-eslint/no-unused-vars
+   71:42  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  124:15  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\api\inputtips\route.ts
+  71:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  91:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\api\optimize\route.ts
+   30:14  error    Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  158:39  error    Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  217:38  error    Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  228:23  error    Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  228:31  error    Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  264:12  warning  'e' is defined but never used                         @typescript-eslint/no-unused-vars
+  275:12  warning  'e' is defined but never used                         @typescript-eslint/no-unused-vars
+  474:11  error    'queryCity' is never reassigned. Use 'const' instead  prefer-const
+  576:15  error    Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\api\transit\route.ts
+  117:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\components\GuidePanel.tsx
+  3:10  warning  'GuideResp' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yyy\Desktop\travel-planner\app\components\InputPanel.tsx
+  64:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\page.tsx
+  233:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\app\types.ts
+  27:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\yyy\Desktop\travel-planner\utils\index.ts
+  10:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  17:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+鉁?42 problems (34 errors, 8 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+
