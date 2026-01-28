@@ -5,7 +5,6 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, Polyline } from "react-
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { PlacePoint, UiLeg } from "../types";
-import { gcj02ToWgs84 } from "../utils/coordTransform";
 
 const makeSvgIcon = (color: string) => {
     const svg = `
@@ -59,18 +58,15 @@ const ChangeView = ({ center, places, origin, activeLegInfo }: ChangeViewProps) 
         const points: [number, number][] = [];
 
         if (origin) {
-            const [lng, lat] = gcj02ToWgs84(origin.lng, origin.lat);
-            points.push([lat, lng]);
+            points.push([origin.lat, origin.lng]);
         }
 
         places.forEach((p: PlacePoint) => {
-            const [lng, lat] = gcj02ToWgs84(p.lng, p.lat);
-            points.push([lat, lng]);
+            points.push([p.lat, p.lng]);
         });
 
         if (center && points.length === 0) {
-            const [lng, lat] = gcj02ToWgs84(center[0], center[1]);
-            map.flyTo([lat, lng], 12);
+            map.flyTo([center[1], center[0]], 12);
         } else if (points.length > 0) {
             const bounds = L.latLngBounds(points);
             map.fitBounds(bounds, { padding: [50, 50] });
@@ -119,8 +115,8 @@ const MapResizeObserver = ({ container, viewportKey }: { container: HTMLDivEleme
 };
 
 export default function MapPanel({ places, origin, center, legs, activeLegIndex, onMarkerClick, edgeToEdge, viewportKey }: MapPanelProps) {
-    // Default center (Chengdu) - converted to WGS84 for Leaflet
-    const [defLng, defLat] = gcj02ToWgs84(104.0648, 30.6586);
+    // Default center (Chengdu) - AMap tiles use GCJ-02
+    const [defLng, defLat] = [104.0648, 30.6586];
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     // Compute all polyline paths from legs
@@ -137,8 +133,7 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
             const points: [number, number][] = [];
 
             // Add start point
-            const [startLng, startLat] = gcj02ToWgs84(leg.from.lng, leg.from.lat);
-            points.push([startLat, startLng]);
+            points.push([leg.from.lat, leg.from.lng]);
 
             // Partial Interface for AMap Segment
             interface AMapSegment {
@@ -156,9 +151,7 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
                         const [lngStr, latStr] = pair.split(",");
                         const lng = Number(lngStr);
                         const lat = Number(latStr);
-                        // Convert GCJ02 -> WGS84
-                        const [wLng, wLat] = gcj02ToWgs84(lng, lat);
-                        points.push([wLat, wLng]);
+                        points.push([lat, lng]);
                     });
                 };
 
@@ -178,8 +171,7 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
             });
 
             // Add end point
-            const [endLng, endLat] = gcj02ToWgs84(leg.to.lng, leg.to.lat);
-            points.push([endLat, endLng]);
+            points.push([leg.to.lat, leg.to.lng]);
 
             return {
                 path: points,
@@ -198,7 +190,7 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
                 style={{ height: "100%", width: "100%" }}
             >
                 <TileLayer
-                    attribution="© AMap"
+                    attribution="AMap"
                     url="https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}"
                     subdomains={["1", "2", "3", "4"]}
                 />
@@ -220,10 +212,9 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
 
                 {/* Origin Marker (Blue) */}
                 {origin && (() => {
-                    const [wgsLng, wgsLat] = gcj02ToWgs84(origin.lng, origin.lat);
                     return (
                         <Marker
-                            position={[wgsLat, wgsLng]}
+                            position={[origin.lat, origin.lng]}
                             icon={blueIcon}
                             zIndexOffset={1000}
                         >
@@ -237,11 +228,10 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
 
                 {/* Destination Markers (Red) */}
                 {places.map((p, idx) => {
-                    const [wgsLng, wgsLat] = gcj02ToWgs84(p.lng, p.lat);
                     return (
                         <Marker
                             key={`${p.name}-${idx}`}
-                            position={[wgsLat, wgsLng]}
+                            position={[p.lat, p.lng]}
                             icon={redIcon}
                             eventHandlers={{
                                 click: () => onMarkerClick?.(idx),

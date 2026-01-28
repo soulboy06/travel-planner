@@ -276,8 +276,28 @@ async function geocodeStrict(
     // ignore
   }
 
-  // 3) ❌ 移除所有全局搜索 fallback
-  // 如果在目标城市找不到，那就是找不到。不要去外地找同名地点。
+  // 3) 城市内“关键词增强”搜索（例如：三亚 + 海滨浴场）
+  try {
+    const q = cityHint ? `${cityHint}${placeName}` : placeName;
+    const p = await poiSearchBest(queryCity, expectAdcodePrefix, cityHint, q, true);
+    if (p) {
+      p.name = placeName;
+      return p;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  // 4) 允许全国兜底搜索，但仍强制落在目标城市内
+  try {
+    const p = await poiSearchBest(queryCity, expectAdcodePrefix, cityHint, placeName, false);
+    if (p && isInTargetCity(p, expectAdcodePrefix, cityHint)) {
+      p.name = placeName;
+      return p;
+    }
+  } catch (e) {
+    // ignore
+  }
 
   // 这里的错误信息会传到 failed 数组中，前端会显示给用户
   throw new Error(`在 ${cityHint || queryCity || '目标城市'} 未找到该地点，请核对名称`);
