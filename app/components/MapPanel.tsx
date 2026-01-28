@@ -7,24 +7,28 @@ import L from "leaflet";
 import { PlacePoint, UiLeg } from "../types";
 import { gcj02ToWgs84 } from "../utils/coordTransform";
 
-// Custom Red Icon for Destinations
+const makeSvgIcon = (color: string) => {
+    const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <circle cx="16" cy="16" r="11" fill="${color}" stroke="#FFFFFF" stroke-width="3"/>
+  <circle cx="16" cy="16" r="4" fill="#FFFFFF"/>
+</svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+};
+
+// Inline SVG icons to avoid blocked external CDNs in mainland networks
 const redIcon = new L.Icon({
-    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconUrl: makeSvgIcon("#EF4444"),
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -12],
 });
 
-// Custom Blue Icon for Origin
 const blueIcon = new L.Icon({
-    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
-    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconUrl: makeSvgIcon("#3B82F6"),
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -12],
 });
 
 // Auto-zoom component
@@ -194,8 +198,9 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
                 style={{ height: "100%", width: "100%" }}
             >
                 <TileLayer
-                    attribution='&copy; OpenStreetMap'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="© AMap"
+                    url="https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}"
+                    subdomains={["1", "2", "3", "4"]}
                 />
 
                 <MapResizeObserver container={containerRef.current} viewportKey={viewportKey} />
