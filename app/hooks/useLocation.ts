@@ -7,14 +7,14 @@ export function useLocation() {
     const { toast } = useToast();
 
     // City State
-    const [cityName, setCityName] = useState<string>("成都");
+    const [cityName, setCityName] = useState<string>("");
     const [cityAdcode, setCityAdcode] = useState<string>("");
     const [cityAutoStatus, setCityAutoStatus] = useState<string>("");
     const [cityCenter, setCityCenter] = useState<[number, number] | undefined>(undefined);
 
     // Origin State
     const [originMode, setOriginMode] = useState<"text" | "coord">("text");
-    const [originText, setOriginText] = useState<string>("天府广场");
+    const [originText, setOriginText] = useState<string>("");
     const [originCoordText, setOriginCoordText] = useState<string>("");
     const [originCoordName, setOriginCoordName] = useState<string>("我的位置");
     const [locating, setLocating] = useState(false);

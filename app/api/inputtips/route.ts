@@ -79,7 +79,8 @@ export async function POST(req: Request) {
         typecode: x?.typecode ? String(x.typecode) : undefined,
       }))
       .filter((t: Tip) => t.name) // 去空
-      .filter((t: Tip) => isInTargetCity(t, expectAdcodePrefix, body.cityHint)); // ✅ 强过滤
+      .filter((t: Tip) => t.name); // 去空
+    // .filter((t: Tip) => isInTargetCity(t, expectAdcodePrefix, body.cityHint)); // 移除强过滤，依赖高德 citylimit
 
     // 按“最可能”排序
     tips.sort((a, b) => scoreTip(keywords, b) - scoreTip(keywords, a));

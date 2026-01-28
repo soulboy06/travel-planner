@@ -2,6 +2,7 @@ import React, { useState, KeyboardEvent } from "react";
 import { AlertCircle, Globe, Loader2, Locate, MapPin, Navigation, Plus, Sparkles, X } from "lucide-react";
 import { cn, postJson } from "@/utils";
 import { PlacePoint } from "../types";
+import { LocationInput } from "./LocationInput";
 
 interface InputPanelProps {
     cityName: string;
@@ -40,6 +41,41 @@ export function InputPanel({
     const { toast } = useToast();
     const [newPlace, setNewPlace] = useState("");
     const [addingPlace, setAddingPlace] = useState(false);
+
+    const handleSelectPlace = (tip: any) => {
+        if (!tip.location || typeof tip.location !== 'string') {
+            setNewPlace(tip.name);
+            return;
+        }
+
+        const [lngStr, latStr] = tip.location.split(',');
+        const lng = parseFloat(lngStr);
+        const lat = parseFloat(latStr);
+
+        if (isNaN(lng) || isNaN(lat)) {
+            setNewPlace(tip.name);
+            return;
+        }
+
+        const newPoint: PlacePoint = {
+            name: tip.name,
+            lng,
+            lat,
+            location: tip.location,
+            formatted_address: tip.address ? `${tip.district || ''}${tip.address}` : undefined,
+            city: tip.city,
+            adcode: tip.adcode
+        };
+
+        if (places.some(p => p.name === newPoint.name)) {
+            toast("该地点已在列表中", "info");
+            setNewPlace("");
+            return;
+        }
+
+        setPlaces([...places, newPoint]);
+        setNewPlace("");
+    };
 
     const handleAddPlace = async () => {
         const trimmed = newPlace.trim();
@@ -147,10 +183,11 @@ export function InputPanel({
                 </div>
 
                 {originMode === "text" ? (
-                    <input
-                        className="input-field"
+                    <LocationInput
+                        className="flex-1"
                         value={originText}
-                        onChange={(e) => setOriginText(e.target.value)}
+                        onChange={setOriginText}
+                        cityName={cityName}
                         placeholder="例如：天府广场"
                     />
                 ) : (
@@ -184,13 +221,15 @@ export function InputPanel({
                 </label>
 
                 {/* Add Place Input */}
-                <div className="flex gap-2">
-                    <input
-                        className="input-field flex-1"
+                <div className="flex gap-2 items-start">
+                    <LocationInput
+                        className="flex-1"
                         value={newPlace}
-                        onChange={(e) => setNewPlace(e.target.value)}
+                        onChange={setNewPlace}
+                        onSelect={handleSelectPlace}
                         onKeyDown={handleKeyDown}
                         disabled={addingPlace}
+                        cityName={cityName}
                         placeholder={addingPlace ? "搜索坐标中..." : "输入地点名称并回车"}
                     />
                     <button
