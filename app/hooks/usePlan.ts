@@ -60,8 +60,11 @@ export function usePlan() {
             return true; // Success
         } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e);
-            setOptError(msg);
-            toast(msg, "error");
+            const enhanced = /Failed to fetch|NetworkError/i.test(msg)
+                ? "网络请求失败（Failed to fetch）。可能原因：1) 域名未加入高德 Referer 白名单 2) /api 未通或跨域 3) HTTPS 证书/混合内容 4) 移动网络不稳定。"
+                : msg;
+            setOptError(enhanced);
+            toast(enhanced, "error");
             return false;
         } finally {
             setOptimizing(false);

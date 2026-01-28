@@ -293,7 +293,11 @@ function buildAmapLinks(from: PlacePoint, to: PlacePoint) {
   return { appUri, webUrl };
 }
 
+const regeoCache = new Map<string, { citycode?: string; adcode?: string; city?: string }>();
+
 async function regeo(locationLngLat: string): Promise<{ citycode?: string; adcode?: string; city?: string }> {
+  const cached = regeoCache.get(locationLngLat);
+  if (cached) return cached;
   const key = mustEnv("AMAP_WEB_KEY");
   const url = new URL("https://restapi.amap.com/v3/geocode/regeo");
   url.searchParams.set("key", key);
@@ -309,7 +313,9 @@ async function regeo(locationLngLat: string): Promise<{ citycode?: string; adcod
   const adcode = comp?.adcode;
   const city = (Array.isArray(comp?.city) ? comp?.province : comp?.city) || comp?.province;
 
-  return { citycode, adcode, city };
+  const result = { citycode, adcode, city };
+  regeoCache.set(locationLngLat, result);
+  return result;
 }
 
 async function transitDurationV3(from: PlacePoint, to: PlacePoint): Promise<number | undefined> {
@@ -341,26 +347,22 @@ async function transitOrWalk(
 ): Promise<Pick<UiLeg, "summary" | "segments">> {
   const key = mustEnv("AMAP_WEB_KEY");
 
-  if (!from.citycode || !from.adcode) {
-    try {
-      const info = await regeo(from.location);
-      from.citycode = from.citycode || info.citycode;
-      from.adcode = from.adcode || info.adcode;
-      from.city = from.city || info.city;
-    } catch {
-      // best effort
-    }
-  }
-  if (!to.citycode || !to.adcode) {
-    try {
-      const info = await regeo(to.location);
-      to.citycode = to.citycode || info.citycode;
-      to.adcode = to.adcode || info.adcode;
-      to.city = to.city || info.city;
-    } catch {
-      // best effort
-    }
-  }
+  await Promise.all([
+    (!from.citycode || !from.adcode)
+      ? regeo(from.location).then((info) => {
+        from.citycode = from.citycode || info.citycode;
+        from.adcode = from.adcode || info.adcode;
+        from.city = from.city || info.city;
+      }).catch(() => { /* best effort */ })
+      : Promise.resolve(),
+    (!to.citycode || !to.adcode)
+      ? regeo(to.location).then((info) => {
+        to.citycode = to.citycode || info.citycode;
+        to.adcode = to.adcode || info.adcode;
+        to.city = to.city || info.city;
+      }).catch(() => { /* best effort */ })
+      : Promise.resolve(),
+  ]);
 
   const city1 = from.citycode;
   const city2 = to.citycode;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -84,11 +84,40 @@ interface MapPanelProps {
     activeLegIndex?: number | null;
     onMarkerClick?: (index: number) => void;
     edgeToEdge?: boolean;
+    viewportKey?: string;
 }
 
-export default function MapPanel({ places, origin, center, legs, activeLegIndex, onMarkerClick, edgeToEdge }: MapPanelProps) {
+const MapResizeObserver = ({ container, viewportKey }: { container: HTMLDivElement | null; viewportKey?: string }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        if (!map || !container) return;
+
+        const refresh = () => {
+            // Ensure Leaflet recalculates size after layout changes
+            map.invalidateSize();
+        };
+
+        const ro = new ResizeObserver(() => {
+            refresh();
+        });
+
+        ro.observe(container);
+        // Also refresh on tab/view switches
+        refresh();
+
+        return () => {
+            ro.disconnect();
+        };
+    }, [map, container, viewportKey]);
+
+    return null;
+};
+
+export default function MapPanel({ places, origin, center, legs, activeLegIndex, onMarkerClick, edgeToEdge, viewportKey }: MapPanelProps) {
     // Default center (Chengdu) - converted to WGS84 for Leaflet
     const [defLng, defLat] = gcj02ToWgs84(104.0648, 30.6586);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     // Compute all polyline paths from legs
     // Return: Array of { path: [lat, lng][], isActive: boolean }
@@ -158,7 +187,7 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
     const activeLegInfo = routePaths.find(p => p.isActive);
 
     return (
-        <div className={`w-full h-full overflow-hidden z-0 relative ${edgeToEdge ? "rounded-none shadow-none" : "rounded-2xl shadow-lg"}`}>
+        <div ref={containerRef} className={`w-full h-full overflow-hidden z-0 relative ${edgeToEdge ? "rounded-none shadow-none" : "rounded-2xl shadow-lg"}`}>
             <MapContainer
                 center={[defLat, defLng]}
                 zoom={13}
@@ -169,6 +198,7 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
+                <MapResizeObserver container={containerRef.current} viewportKey={viewportKey} />
                 <ChangeView center={center} places={places} origin={origin} activeLegInfo={activeLegInfo} />
 
                 {/* Polylines */}

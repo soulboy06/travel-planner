@@ -123,11 +123,10 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(({ opt, city
                         <div key={idx} className="flex items-stretch gap-5">
                             <div className="flex flex-col items-center shrink-0 w-8">
                                 <div
-                                    className="w-8 h-8 rounded-full bg-white font-bold text-sm flex items-center justify-center shadow-sm border border-blue-100 z-10 shrink-0"
+                                    className="w-8 h-8 rounded-full bg-white font-bold text-sm grid place-items-center shadow-sm border border-blue-100 z-10 shrink-0"
                                     style={{ color: THEME.text.primary }}
                                 >
-                                    {/* Centered Number */}
-                                    <span className="leading-none flex items-center justify-center font-bold">{idx + 1}</span>
+                                    <span className="leading-none block" style={{ fontVariantNumeric: "tabular-nums" }}>{idx + 1}</span>
                                 </div>
                                 {idx < opt.orderedPlaces.length - 1 && (
                                     <div

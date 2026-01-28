@@ -25,7 +25,7 @@ const MapPanel = dynamic(() => import("./components/MapPanel"), {
   loading: () => (
     <div className="w-full h-full flex flex-col items-center justify-center bg-white/50 backdrop-blur-sm rounded-2xl border border-[var(--border)] text-[var(--text-muted)] p-6 gap-3">
       <div className="w-12 h-12 rounded-full border-4 border-[var(--primary)] border-t-transparent animate-spin opacity-50"></div>
-      <div className="text-sm font-medium animate-pulse">地图组件加载中...</div>
+      <div className="text-sm font-medium animate-pulse">地图组件加载�?..</div>
     </div>
   )
 });
@@ -67,9 +67,9 @@ export default function Page() {
   const [shareImage, setShareImage] = useState<string>("");
   const shareCardRef = useRef<HTMLDivElement>(null);
   const [isGeneratingShare, setIsGeneratingShare] = useState(false);
-
-  const handleShare = async () => {
+  const generateShareImage = async (showModalAfter = false) => {
     if (!shareCardRef.current || !opt) return;
+    if (isGeneratingShare) return;
     setIsGeneratingShare(true);
     try {
       // Wait for fonts to load (optional but safe)
@@ -77,15 +77,13 @@ export default function Page() {
 
       const canvas = await html2canvas(shareCardRef.current, {
         useCORS: true,
-        scale: 2, // Retina quality
-        backgroundColor: '#ffffff',
-        height: shareCardRef.current.scrollHeight + 50, // Add buffer
-        windowHeight: shareCardRef.current.scrollHeight + 100,
+        scale: 1.5, // Faster while still crisp on mobile
+        backgroundColor: "#ffffff",
       });
 
       const imgData = canvas.toDataURL("image/png");
       setShareImage(imgData);
-      setShowShareModal(true);
+      if (showModalAfter) setShowShareModal(true);
     } catch (e) {
       console.error("Share gen failed:", e);
       toast("生成分享卡片失败，请重试", "error");
@@ -93,6 +91,30 @@ export default function Page() {
       setIsGeneratingShare(false);
     }
   };
+
+  const handleShare = async () => {
+    if (!shareImage) {
+      await generateShareImage(true);
+      return;
+    }
+    setShowShareModal(true);
+  };
+
+  // Pre-generate share image after planning to reduce perceived delay
+  useEffect(() => {
+    if (!opt) {
+      setShareImage("");
+      return;
+    }
+    const idleCb = (window as any).requestIdleCallback;
+    const id = idleCb
+      ? idleCb(() => { if (!shareImage) generateShareImage(false); })
+      : window.setTimeout(() => { if (!shareImage) generateShareImage(false); }, 400);
+    return () => {
+      if (idleCb) (window as any).cancelIdleCallback?.(id);
+      else clearTimeout(id);
+    };
+  }, [opt]);
 
   const handleMarkerClick = (index: number) => {
     // Only available in result mode when nodes are rendered with ids
@@ -219,6 +241,7 @@ export default function Page() {
                   center={cityCenter}
                   activeLegIndex={activeLegIndex}
                   onMarkerClick={handleMarkerClick}
+                  viewportKey={tab}
                 />
               </div>
             )}
@@ -232,6 +255,7 @@ export default function Page() {
                   legs={opt ? opt.legs : undefined}
                   activeLegIndex={activeLegIndex}
                   onMarkerClick={handleMarkerClick}
+                  viewportKey={tab}
                 />
               </div>
             )}
@@ -247,6 +271,7 @@ export default function Page() {
                     legs={opt ? opt.legs : undefined}
                     activeLegIndex={activeLegIndex}
                     onMarkerClick={handleMarkerClick}
+                    viewportKey={tab}
                   />
                 </div>
                 <div className="mb-4">
@@ -284,7 +309,7 @@ export default function Page() {
                     onClick={() => setShowShareModal(false)}
                     className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
                   >
-                    <div className="w-5 h-5 flex items-center justify-center text-gray-500">✕</div>
+                    <div className="w-5 h-5 flex items-center justify-center text-gray-500">�?/div>
                   </button>
                 </div>
 
@@ -300,7 +325,7 @@ export default function Page() {
                 </div>
 
                 <div className="p-4 border-t border-[var(--border)] bg-white">
-                  <p className="text-xs text-center text-gray-400 mb-3">长按图片保存，或右键另存为</p>
+                  <p className="text-xs text-center text-gray-400 mb-3">长按图片保存，或右键另存�?/p>
                   <button
                     onClick={() => setShowShareModal(false)}
                     className="w-full btn-secondary"
@@ -323,3 +348,4 @@ export default function Page() {
     </div>
   );
 }
+
