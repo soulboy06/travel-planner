@@ -15,7 +15,6 @@ import { InputPanel } from "./components/InputPanel";
 import { ResultPanel } from "./components/ResultPanel";
 import { GuidePanel } from "./components/GuidePanel";
 import { RefPanel } from "./components/RefPanel";
-import { RouteCards } from "./components/RouteCards";
 import { ShareCard } from "./components/ShareCard";
 import html2canvas from "html2canvas";
 import { useToast } from "./contexts/ToastContext";
@@ -207,7 +206,7 @@ export default function Page() {
           {/* Main Viewport */}
           <main className={cn(
             "flex-1 bg-[var(--bg-secondary)]/30 relative",
-            tab === "input" ? "overflow-hidden" : "overflow-y-auto p-4 md:p-8",
+            tab === "input" ? "overflow-hidden" : "overflow-y-auto p-4 md:p-0",
             tab === "result" ? "block w-full h-full absolute inset-0 md:relative z-20 md:z-0" : "hidden md:block"
           )}>
 
@@ -261,7 +260,6 @@ export default function Page() {
                     onLegClick={handleLegClick}
                   />
                 </div>
-                <RouteCards opt={opt} />
               </div>
             )}
 

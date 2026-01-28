@@ -83,9 +83,10 @@ interface MapPanelProps {
     legs?: UiLeg[];
     activeLegIndex?: number | null;
     onMarkerClick?: (index: number) => void;
+    edgeToEdge?: boolean;
 }
 
-export default function MapPanel({ places, origin, center, legs, activeLegIndex, onMarkerClick }: MapPanelProps) {
+export default function MapPanel({ places, origin, center, legs, activeLegIndex, onMarkerClick, edgeToEdge }: MapPanelProps) {
     // Default center (Chengdu) - converted to WGS84 for Leaflet
     const [defLng, defLat] = gcj02ToWgs84(104.0648, 30.6586);
 
@@ -157,7 +158,7 @@ export default function MapPanel({ places, origin, center, legs, activeLegIndex,
     const activeLegInfo = routePaths.find(p => p.isActive);
 
     return (
-        <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg z-0 relative">
+        <div className={`w-full h-full overflow-hidden z-0 relative ${edgeToEdge ? "rounded-none shadow-none" : "rounded-2xl shadow-lg"}`}>
             <MapContainer
                 center={[defLat, defLng]}
                 zoom={13}

@@ -29,7 +29,7 @@ export function ResultPanel({
     return (
         <div className={cn(
             "w-full flex flex-col bg-white overflow-hidden",
-            mobileMode ? "rounded-b-2xl shadow-sm" : "h-full rounded-tr-2xl"
+            mobileMode ? "rounded-2xl shadow-sm" : "h-full rounded-tr-2xl"
         )}>
             {/* Header */}
             <div className="p-4 border-b border-[var(--border)] bg-gray-50/50 flex justify-between items-center shrink-0">
