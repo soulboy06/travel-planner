@@ -255,6 +255,7 @@ export default function Page() {
                     copyItinerary={copyItinerary}
                     onReset={() => { setOpt(null); setTab("input"); }}
                     onGuide={() => setTab("guide")}
+                    onShare={handleShare}
                     mobileMode
                     activeLegIndex={activeLegIndex}
                     onLegClick={handleLegClick}
