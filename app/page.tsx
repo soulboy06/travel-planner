@@ -228,7 +228,7 @@ export default function Page() {
             {/* Result Tab: Show Mobile Panel & Route Cards */}
             {tab === "result" && (
               <div className="md:hidden h-full flex flex-col">
-                <div className="h-[45vh] min-h-[260px] sm:h-64 shrink-0 mb-4">
+                <div className="mb-4 h-56 sm:h-64 h-[45vh] min-h-[260px] shrink-0">
                   <MapPanel
                     places={opt ? opt.orderedPlaces : places}
                     origin={opt ? opt.origin : (originPoint || undefined)}
