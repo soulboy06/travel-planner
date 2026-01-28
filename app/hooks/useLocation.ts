@@ -38,7 +38,7 @@ export function useLocation() {
                 }
 
                 if (g?.lng && g?.lat) {
-                    setCityCenter([g.lat, g.lng]);
+                    setCityCenter([g.lng, g.lat]);
                 }
             } catch {
                 setCityAutoStatus("未匹配");
