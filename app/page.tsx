@@ -212,13 +212,25 @@ export default function Page() {
           )}>
 
             {/* Map is now shown in both Input and Result tabs on Desktop */}
-            {(tab === "input" || tab === "result") && (
-              <div className={cn("w-full h-full", tab === "result" ? "hidden md:block" : "block")}>
+            {tab === "input" && (
+              <div className="w-full h-full">
                 <MapPanel
-                  places={tab === "result" && opt ? opt.orderedPlaces : places}
-                  origin={tab === "result" && opt ? opt.origin : (originPoint || undefined)}
+                  places={places}
+                  origin={originPoint || undefined}
                   center={cityCenter}
-                  legs={tab === "result" && opt ? opt.legs : undefined}
+                  activeLegIndex={activeLegIndex}
+                  onMarkerClick={handleMarkerClick}
+                />
+              </div>
+            )}
+
+            {tab === "result" && (
+              <div className="w-full h-full max-md:hidden">
+                <MapPanel
+                  places={opt ? opt.orderedPlaces : places}
+                  origin={opt ? opt.origin : (originPoint || undefined)}
+                  center={cityCenter}
+                  legs={opt ? opt.legs : undefined}
                   activeLegIndex={activeLegIndex}
                   onMarkerClick={handleMarkerClick}
                 />
@@ -228,6 +240,16 @@ export default function Page() {
             {/* Result Tab: Show Mobile Panel & Route Cards */}
             {tab === "result" && (
               <div className="md:hidden">
+                <div className="mb-4 h-56 sm:h-64">
+                  <MapPanel
+                    places={opt ? opt.orderedPlaces : places}
+                    origin={opt ? opt.origin : (originPoint || undefined)}
+                    center={cityCenter}
+                    legs={opt ? opt.legs : undefined}
+                    activeLegIndex={activeLegIndex}
+                    onMarkerClick={handleMarkerClick}
+                  />
+                </div>
                 <div className="mb-4">
                   <ResultPanel
                     opt={opt}
