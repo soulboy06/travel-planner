@@ -207,7 +207,7 @@ export default function Page() {
           {/* Main Viewport */}
           <main className={cn(
             "flex-1 bg-[var(--bg-secondary)]/30 relative",
-            tab === "input" ? "overflow-hidden" : "overflow-y-auto p-4 md:p-8",
+            tab === "input" ? "overflow-hidden" : "overflow-hidden p-4 md:p-8 md:overflow-y-auto",
             tab === "result" ? "block w-full h-full absolute inset-0 md:relative z-20 md:z-0" : "hidden md:block"
           )}>
 
@@ -227,19 +227,31 @@ export default function Page() {
 
             {/* Result Tab: Show Mobile Panel & Route Cards */}
             {tab === "result" && (
-              <div className="md:hidden">
-                <div className="mb-4">
-                  <ResultPanel
-                    opt={opt}
-                    copyItinerary={copyItinerary}
-                    onReset={() => { setOpt(null); setTab("input"); }}
-                    onGuide={() => setTab("guide")}
-                    mobileMode
+              <div className="md:hidden h-full flex flex-col">
+                <div className="h-[45vh] min-h-[260px] shrink-0 mb-4">
+                  <MapPanel
+                    places={opt ? opt.orderedPlaces : places}
+                    origin={opt ? opt.origin : (originPoint || undefined)}
+                    center={cityCenter}
+                    legs={opt ? opt.legs : undefined}
                     activeLegIndex={activeLegIndex}
-                    onLegClick={handleLegClick}
+                    onMarkerClick={handleMarkerClick}
                   />
                 </div>
-                <RouteCards opt={opt} />
+                <div className="flex-1 overflow-y-auto">
+                  <div className="mb-4">
+                    <ResultPanel
+                      opt={opt}
+                      copyItinerary={copyItinerary}
+                      onReset={() => { setOpt(null); setTab("input"); }}
+                      onGuide={() => setTab("guide")}
+                      mobileMode
+                      activeLegIndex={activeLegIndex}
+                      onLegClick={handleLegClick}
+                    />
+                  </div>
+                  <RouteCards opt={opt} />
+                </div>
               </div>
             )}
 
