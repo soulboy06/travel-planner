@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -26,7 +26,7 @@ const MapPanel = dynamic(() => import("./components/MapPanel"), {
   loading: () => (
     <div className="w-full h-full flex flex-col items-center justify-center bg-white/50 backdrop-blur-sm rounded-2xl border border-[var(--border)] text-[var(--text-muted)] p-6 gap-3">
       <div className="w-12 h-12 rounded-full border-4 border-[var(--primary)] border-t-transparent animate-spin opacity-50"></div>
-      <div className="text-sm font-medium animate-pulse">地图组件加载�?..</div>
+      <div className="text-sm font-medium animate-pulse">鍦板浘缁勪欢鍔犺浇涓?..</div>
     </div>
   )
 });
@@ -88,7 +88,7 @@ export default function Page() {
     } catch (e) {
       console.error("Share gen failed:", e);
       const msg = e instanceof Error ? e.message : String(e);
-      toast(`生成分享卡片失败，请重试: ${msg}`, "error");
+      toast(`鐢熸垚鍒嗕韩鍗＄墖澶辫触锛岃閲嶈瘯: ${msg}`, "error");
     } finally {
       setIsGeneratingShare(false);
     }
@@ -137,22 +137,22 @@ export default function Page() {
             </div>
             <div>
               <h1 className="text-base font-semibold text-[var(--text-primary)]">Travel Planner</h1>
-              <p className="text-xs text-[var(--text-muted)] hidden sm:block">智能行程规划</p>
+              <p className="text-xs text-[var(--text-muted)] hidden sm:block">鏅鸿兘琛岀▼瑙勫垝</p>
             </div>
           </div>
 
           {/* Tab Control */}
           <div className="tab-control">
             <button onClick={() => setTab("input")} className={cn("tab-item", tab === "input" && "active")}>
-              <span className="hidden sm:inline">输入</span>
+              <span className="hidden sm:inline">杈撳叆</span>
               <Compass className="w-4 h-4 sm:hidden" />
             </button>
             <button onClick={() => setTab("result")} className={cn("tab-item", tab === "result" && "active")}>
-              <span className="hidden sm:inline">路线</span>
+              <span className="hidden sm:inline">璺嚎</span>
               <Route className="w-4 h-4 sm:hidden" />
             </button>
             <button onClick={() => setTab("guide")} className={cn("tab-item", tab === "guide" && "active")}>
-              <span className="hidden sm:inline">攻略</span>
+              <span className="hidden sm:inline">鏀荤暐</span>
               <BookOpen className="w-4 h-4 sm:hidden" />
             </button>
           </div>
@@ -320,12 +320,12 @@ export default function Page() {
                 </div>
 
                 <div className="p-4 border-t border-[var(--border)] bg-white">
-                  <p className="text-xs text-center text-gray-400 mb-3">长按图片保存，或右键另存�?/p>
+                  <p className="text-xs text-center text-gray-400 mb-3">长按图片保存，或右键另存为</p>
                   <button
                     onClick={() => setShowShareModal(false)}
                     className="w-full btn-secondary"
                   >
-                    关闭
+                    鍏抽棴
                   </button>
                 </div>
               </div>
