@@ -293,6 +293,44 @@ function buildAmapLinks(from: PlacePoint, to: PlacePoint) {
   return { appUri, webUrl };
 }
 
+async function regeo(locationLngLat: string): Promise<{ citycode?: string; adcode?: string; city?: string }> {
+  const key = mustEnv("AMAP_WEB_KEY");
+  const url = new URL("https://restapi.amap.com/v3/geocode/regeo");
+  url.searchParams.set("key", key);
+  url.searchParams.set("location", locationLngLat);
+  url.searchParams.set("output", "JSON");
+  url.searchParams.set("extensions", "base");
+
+  const r = await fetch(url.toString(), { cache: "no-store" });
+  const j = await r.json();
+
+  const comp = j?.regeocode?.addressComponent;
+  const citycode = comp?.citycode;
+  const adcode = comp?.adcode;
+  const city = (Array.isArray(comp?.city) ? comp?.province : comp?.city) || comp?.province;
+
+  return { citycode, adcode, city };
+}
+
+async function transitDurationV3(from: PlacePoint, to: PlacePoint): Promise<number | undefined> {
+  const key = mustEnv("AMAP_WEB_KEY");
+  const url = new URL("https://restapi.amap.com/v3/direction/transit/integrated");
+  url.searchParams.set("key", key);
+  url.searchParams.set("origin", from.location);
+  url.searchParams.set("destination", to.location);
+  const city = from.citycode || from.city || to.citycode || to.city;
+  if (city) url.searchParams.set("city", String(city));
+  url.searchParams.set("strategy", "0");
+  url.searchParams.set("output", "JSON");
+
+  const r = await fetch(url.toString(), { cache: "no-store" });
+  const j = await r.json();
+  const transits = j?.route?.transits;
+  if (!Array.isArray(transits) || transits.length === 0) return undefined;
+  const n = Number(transits[0]?.duration);
+  return isNaN(n) ? undefined : n;
+}
+
 /**
  * ✅ 修复公交模式：city1/city2 用每个点自己的 adcode
  */
@@ -303,8 +341,31 @@ async function transitOrWalk(
 ): Promise<Pick<UiLeg, "summary" | "segments">> {
   const key = mustEnv("AMAP_WEB_KEY");
 
-  const city1 = from.adcode || fallbackCityAdcode;
-  const city2 = to.adcode || fallbackCityAdcode;
+  if (!from.citycode || !from.adcode) {
+    try {
+      const info = await regeo(from.location);
+      from.citycode = from.citycode || info.citycode;
+      from.adcode = from.adcode || info.adcode;
+      from.city = from.city || info.city;
+    } catch {
+      // best effort
+    }
+  }
+  if (!to.citycode || !to.adcode) {
+    try {
+      const info = await regeo(to.location);
+      to.citycode = to.citycode || info.citycode;
+      to.adcode = to.adcode || info.adcode;
+      to.city = to.city || info.city;
+    } catch {
+      // best effort
+    }
+  }
+
+  const city1 = from.citycode;
+  const city2 = to.citycode;
+  const ad1 = from.adcode || fallbackCityAdcode;
+  const ad2 = to.adcode || fallbackCityAdcode;
 
   const url = new URL("https://restapi.amap.com/v5/direction/transit/integrated");
   url.searchParams.set("key", key);
@@ -313,6 +374,8 @@ async function transitOrWalk(
 
   if (city1) url.searchParams.set("city1", city1);
   if (city2) url.searchParams.set("city2", city2);
+  if (ad1) url.searchParams.set("ad1", ad1);
+  if (ad2) url.searchParams.set("ad2", ad2);
 
   const resp = await fetch(url.toString(), { cache: "no-store" });
   const j = await resp.json();
@@ -326,8 +389,32 @@ async function transitOrWalk(
       const n = Number(v);
       return isNaN(n) ? undefined : n;
     };
-    const distanceM = parseNum(best?.distance);
-    const durationS = parseNum(best?.duration);
+    const sumSegmentField = (segments: any[] | undefined, field: "duration" | "distance") => {
+      if (!Array.isArray(segments) || segments.length === 0) return undefined;
+      let total = 0;
+      let has = false;
+      const add = (v: any) => {
+        const n = parseNum(v);
+        if (n === undefined) return;
+        total += n;
+        has = true;
+      };
+      segments.forEach((seg) => {
+        add(seg?.walking?.[field]);
+        if (Array.isArray(seg?.bus?.buslines)) {
+          seg.bus.buslines.forEach((line: any) => add(line?.[field]));
+        }
+        add(seg?.railway?.[field]);
+        add(seg?.taxi?.[field]);
+      });
+      return has ? total : undefined;
+    };
+
+    const distanceM = parseNum(best?.distance) ?? sumSegmentField(best?.segments, "distance");
+    let durationS = parseNum(best?.duration) ?? sumSegmentField(best?.segments, "duration");
+    if (durationS === undefined) {
+      durationS = await transitDurationV3(from, to);
+    }
     const costYuan = parseNum(best?.cost);
 
     return {

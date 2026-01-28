@@ -196,9 +196,9 @@ export function InputPanel({
                     <button
                         onClick={handleAddPlace}
                         disabled={!newPlace.trim() || addingPlace}
-                        className="btn-secondary w-12 flex items-center justify-center p-0 disabled:opacity-50"
+                        className="btn-secondary w-14 h-12 flex items-center justify-center p-0 disabled:opacity-50"
                     >
-                        {addingPlace ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
+                        {addingPlace ? <Loader2 className="w-7 h-7 animate-spin" /> : <Plus className="w-7 h-7 stroke-[2.25]" />}
                     </button>
                 </div>
 
