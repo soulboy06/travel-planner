@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/input/index",
+    "pages/route/index",
+    "pages/guide/index"
+  ],
+  "window": {
+    "backgroundColor": "#F8FAFC",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#F8FAFC",
+    "navigationBarTitleText": "Travel Planner",
+    "navigationBarTextStyle": "black"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于在地图上显示当前位置"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation"
+  ],
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

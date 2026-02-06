@@ -1,0 +1,149 @@
+<view class="page">
+  <!-- Top Tabs -->
+  <view class="top-tabs">
+    <view class="tab-item active" bindtap="goTab" data-tab="input">
+      <view class="tab-icon"></view>
+      <text class="tab-text">输入</text>
+    </view>
+    <view class="tab-item" bindtap="goTab" data-tab="route">
+      <view class="tab-icon"></view>
+      <text class="tab-text">路线</text>
+    </view>
+    <view class="tab-item" bindtap="goTab" data-tab="guide">
+      <view class="tab-icon"></view>
+      <text class="tab-text">攻略</text>
+    </view>
+  </view>
+
+  <!-- INPUT MODULE -->
+  <view class="module">
+    <scroll-view scroll-y class="module-scroll">
+      <!-- 目标城市 -->
+      <view class="card">
+        <text class="card-title">目标城市</text>
+        <view class="input-box">
+          <input
+            class="input"
+            placeholder="请输入城市名，如：成都"
+            value="{{cityQuery}}"
+            bindinput="onCityInput"
+          />
+          <view class="loading-dot" wx:if="{{cityLoading}}"></view>
+        </view>
+        <text class="hint">输入后自动定位地图（无需回车）</text>
+      </view>
+
+      <!-- 出发点设置 -->
+      <view class="card">
+        <view class="row-between">
+          <text class="card-title">出发点设置</text>
+          <view class="pill" bindtap="onLocateMe">一键定位我的位置</view>
+        </view>
+        <view class="input-box">
+          <block wx:if="{{originMode === 'location'}}">
+            <text class="dest-name">{{originAddress || '我的位置'}}</text>
+            <text class="text-link" bindtap="toggleOriginMode">手动输入</text>
+          </block>
+          <block wx:else>
+            <input
+              class="input"
+              placeholder="输入出发点地址"
+              value="{{originQuery}}"
+              bindinput="onOriginInput"
+            />
+            <text class="text-link" bindtap="toggleOriginMode" wx:if="{{originAddress}}">定位</text>
+          </block>
+        </view>
+        <view wx:if="{{originMode === 'manual' && originSuggestions.length > 0}}">
+          <text class="card-subtitle">出发点候选</text>
+          <view class="suggestion-list">
+            <block wx:for="{{originSuggestions}}" wx:key="id">
+              <view class="suggestion-item" bindtap="onSelectOriginSuggestion" data-index="{{index}}">
+                <text class="suggestion-name">{{item.title || item.name}}</text>
+                <text class="suggestion-addr">{{item.address}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+        <view class="row-center">
+          <view class="dot dot-blue"></view>
+          <text class="legend-text">起点标记：蓝色</text>
+        </view>
+      </view>
+
+      <!-- 目的地搜索 -->
+      <view class="card">
+        <text class="card-title">目的地搜索</text>
+        <view class="input-box">
+          <input
+            class="input"
+            placeholder="输入关键词，实时弹出候选地点"
+            value="{{destQuery}}"
+            bindinput="onDestInput"
+          />
+          <view wx:if="{{destQuery && suggestions.length === 0}}" bindtap="onClearDest">
+            <text class="text-link">清空</text>
+          </view>
+        </view>
+        <text class="hint">搜索结果优先当前城市</text>
+
+        <view wx:if="{{suggestions.length > 0}}">
+          <text class="card-subtitle">候选地点</text>
+          <view class="suggestion-list">
+            <block wx:for="{{suggestions}}" wx:key="id">
+              <view class="suggestion-item" bindtap="onSelectSuggestion" data-index="{{index}}">
+                <text class="suggestion-name">{{item.title}}</text>
+                <text class="suggestion-addr">{{item.address}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+        <text class="hint">空输入不显示任何候选列表</text>
+      </view>
+
+      <!-- 地图预览 -->
+      <view class="card">
+        <text class="card-title">地图预览</text>
+        <view class="map-frame">
+          <map
+            id="inputMap"
+            class="map"
+            longitude="{{map.lng}}"
+            latitude="{{map.lat}}"
+            scale="{{map.scale}}"
+            markers="{{markers}}"
+            show-location
+          ></map>
+        </view>
+        <view class="row-center">
+          <view class="dot dot-blue"></view>
+          <text class="legend-text">起点</text>
+          <view class="dot dot-red" style="margin-left: 16rpx;"></view>
+          <text class="legend-text">目的地</text>
+        </view>
+      </view>
+
+      <!-- 目的地列表 -->
+      <view class="card">
+        <text class="card-title">目的地列表</text>
+        <view class="dest-list">
+          <block wx:for="{{places}}" wx:key="id">
+            <view class="dest-item">
+              <view class="dest-info">
+                <text class="dest-name">{{item.name}}</text>
+                <text class="dest-addr">{{item.address}}</text>
+              </view>
+              <view class="pill pill-danger" bindtap="onRemovePlace" data-id="{{item.id}}">删除</view>
+            </view>
+          </block>
+        </view>
+        <view class="row-center">
+          <view class="dot dot-red"></view>
+          <text class="legend-text">目的地标记：红色；删除后地图标点同步更新</text>
+        </view>
+      </view>
+
+      <button class="btn-primary" bindtap="goRoute">生成最优路线</button>
+    </scroll-view>
+  </view>
+</view>

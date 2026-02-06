@@ -1,0 +1,1458 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "JgnxG",
+      "x": 0,
+      "y": 0,
+      "name": "Input UI",
+      "width": 375,
+      "height": 1081,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 20,
+      "children": [
+        {
+          "type": "frame",
+          "id": "l0Vdi",
+          "name": "tabs",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "rgba(255,255,255,0.85)",
+          "cornerRadius": 16,
+          "gap": 12,
+          "padding": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "mlb0Y",
+              "name": "tab_input",
+              "width": 100,
+              "height": 40,
+              "fill": "#E0F2FE",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "6jGlt",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#0EA5E9",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "bQTEz",
+                  "name": "text1",
+                  "fill": "#0EA5E9",
+                  "content": "输入",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mobR5",
+              "name": "tab_route",
+              "width": 100,
+              "height": 40,
+              "fill": "transparent",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "gvM6s",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#94A3B8",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "PUmPB",
+                  "name": "text2",
+                  "fill": "#94A3B8",
+                  "content": "路线",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "8p1qP",
+              "name": "tab_guide",
+              "width": 100,
+              "height": 40,
+              "fill": "transparent",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "xzjAJ",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#94A3B8",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "uM8vH",
+                  "name": "text3",
+                  "fill": "#94A3B8",
+                  "content": "攻略",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "pXJGL",
+          "name": "cityCard",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "EMU4K",
+              "name": "cityTitle",
+              "fill": "#0F172A",
+              "content": "目标城市",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "9cbXV",
+              "name": "cityInput",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "s5kl3",
+                  "name": "cityInputText",
+                  "fill": "#64748B",
+                  "content": "请输入城市名，如：成都",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "gaMPo",
+              "name": "cityHint",
+              "fill": "#94A3B8",
+              "content": "输入后自动定位地图（无需回车）",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "oH0Zv",
+          "name": "startCard",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "PCuYI",
+              "name": "startHeader",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "navmK",
+                  "name": "startTitle",
+                  "fill": "#0F172A",
+                  "content": "出发点设置",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "frame",
+                  "id": "FqEAA",
+                  "name": "locateBtn",
+                  "fill": "#E0F2FE",
+                  "cornerRadius": 999,
+                  "padding": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "O3mF8",
+                      "name": "locateText",
+                      "fill": "#0284C7",
+                      "content": "一键定位我的位置",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IUH4Y",
+              "name": "startInput",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "jEnlJ",
+                  "name": "startInputText",
+                  "fill": "#64748B",
+                  "content": "输入出发点地址",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IBESh",
+              "name": "startLegend",
+              "width": "fill_container",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eBFBB",
+                  "name": "blueDot",
+                  "width": 8,
+                  "height": 8,
+                  "fill": "#3B82F6",
+                  "cornerRadius": 4
+                },
+                {
+                  "type": "text",
+                  "id": "g03ys",
+                  "name": "legendText",
+                  "fill": "#64748B",
+                  "content": "起点标记：蓝色",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "r9ieb",
+          "name": "searchCard",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "wHaMQ",
+              "name": "searchTitle",
+              "fill": "#0F172A",
+              "content": "目的地搜索",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "I2r1o",
+              "name": "searchInput",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "WRJue",
+                  "name": "searchInputText",
+                  "fill": "#64748B",
+                  "content": "输入关键词，实时弹出候选地点",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "Is8NE",
+              "name": "searchHint",
+              "fill": "#94A3B8",
+              "content": "搜索结果优先当前城市",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "xrXcM",
+              "name": "suggestHeader",
+              "fill": "#0F172A",
+              "content": "候选地点（示例）",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "SaMGL",
+              "name": "suggestList",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "IoLiK",
+                  "name": "suggestItem1",
+                  "width": "fill_container",
+                  "fill": "#F8FAFC",
+                  "cornerRadius": 10,
+                  "padding": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "QnJjv",
+                      "name": "suggestText1",
+                      "fill": "#0F172A",
+                      "content": "人民公园 · 青羊区少城路",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "K0DDw",
+                  "name": "suggestItem2",
+                  "width": "fill_container",
+                  "fill": "#F8FAFC",
+                  "cornerRadius": 10,
+                  "padding": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DEwPg",
+                      "name": "suggestText2",
+                      "fill": "#0F172A",
+                      "content": "宽窄巷子 · 青羊区长顺街",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "WZcBk",
+              "name": "searchNote",
+              "fill": "#94A3B8",
+              "content": "空输入不显示任何候选列表",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "6Qx7I",
+          "name": "mapCard",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "MwLfq",
+              "name": "mapTitle",
+              "fill": "#0F172A",
+              "content": "地图预览",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "Dt9fK",
+              "name": "map",
+              "metadata": {
+                "type": "unsplash",
+                "username": "adriansiaril",
+                "link": "https://unsplash.com/@adriansiaril",
+                "author": "Adrian Siaril"
+              },
+              "width": "fill_container",
+              "height": 220,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1659533576085-c6bb80f7715c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk4NDkyODV8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 12,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "yrHw7",
+                  "x": 40,
+                  "y": 130,
+                  "name": "marker_start",
+                  "width": 12,
+                  "height": 12,
+                  "fill": "#3B82F6",
+                  "cornerRadius": 6
+                },
+                {
+                  "type": "frame",
+                  "id": "DkGnK",
+                  "x": 180,
+                  "y": 80,
+                  "name": "marker_dest1",
+                  "width": 10,
+                  "height": 10,
+                  "fill": "#EF4444",
+                  "cornerRadius": 5
+                },
+                {
+                  "type": "frame",
+                  "id": "heQEJ",
+                  "x": 260,
+                  "y": 140,
+                  "name": "marker_dest2",
+                  "width": 10,
+                  "height": 10,
+                  "fill": "#EF4444",
+                  "cornerRadius": 5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "hTeLR",
+          "name": "destListCard",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "8nOPg",
+              "name": "listTitle",
+              "fill": "#0F172A",
+              "content": "目的地列表",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "lyn2u",
+              "name": "destItem1",
+              "width": "fill_container",
+              "fill": "#F8FAFC",
+              "cornerRadius": 12,
+              "gap": 8,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ZKvZo",
+                  "name": "item1Text",
+                  "fill": "#0F172A",
+                  "content": "春熙路｜锦江区红星路三段",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "wTUPN",
+                  "name": "item1Del",
+                  "fill": "#EF4444",
+                  "content": "删除",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "WMb0Q",
+              "name": "destItem2",
+              "width": "fill_container",
+              "fill": "#F8FAFC",
+              "cornerRadius": 12,
+              "gap": 8,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "YZYd9",
+                  "name": "item2Text",
+                  "fill": "#0F172A",
+                  "content": "锦里古街｜武侯区武侯祠大街",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "8Az6o",
+                  "name": "item2Del",
+                  "fill": "#EF4444",
+                  "content": "删除",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZgV8I",
+              "name": "destLegend",
+              "width": "fill_container",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "zzhj9",
+                  "name": "redDot",
+                  "width": 8,
+                  "height": 8,
+                  "fill": "#EF4444",
+                  "cornerRadius": 4
+                },
+                {
+                  "type": "text",
+                  "id": "hU5qW",
+                  "name": "legendText2",
+                  "fill": "#64748B",
+                  "content": "目的地标记：红色；删除后地图标点同步更新",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "qX5iC",
+      "x": 450,
+      "y": 0,
+      "name": "Route UI",
+      "width": 375,
+      "height": 812,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 20,
+      "children": [
+        {
+          "type": "frame",
+          "id": "C4YRd",
+          "name": "tabs",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "rgba(255,255,255,0.85)",
+          "cornerRadius": 16,
+          "gap": 12,
+          "padding": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "PIdwV",
+              "name": "tab_input",
+              "width": 100,
+              "height": 40,
+              "fill": "transparent",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eFrMw",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#94A3B8",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "PShI2",
+                  "name": "rt1t",
+                  "fill": "#94A3B8",
+                  "content": "输入",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qxcGs",
+              "name": "tab_route",
+              "width": 100,
+              "height": 40,
+              "fill": "#E0F2FE",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Y2Yhb",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#0EA5E9",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "vvt6k",
+                  "name": "rt2t",
+                  "fill": "#0EA5E9",
+                  "content": "路线",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ardLl",
+              "name": "tab_guide",
+              "width": 100,
+              "height": 40,
+              "fill": "transparent",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "dJQ3x",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#94A3B8",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "39ZnK",
+                  "name": "rt3t",
+                  "fill": "#94A3B8",
+                  "content": "攻略",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "43GWw",
+          "name": "routeMapCard",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "klyUn",
+              "name": "routeMapTitle",
+              "fill": "#0F172A",
+              "content": "路线预览",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "jRaHk",
+              "name": "routeMap",
+              "metadata": {
+                "type": "unsplash",
+                "username": "mareklumi",
+                "link": "https://unsplash.com/@mareklumi",
+                "author": "Marek Lumi"
+              },
+              "width": "fill_container",
+              "height": 220,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1763462929966-23955f0a8a2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk4NDkzMzF8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 12
+            },
+            {
+              "type": "frame",
+              "id": "025KH",
+              "name": "routeBadge",
+              "fill": "#DCFCE7",
+              "cornerRadius": 999,
+              "padding": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "LUBw8",
+                  "name": "routeBadgeText",
+                  "fill": "#16A34A",
+                  "content": "最优路线已生成",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vMUaR",
+          "name": "routeList",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "0yzQ6",
+              "name": "routeListTitle",
+              "fill": "#0F172A",
+              "content": "路线列表",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "WdgYB",
+              "name": "routeListNote",
+              "fill": "#94A3B8",
+              "content": "每段路线均提供导航入口（腾讯地图）",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "ZLbqL",
+              "name": "routeItem1",
+              "width": "fill_container",
+              "fill": "#F8FAFC",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 6,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "NCF47",
+                  "name": "routeItem1Title",
+                  "fill": "#0F172A",
+                  "content": "起点 → 春熙路",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "fuljQ",
+                  "name": "routeItem1Addr",
+                  "fill": "#64748B",
+                  "content": "详细地址：成都市锦江区红星路三段",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "BpzrR",
+                  "name": "meta1",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "aZa8F",
+                      "name": "routeItem1MetaText",
+                      "fill": "#0F172A",
+                      "content": "距离 3.4km · 预计 12min",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "HyLR6",
+                      "name": "navBtn1",
+                      "fill": "#E0F2FE",
+                      "cornerRadius": 999,
+                      "padding": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kup4q",
+                          "name": "routeItem1BtnText",
+                          "fill": "#0284C7",
+                          "content": "导航",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mppJQ",
+              "name": "routeItem2",
+              "width": "fill_container",
+              "fill": "#F8FAFC",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 6,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "fHfIF",
+                  "name": "routeItem2Title",
+                  "fill": "#0F172A",
+                  "content": "春熙路 → 锦里古街",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "9CXwR",
+                  "name": "routeItem2Addr",
+                  "fill": "#64748B",
+                  "content": "详细地址：成都市武侯区武侯祠大街",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "mQwdk",
+                  "name": "meta2",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "1142i",
+                      "name": "routeItem2MetaText",
+                      "fill": "#0F172A",
+                      "content": "距离 2.1km · 预计 9min",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "98hgz",
+                      "name": "navBtn2",
+                      "fill": "#E0F2FE",
+                      "cornerRadius": 999,
+                      "padding": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "PSCLV",
+                          "name": "routeItem2BtnText",
+                          "fill": "#0284C7",
+                          "content": "导航",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "bold"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ykPau",
+      "x": 900,
+      "y": 0,
+      "name": "Guide UI",
+      "width": 375,
+      "height": 812,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 20,
+      "children": [
+        {
+          "type": "frame",
+          "id": "25LE7",
+          "name": "tabs",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "rgba(255,255,255,0.85)",
+          "cornerRadius": 16,
+          "gap": 12,
+          "padding": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "5Dijw",
+              "name": "tab_input",
+              "width": 100,
+              "height": 40,
+              "fill": "transparent",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "uRZvA",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#94A3B8",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "civNt",
+                  "name": "gt1t",
+                  "fill": "#94A3B8",
+                  "content": "输入",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "2aaf2",
+              "name": "tab_route",
+              "width": 100,
+              "height": 40,
+              "fill": "transparent",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ne5Kq",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#94A3B8",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "Ok5y8",
+                  "name": "gt2t",
+                  "fill": "#94A3B8",
+                  "content": "路线",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zFzza",
+              "name": "tab_guide",
+              "width": 100,
+              "height": 40,
+              "fill": "#E0F2FE",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "nc0VI",
+                  "name": "icon",
+                  "width": 18,
+                  "height": 18,
+                  "fill": "#0EA5E9",
+                  "cornerRadius": 9
+                },
+                {
+                  "type": "text",
+                  "id": "p2yfr",
+                  "name": "gt3t",
+                  "fill": "#0EA5E9",
+                  "content": "攻略",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lY1Ox",
+          "name": "guideForm",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "xsZnr",
+              "name": "formTitle",
+              "fill": "#0F172A",
+              "content": "填写需求",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "kjOJ0",
+              "name": "field1Label",
+              "fill": "#0F172A",
+              "content": "出行天数",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "bMp7H",
+              "name": "daysInput",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "57DOI",
+                  "name": "field1Text",
+                  "fill": "#64748B",
+                  "content": "例如：3天2晚",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "Dw0iR",
+              "name": "field2Label",
+              "fill": "#0F172A",
+              "content": "预算",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "tv2Wn",
+              "name": "budgetInput",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "3AeRT",
+                  "name": "field2Text",
+                  "fill": "#64748B",
+                  "content": "例如：¥3000/人",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "h3yDu",
+              "name": "field3Label",
+              "fill": "#0F172A",
+              "content": "偏好",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "uEZsv",
+              "name": "prefInput",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "JRhDB",
+                  "name": "field3Text",
+                  "fill": "#64748B",
+                  "content": "如：美食 / 拍照 / 亲子",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "YO8cp",
+              "name": "paceLabel",
+              "fill": "#0F172A",
+              "content": "节奏",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "W1Sxq",
+              "name": "paceRow",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "wOeMK",
+                  "name": "paceSlow",
+                  "fill": "#E2E8F0",
+                  "cornerRadius": 999,
+                  "padding": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LhGCb",
+                      "name": "paceSlowText",
+                      "fill": "#475569",
+                      "content": "慢",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Of8q2",
+                  "name": "paceNormal",
+                  "fill": "#E0F2FE",
+                  "cornerRadius": 999,
+                  "padding": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "iE4s1",
+                      "name": "paceNormalText",
+                      "fill": "#0284C7",
+                      "content": "正常",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "AxZ42",
+                  "name": "paceFast",
+                  "fill": "#E2E8F0",
+                  "cornerRadius": 999,
+                  "padding": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "eTCQm",
+                      "name": "paceFastText",
+                      "fill": "#475569",
+                      "content": "紧凑",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "lCGf3",
+              "name": "otherLabel",
+              "fill": "#0F172A",
+              "content": "其他要求",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "jGrGT",
+              "name": "otherInput",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": 10,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Mo0UA",
+                  "name": "otherText",
+                  "fill": "#64748B",
+                  "content": "如：避开人多景点、含亲子活动",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SJBUk",
+          "name": "generateBtn",
+          "width": "fill_container",
+          "fill": "#0EA5E9",
+          "cornerRadius": 12,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "0Ug1A",
+              "name": "genBtnText",
+              "fill": "white",
+              "content": "生成攻略",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ACzoY",
+          "name": "resultCard",
+          "width": "fill_container",
+          "fill": "white",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "Rkg2w",
+              "name": "resultTitle",
+              "fill": "#0F172A",
+              "content": "攻略展示",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "PfsTm",
+              "name": "resultNote",
+              "fill": "#94A3B8",
+              "content": "生成成功才显示内容（示例）",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "sQWen",
+              "name": "resultHeading",
+              "fill": "#0F172A",
+              "content": "标题：成都3天美食+拍照路线",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "RFCzw",
+              "name": "resultSummary",
+              "fill": "#64748B",
+              "content": "摘要：覆盖市区精华与热门美食，节奏适中。",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "dQkIF",
+              "name": "itineraryTitle",
+              "fill": "#0F172A",
+              "content": "行程建议",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "PYZBv",
+              "name": "itineraryText",
+              "fill": "#64748B",
+              "content": "Day1 市区经典；Day2 人文与美食；Day3 轻松拍照点",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "N2GuD",
+              "name": "keyTitle",
+              "fill": "#0F172A",
+              "content": "关键要点",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "aj8CX",
+              "name": "keyText",
+              "fill": "#64748B",
+              "content": "交通：地铁优先；餐饮：提前预约热门店",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

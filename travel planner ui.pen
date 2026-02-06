@@ -1,0 +1,3087 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "rExvB",
+      "x": 40,
+      "y": 40,
+      "name": "Dark - 输入",
+      "clip": true,
+      "width": 390,
+      "height": 974,
+      "fill": "#0B1220",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": [
+        24,
+        20
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "n5HbT",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 44,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "e5Qgr",
+              "name": "brand",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "UnYmU",
+                  "name": "logo",
+                  "width": 36,
+                  "height": 36,
+                  "fill": "#0EA5E9",
+                  "cornerRadius": 10,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0EA5E933",
+                    "offset": {
+                      "x": 0,
+                      "y": 6
+                    },
+                    "blur": 16
+                  },
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "h9eMy",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "plane",
+                      "iconFontFamily": "lucide",
+                      "fill": "#0B1220"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "LXqlV",
+                  "fill": "#E5E7EB",
+                  "content": "轻旅助手",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GLEi5",
+              "name": "Top Tabs",
+              "height": 36,
+              "fill": "#111827",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rr4Wg",
+                  "name": "nav1",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "uOQti",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "compass",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "NW9xC",
+                  "name": "nav2",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#111827",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "85vjR",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "route",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "6cgK5",
+                  "name": "nav3",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#111827",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "jcFtu",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "book-open",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "sok0Y",
+          "name": "cityLabel",
+          "width": "fill_container",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "GYKvN",
+              "width": 16,
+              "height": 16,
+              "iconFontName": "globe",
+              "iconFontFamily": "lucide",
+              "fill": "#38BDF8"
+            },
+            {
+              "type": "text",
+              "id": "YAV53",
+              "fill": "#E5E7EB",
+              "content": "目标城市",
+              "fontFamily": "DM Sans",
+              "fontSize": 14,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "eBVft",
+          "name": "cityCard",
+          "width": "fill_container",
+          "fill": "#111827",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "mtTYD",
+              "name": "cityInput",
+              "width": "fill_container",
+              "height": 44,
+              "fill": "#0F172A",
+              "cornerRadius": 12,
+              "padding": [
+                0,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "SOOKz",
+                  "fill": "#94A3B8",
+                  "content": "输入城市名称，如：成都",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 13
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "zNN4J",
+          "name": "originLabel",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "h66wY",
+              "name": "originLeft",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "rudgc",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "navigation",
+                  "iconFontFamily": "lucide",
+                  "fill": "#38BDF8"
+                },
+                {
+                  "type": "text",
+                  "id": "R0r9G",
+                  "fill": "#E5E7EB",
+                  "content": "出发点",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "RRH64",
+              "name": "locBtn",
+              "height": 28,
+              "fill": "#111827",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": [
+                0,
+                10
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "TppwG",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "locate-fixed",
+                  "iconFontFamily": "lucide",
+                  "fill": "#94A3B8"
+                },
+                {
+                  "type": "text",
+                  "id": "4CReO",
+                  "fill": "#94A3B8",
+                  "content": "我的位置",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "79mYr",
+          "name": "originCard",
+          "width": "fill_container",
+          "fill": "#111827",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "qLbka",
+              "name": "originSeg",
+              "width": "fill_container",
+              "height": 36,
+              "fill": "#0B1220",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "UmZg8",
+                  "name": "segA",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lytW2",
+                      "fill": "#E5E7EB",
+                      "content": "文字地址",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eLAHu",
+                  "name": "segB",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#0B1220",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "UhWP4",
+                      "fill": "#94A3B8",
+                      "content": "精准坐标",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "UjTkt",
+              "name": "originInput",
+              "width": "fill_container",
+              "height": 44,
+              "fill": "#0F172A",
+              "cornerRadius": 12,
+              "padding": [
+                0,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bUQjP",
+                  "fill": "#94A3B8",
+                  "content": "例如：天府广场",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 13
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Zvi6o",
+          "name": "destLabel",
+          "width": "fill_container",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "PxfXw",
+              "width": 16,
+              "height": 16,
+              "iconFontName": "map-pin",
+              "iconFontFamily": "lucide",
+              "fill": "#38BDF8"
+            },
+            {
+              "type": "text",
+              "id": "0TWcf",
+              "fill": "#E5E7EB",
+              "content": "目的地列表",
+              "fontFamily": "DM Sans",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "bnbfA",
+              "fill": "#94A3B8",
+              "content": "2 个地点",
+              "fontFamily": "DM Sans",
+              "fontSize": 12,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "szl3x",
+          "name": "Map Card",
+          "width": "fill_container",
+          "height": 220,
+          "fill": "#111827",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "n7wJO",
+              "fill": "#E5E7EB",
+              "content": "地图预览",
+              "fontFamily": "DM Sans",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "UBPOZ",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#0F172A",
+              "cornerRadius": 12
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "6IPrH",
+          "name": "Dest Card",
+          "width": "fill_container",
+          "fill": "#111827",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "AZz0k",
+              "name": "addRow",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Kz0Rq",
+                  "name": "addInput",
+                  "width": "fill_container",
+                  "height": 44,
+                  "fill": "#0F172A",
+                  "cornerRadius": 12,
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "laSvC",
+                      "fill": "#94A3B8",
+                      "content": "输入地点名称并回车",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "p3sNT",
+                  "name": "addBtn",
+                  "width": 44,
+                  "height": 44,
+                  "fill": "#111827",
+                  "cornerRadius": 12,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "yDRpW",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "plus",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "FGm0d",
+              "name": "item1",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#0F172A",
+              "cornerRadius": 14,
+              "gap": 12,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sJq4p",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#0B1220",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "4DV61",
+                  "fill": "#38BDF8",
+                  "content": "1",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "6GxMl",
+                  "name": "info1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "8CpZ4",
+                      "fill": "#E5E7EB",
+                      "content": "红树林公园",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Cj5iU",
+                      "fill": "#94A3B8",
+                      "content": "海南省三亚市天涯区城市乐园",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "PC56B",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "byn8A",
+              "name": "item2",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#0F172A",
+              "cornerRadius": 14,
+              "gap": 12,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "s7KRS",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#0B1220",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "VnFkg",
+                  "fill": "#38BDF8",
+                  "content": "2",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "558p0",
+                  "name": "info2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZChBQ",
+                      "fill": "#E5E7EB",
+                      "content": "海滨浴场",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "hb2IU",
+                      "fill": "#94A3B8",
+                      "content": "海南省三亚市天涯区西岛海洋...",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "Pj0E7",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "fnljB",
+          "name": "CTA",
+          "width": "fill_container",
+          "height": 52,
+          "fill": "#F97316",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#F9731633",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 16
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "6QqNH",
+              "fill": "#0B1220",
+              "content": "生成最优路线",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "HeVXo",
+      "x": 480,
+      "y": 40,
+      "name": "Dark - 路线",
+      "clip": true,
+      "width": 390,
+      "height": 844,
+      "fill": "#0B1220",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": [
+        24,
+        20
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "nbBGp",
+          "name": "routeHeader",
+          "width": "fill_container",
+          "height": 44,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "4kHs7",
+              "fill": "#E5E7EB",
+              "content": "路线",
+              "fontFamily": "DM Sans",
+              "fontSize": 18,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "BaJBn",
+              "name": "Top Tabs",
+              "height": 36,
+              "fill": "#111827",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "QSnCH",
+                  "name": "nav1",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "fj8cs",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "compass",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "P9gZu",
+                  "name": "nav2",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#111827",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "kNFIT",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "route",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "vb6vM",
+                  "name": "nav3",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#111827",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "hpdci",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "book-open",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "8GXrU",
+          "name": "map",
+          "width": "fill_container",
+          "height": 260,
+          "fill": "#0F172A",
+          "cornerRadius": 16
+        },
+        {
+          "type": "frame",
+          "id": "v0sdB",
+          "name": "summary",
+          "width": "fill_container",
+          "gap": 10,
+          "children": [
+            {
+              "type": "frame",
+              "id": "dBnlC",
+              "name": "card1",
+              "width": "fill_container",
+              "height": 74,
+              "fill": "#111827",
+              "cornerRadius": 14,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                10,
+                12
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "STt2y",
+                  "fill": "#94A3B8",
+                  "content": "总距离",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "Micdd",
+                  "fill": "#E5E7EB",
+                  "content": "26.4 km",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "LOzLe",
+              "name": "card2",
+              "width": "fill_container",
+              "height": 74,
+              "fill": "#111827",
+              "cornerRadius": 14,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                10,
+                12
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "FlKTQ",
+                  "fill": "#94A3B8",
+                  "content": "预计用时",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "XJmka",
+                  "fill": "#E5E7EB",
+                  "content": "1小时20分",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "z8D6I",
+          "name": "routeList",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "frame",
+              "id": "JYNNn",
+              "name": "step1",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#111827",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "QRRzD",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "0lIHB",
+                  "fill": "#38BDF8",
+                  "content": "1",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "iinii",
+                  "name": "info1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "4XEZU",
+                      "fill": "#E5E7EB",
+                      "content": "红树林公园",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "B2TTq",
+                      "fill": "#94A3B8",
+                      "content": "海边公园 · 08:40",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "ZUAIL",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Dm71X",
+              "name": "step2",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#111827",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "v283i",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "0yCb6",
+                  "fill": "#38BDF8",
+                  "content": "2",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "YpxE0",
+                  "name": "info2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "stDd2",
+                      "fill": "#E5E7EB",
+                      "content": "海滨浴场",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vxWQS",
+                      "fill": "#94A3B8",
+                      "content": "海边浴场 · 09:10",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "SzTXr",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "OoRRm",
+          "name": "routeCta",
+          "width": "fill_container",
+          "height": 50,
+          "fill": "#F97316",
+          "cornerRadius": 14,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#F9731633",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 16
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "wSk4Z",
+              "fill": "#0B1220",
+              "content": "开始导航",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "iEJdz",
+      "x": 920,
+      "y": 40,
+      "name": "Dark - 攻略",
+      "clip": true,
+      "width": 390,
+      "height": 844,
+      "fill": "#0B1220",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": [
+        24,
+        20
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "vsef3",
+          "name": "guideHeader",
+          "width": "fill_container",
+          "height": 44,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "AvyCb",
+              "fill": "#E5E7EB",
+              "content": "攻略",
+              "fontFamily": "DM Sans",
+              "fontSize": 18,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "sL1VO",
+              "name": "Top Tabs",
+              "height": 36,
+              "fill": "#111827",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "SzUIT",
+                  "name": "nav1",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "ZoZiU",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "compass",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tLCAN",
+                  "name": "nav2",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#111827",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "Eejhh",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "route",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MDLAj",
+                  "name": "nav3",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#111827",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "KFS9F",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "book-open",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Hu4Pe",
+          "name": "hero",
+          "width": "fill_container",
+          "fill": "#111827",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "0xHMT",
+              "fill": "#E5E7EB",
+              "content": "三亚两日轻旅路线",
+              "fontFamily": "DM Sans",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "Ukn5g",
+              "fill": "#94A3B8",
+              "content": "海风 + 人文 + 日落，路线紧凑但不赶",
+              "fontFamily": "DM Sans",
+              "fontSize": 12
+            },
+            {
+              "type": "frame",
+              "id": "ZHgxy",
+              "name": "chipRow",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lFgjI",
+                  "name": "chip1",
+                  "height": 24,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "padding": [
+                    0,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "WoTPk",
+                      "fill": "#E5E7EB",
+                      "content": "预算 500",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 11,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "DA7UC",
+                  "name": "chip2",
+                  "height": 24,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "padding": [
+                    0,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZNquM",
+                      "fill": "#E5E7EB",
+                      "content": "步行+打车",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 11,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GtL8r",
+                  "name": "chip3",
+                  "height": 24,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "padding": [
+                    0,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Sdcr6",
+                      "fill": "#E5E7EB",
+                      "content": "日落最佳",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 11,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "A1U72",
+          "name": "section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "text",
+              "id": "PxEKj",
+              "fill": "#E5E7EB",
+              "content": "行程建议",
+              "fontFamily": "DM Sans",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "gbxie",
+              "name": "cardA",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#111827",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lQnHf",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "nMwaH",
+                  "fill": "#38BDF8",
+                  "content": "D1",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "paAgY",
+                  "name": "infoA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "tfbjl",
+                      "fill": "#E5E7EB",
+                      "content": "海边日落路线",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "SPbP2",
+                      "fill": "#94A3B8",
+                      "content": "推荐时段 17:30-20:30",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rlCVQ",
+              "name": "cardB",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#111827",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "NlDW4",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#0F172A",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "SWWDi",
+                  "fill": "#38BDF8",
+                  "content": "D2",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "0Culq",
+                  "name": "infoB",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hlWpq",
+                      "fill": "#E5E7EB",
+                      "content": "人文街区漫游",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "oSM1d",
+                      "fill": "#94A3B8",
+                      "content": "步行友好 · 建议上午",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bMPLL",
+          "name": "guideCta",
+          "width": "fill_container",
+          "height": 50,
+          "fill": "#F97316",
+          "cornerRadius": 14,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#F9731633",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 16
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "9OFO8",
+              "fill": "#0B1220",
+              "content": "生成攻略详情",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "oVOrV",
+      "x": 1390,
+      "y": 40,
+      "name": "Light - 输入",
+      "clip": true,
+      "width": 390,
+      "height": 974,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": [
+        24,
+        20
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "nMkdU",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 44,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "qW2D5",
+              "name": "brand",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "tJhFf",
+                  "name": "logo",
+                  "width": 36,
+                  "height": 36,
+                  "fill": "#0EA5E9",
+                  "cornerRadius": 10,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0EA5E933",
+                    "offset": {
+                      "x": 0,
+                      "y": 6
+                    },
+                    "blur": 16
+                  },
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "RUZqA",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "plane",
+                      "iconFontFamily": "lucide",
+                      "fill": "#F8FAFC"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "B2e97",
+                  "fill": "#0F172A",
+                  "content": "轻旅助手",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Y2S4i",
+              "name": "Top Tabs",
+              "height": 36,
+              "fill": "#FFFFFF",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "lBD2K",
+                  "name": "nav1",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "TY0hd",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "compass",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "2ET3J",
+                  "name": "nav2",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "vgZAt",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "route",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Ogw2X",
+                  "name": "nav3",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "1SdeX",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "book-open",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "P11Pz",
+          "name": "cityLabel",
+          "width": "fill_container",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "a12uz",
+              "width": 16,
+              "height": 16,
+              "iconFontName": "globe",
+              "iconFontFamily": "lucide",
+              "fill": "#38BDF8"
+            },
+            {
+              "type": "text",
+              "id": "lSXu2",
+              "fill": "#0F172A",
+              "content": "目标城市",
+              "fontFamily": "DM Sans",
+              "fontSize": 14,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SCRbA",
+          "name": "cityCard",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "4z3ZT",
+              "name": "cityInput",
+              "width": "fill_container",
+              "height": 44,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": [
+                0,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vcMnh",
+                  "fill": "#64748B",
+                  "content": "输入城市名称，如：成都",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 13
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "3JaCI",
+          "name": "originLabel",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "yHdoU",
+              "name": "originLeft",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "v3Pd2",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "navigation",
+                  "iconFontFamily": "lucide",
+                  "fill": "#38BDF8"
+                },
+                {
+                  "type": "text",
+                  "id": "H87wK",
+                  "fill": "#0F172A",
+                  "content": "出发点",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "T0Bap",
+              "name": "locBtn",
+              "height": 28,
+              "fill": "#FFFFFF",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": [
+                0,
+                10
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "M2A1m",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "locate-fixed",
+                  "iconFontFamily": "lucide",
+                  "fill": "#94A3B8"
+                },
+                {
+                  "type": "text",
+                  "id": "bhJAo",
+                  "fill": "#64748B",
+                  "content": "我的位置",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gTtt3",
+          "name": "originCard",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "ATHez",
+              "name": "originSeg",
+              "width": "fill_container",
+              "height": 36,
+              "fill": "#F8FAFC",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "6C7TS",
+                  "name": "segA",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lFWYi",
+                      "fill": "#0F172A",
+                      "content": "文字地址",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "xvdRn",
+                  "name": "segB",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#F8FAFC",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "L9xXm",
+                      "fill": "#64748B",
+                      "content": "精准坐标",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "6jp6Z",
+              "name": "originInput",
+              "width": "fill_container",
+              "height": 44,
+              "fill": "#F1F5F9",
+              "cornerRadius": 12,
+              "padding": [
+                0,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "2IXO6",
+                  "fill": "#64748B",
+                  "content": "例如：天府广场",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 13
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "0JQ4q",
+          "name": "destLabel",
+          "width": "fill_container",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "1Le2n",
+              "width": 16,
+              "height": 16,
+              "iconFontName": "map-pin",
+              "iconFontFamily": "lucide",
+              "fill": "#38BDF8"
+            },
+            {
+              "type": "text",
+              "id": "Fwrab",
+              "fill": "#0F172A",
+              "content": "目的地列表",
+              "fontFamily": "DM Sans",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "YEeXt",
+              "fill": "#64748B",
+              "content": "2 个地点",
+              "fontFamily": "DM Sans",
+              "fontSize": 12,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "3mpyS",
+          "name": "Map Card",
+          "width": "fill_container",
+          "height": 220,
+          "fill": "#FFFFFF",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "PZ4K4",
+              "fill": "#0F172A",
+              "content": "地图预览",
+              "fontFamily": "DM Sans",
+              "fontSize": 13,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "rhAjj",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#F1F5F9",
+              "cornerRadius": 12
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ybbty",
+          "name": "Dest Card",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000000A",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 10
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "SabxI",
+              "name": "addRow",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "hzAkS",
+                  "name": "addInput",
+                  "width": "fill_container",
+                  "height": 44,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 12,
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "8xHuc",
+                      "fill": "#64748B",
+                      "content": "输入地点名称并回车",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "B3UO3",
+                  "name": "addBtn",
+                  "width": 44,
+                  "height": 44,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "GPnwY",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "plus",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "L3mSi",
+              "name": "item1",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#F1F5F9",
+              "cornerRadius": 14,
+              "gap": 12,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "CJhWd",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#F8FAFC",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "6g1go",
+                  "fill": "#0891B2",
+                  "content": "1",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "3myFl",
+                  "name": "info1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "GRNmO",
+                      "fill": "#0F172A",
+                      "content": "红树林公园",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "s6Iz6",
+                      "fill": "#64748B",
+                      "content": "海南省三亚市天涯区城市乐园",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "8T9CR",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "muo3J",
+              "name": "item2",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#F1F5F9",
+              "cornerRadius": 14,
+              "gap": 12,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Wl8QR",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#F8FAFC",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "Qpfw5",
+                  "fill": "#0891B2",
+                  "content": "2",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "2QXrZ",
+                  "name": "info2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lSyOa",
+                      "fill": "#0F172A",
+                      "content": "海滨浴场",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "DdyJP",
+                      "fill": "#64748B",
+                      "content": "海南省三亚市天涯区西岛海洋...",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "SRRCC",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "NbEw1",
+          "name": "CTA",
+          "width": "fill_container",
+          "height": 52,
+          "fill": "#F97316",
+          "cornerRadius": 16,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#F9731633",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 16
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "5eCHD",
+              "fill": "#0F172A",
+              "content": "生成最优路线",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "gZq8H",
+      "x": 1810,
+      "y": 40,
+      "name": "Light - 路线",
+      "clip": true,
+      "width": 390,
+      "height": 844,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": [
+        24,
+        20
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "aodyN",
+          "name": "routeHeader",
+          "width": "fill_container",
+          "height": 44,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "covPn",
+              "fill": "#0F172A",
+              "content": "路线",
+              "fontFamily": "DM Sans",
+              "fontSize": 18,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "4lxkT",
+              "name": "Top Tabs",
+              "height": 36,
+              "fill": "#FFFFFF",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "fpXcU",
+                  "name": "nav1",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "hdIE3",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "compass",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "XqTpG",
+                  "name": "nav2",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "kwMMk",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "route",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eNDly",
+                  "name": "nav3",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "WqsoX",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "book-open",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "r2NRr",
+          "name": "map",
+          "width": "fill_container",
+          "height": 260,
+          "fill": "#F1F5F9",
+          "cornerRadius": 16
+        },
+        {
+          "type": "frame",
+          "id": "uByGo",
+          "name": "summary",
+          "width": "fill_container",
+          "gap": 10,
+          "children": [
+            {
+              "type": "frame",
+              "id": "MpPLl",
+              "name": "card1",
+              "width": "fill_container",
+              "height": 74,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                10,
+                12
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "HvUX4",
+                  "fill": "#64748B",
+                  "content": "总距离",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "JAbYY",
+                  "fill": "#0F172A",
+                  "content": "26.4 km",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MbdYF",
+              "name": "card2",
+              "width": "fill_container",
+              "height": 74,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                10,
+                12
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ricwU",
+                  "fill": "#64748B",
+                  "content": "预计用时",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "RBDSL",
+                  "fill": "#0F172A",
+                  "content": "1小时20分",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "VHI52",
+          "name": "routeList",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "frame",
+              "id": "2YAEv",
+              "name": "step1",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qkCb8",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "qSQlq",
+                  "fill": "#0891B2",
+                  "content": "1",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "gQOKE",
+                  "name": "info1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HJ18Z",
+                      "fill": "#0F172A",
+                      "content": "红树林公园",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "VtcmN",
+                      "fill": "#64748B",
+                      "content": "海边公园 · 08:40",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "QWTpM",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ACxGn",
+              "name": "step2",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "4KBBM",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "W7aU0",
+                  "fill": "#0891B2",
+                  "content": "2",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "plhg5",
+                  "name": "info2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "2KIKr",
+                      "fill": "#0F172A",
+                      "content": "海滨浴场",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "6kAnc",
+                      "fill": "#64748B",
+                      "content": "海边浴场 · 09:10",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "j0T1a",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "OUyUT",
+          "name": "routeCta",
+          "width": "fill_container",
+          "height": 50,
+          "fill": "#F97316",
+          "cornerRadius": 14,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#F9731633",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 16
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "iOaSb",
+              "fill": "#0F172A",
+              "content": "开始导航",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "WKD89",
+      "x": 2230,
+      "y": 40,
+      "name": "Light - 攻略",
+      "clip": true,
+      "width": 390,
+      "height": 844,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 16,
+      "padding": [
+        24,
+        20
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "bUjv3",
+          "name": "guideHeader",
+          "width": "fill_container",
+          "height": 44,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Omd5e",
+              "fill": "#0F172A",
+              "content": "攻略",
+              "fontFamily": "DM Sans",
+              "fontSize": 18,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "nGoAB",
+              "name": "Top Tabs",
+              "height": 36,
+              "fill": "#FFFFFF",
+              "cornerRadius": 999,
+              "gap": 6,
+              "padding": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "I3VA1",
+                  "name": "nav1",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "ZtJYr",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "compass",
+                      "iconFontFamily": "lucide",
+                      "fill": "#38BDF8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KOVU6",
+                  "name": "nav2",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "pkNpr",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "route",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "bwxSA",
+                  "name": "nav3",
+                  "width": 32,
+                  "height": 28,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "Fvhpc",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "book-open",
+                      "iconFontFamily": "lucide",
+                      "fill": "#94A3B8"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "L2z3U",
+          "name": "hero",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "94BkA",
+              "fill": "#0F172A",
+              "content": "三亚两日轻旅路线",
+              "fontFamily": "DM Sans",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "YcEfX",
+              "fill": "#64748B",
+              "content": "海风 + 人文 + 日落，路线紧凑但不赶",
+              "fontFamily": "DM Sans",
+              "fontSize": 12
+            },
+            {
+              "type": "frame",
+              "id": "C6QiQ",
+              "name": "chipRow",
+              "width": "fill_container",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RBXaC",
+                  "name": "chip1",
+                  "height": 24,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "padding": [
+                    0,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "qv3sD",
+                      "fill": "#0F172A",
+                      "content": "预算 500",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 11,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wYqzW",
+                  "name": "chip2",
+                  "height": 24,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "padding": [
+                    0,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "AFBEE",
+                      "fill": "#0F172A",
+                      "content": "步行+打车",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 11,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "j8b5C",
+                  "name": "chip3",
+                  "height": 24,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "padding": [
+                    0,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rjws8",
+                      "fill": "#0F172A",
+                      "content": "日落最佳",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 11,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "iieg0",
+          "name": "section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "text",
+              "id": "wLYI6",
+              "fill": "#0F172A",
+              "content": "行程建议",
+              "fontFamily": "DM Sans",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "lIqjs",
+              "name": "cardA",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "64evt",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "NNme7",
+                  "fill": "#0891B2",
+                  "content": "D1",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "RZ1HN",
+                  "name": "infoA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "YjRqI",
+                      "fill": "#0F172A",
+                      "content": "海边日落路线",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "YJaQb",
+                      "fill": "#64748B",
+                      "content": "推荐时段 17:30-20:30",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "vmOGK",
+              "name": "cardB",
+              "width": "fill_container",
+              "height": 64,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "gap": 10,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qqyAP",
+                  "width": 28,
+                  "height": 28,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center"
+                },
+                {
+                  "type": "text",
+                  "id": "JcTWV",
+                  "fill": "#0891B2",
+                  "content": "D2",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "ZlJ1d",
+                  "name": "infoB",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "64TLq",
+                      "fill": "#0F172A",
+                      "content": "人文街区漫游",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Oy1lp",
+                      "fill": "#64748B",
+                      "content": "步行友好 · 建议上午",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "VwXue",
+          "name": "guideCta",
+          "width": "fill_container",
+          "height": 50,
+          "fill": "#F97316",
+          "cornerRadius": 14,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#F9731633",
+            "offset": {
+              "x": 0,
+              "y": 6
+            },
+            "blur": 16
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "puJHE",
+              "fill": "#0F172A",
+              "content": "生成攻略详情",
+              "fontFamily": "DM Sans",
+              "fontSize": 15,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

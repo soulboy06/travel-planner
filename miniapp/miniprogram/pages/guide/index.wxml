@@ -1,0 +1,124 @@
+<view class="page">
+  <!-- Top Tabs -->
+  <view class="top-tabs">
+    <view class="tab-item" bindtap="goInput">
+      <view class="tab-icon"></view>
+      <text class="tab-text">输入</text>
+    </view>
+    <view class="tab-item" bindtap="goRoute">
+      <view class="tab-icon"></view>
+      <text class="tab-text">路线</text>
+    </view>
+    <view class="tab-item active">
+      <view class="tab-icon"></view>
+      <text class="tab-text">攻略</text>
+    </view>
+  </view>
+
+  <view class="module">
+    <scroll-view scroll-y class="module-scroll">
+      <!-- Guide Form Card -->
+      <view class="card">
+        <text class="card-title">填写需求</text>
+        <text class="hint">已带入：{{guideContextSummary}}</text>
+
+        <view class="input-group">
+          <text class="input-label">出行天数</text>
+          <view class="input-box">
+            <input class="input" placeholder="例如：3天2晚" data-field="days" bindinput="onGuideInput" value="{{guideParams.days}}" />
+          </view>
+        </view>
+
+        <view class="input-group">
+          <text class="input-label">预算</text>
+          <view class="input-box">
+            <input class="input" placeholder="例如：¥3000/人" data-field="budget" bindinput="onGuideInput" value="{{guideParams.budget}}" />
+          </view>
+        </view>
+
+        <view class="input-group">
+          <text class="input-label">偏好</text>
+          <view class="input-box">
+            <input class="input" placeholder="如：美食 / 拍照 / 亲子" data-field="vibe" bindinput="onGuideInput" value="{{guideParams.vibe}}" />
+          </view>
+        </view>
+
+        <view class="input-group">
+          <text class="input-label">节奏</text>
+          <view class="chip-row">
+            <view class="chip {{guideParams.pace === '慢' ? 'active' : ''}}" bindtap="setGuidePace" data-val="慢">慢</view>
+            <view class="chip {{guideParams.pace === '正常' ? 'active' : ''}}" bindtap="setGuidePace" data-val="正常">正常</view>
+            <view class="chip {{guideParams.pace === '紧凑' ? 'active' : ''}}" bindtap="setGuidePace" data-val="紧凑">紧凑</view>
+          </view>
+        </view>
+
+        <view class="input-group">
+          <text class="input-label">其他要求</text>
+          <view class="input-box">
+            <input class="input" placeholder="如：避开人多景点、含亲子活动" data-field="other" bindinput="onGuideInput" value="{{guideParams.other}}" />
+          </view>
+        </view>
+
+        <button class="btn-primary" bindtap="onGenerateGuide" loading="{{guideLoading}}">
+          {{guideLoading ? '生成中…' : '生成攻略'}}
+        </button>
+      </view>
+
+      <!-- Result Card -->
+      <view class="card" wx:if="{{guideResult}}">
+        <text class="card-title">攻略展示</text>
+        <text class="hint">生成成功才显示内容</text>
+        
+        <view class="input-group">
+          <text class="card-subtitle">标题：{{guideResult.title}}</text>
+          <text class="result-text">摘要：{{guideResult.summary}}</text>
+        </view>
+        
+        <view class="input-group">
+          <text class="card-subtitle">行程建议</text>
+          <block wx:if="{{guideResult.itinerary.length > 0}}">
+            <block wx:for="{{guideResult.itinerary}}" wx:key="index">
+              <text class="result-text">- {{item}}</text>
+            </block>
+          </block>
+          <text wx:else class="result-text">暂无</text>
+        </view>
+        
+        <view class="input-group">
+          <text class="card-subtitle">必做清单</text>
+          <block wx:if="{{guideResult.mustDo.length > 0}}">
+            <block wx:for="{{guideResult.mustDo}}" wx:key="index">
+              <text class="result-text">- {{item}}</text>
+            </block>
+          </block>
+          <text wx:else class="result-text">暂无</text>
+        </view>
+
+        <view class="input-group">
+          <text class="card-subtitle">关键要点</text>
+          <block wx:if="{{guideResult.keyPoints.length > 0}}">
+            <block wx:for="{{guideResult.keyPoints}}" wx:key="index">
+              <text class="result-text">- {{item}}</text>
+            </block>
+          </block>
+          <text wx:else class="result-text">暂无</text>
+        </view>
+
+        <view class="input-group">
+          <text class="card-subtitle">实用提示</text>
+          <block wx:if="{{guideResult.tips.length > 0}}">
+            <block wx:for="{{guideResult.tips}}" wx:key="index">
+              <text class="result-text">- {{item}}</text>
+            </block>
+          </block>
+          <text wx:else class="result-text">暂无</text>
+        </view>
+
+        <view class="input-group" wx:if="{{guideResult.planB}}">
+          <text class="card-subtitle">备选方案</text>
+          <text class="result-text">{{guideResult.planB}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

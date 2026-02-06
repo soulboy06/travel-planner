@@ -1,0 +1,49 @@
+<svg width="144" height="144" viewBox="0 0 144 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景：扁平风格的天蓝色 -->
+  <rect width="144" height="144" rx="32" fill="#56CCF2"/>
+  
+  <!-- 地图元素：折叠纸张效果 -->
+  <!-- 左侧折页 -->
+  <path d="M22 32 L55.33 44 V116 L22 104 V32Z" fill="#F7F9FA"/>
+  
+  <!-- 中间折页 (阴影稍深) -->
+  <path d="M55.33 44 L88.66 32 V104 L55.33 116 V44Z" fill="#E1E8ED"/>
+  
+  <!-- 右侧折页 -->
+  <path d="M88.66 32 L122 44 V116 L88.66 104 V32Z" fill="#F7F9FA"/>
+  
+  <!-- 地图细节：简单的道路线条 -->
+  <!-- 虚线网格 -->
+  <path d="M55.33 55 V100" stroke="#CBD5E0" stroke-width="2" stroke-dasharray="4 2"/>
+  <path d="M88.66 45 V90" stroke="#CBD5E0" stroke-width="2" stroke-dasharray="4 2"/>
+  
+  <!-- 连贯的路线：从左到右，贯穿三个折页 -->
+  <!-- 使用贝塞尔曲线模拟路线，使其看起来是连续的 -->
+  <path d="M35 55 C 45 65, 55 50, 72 58 C 89 66, 95 80, 110 70" stroke="#F6AD55" stroke-width="4" stroke-linecap="round" fill="none"/>
+  
+  <!-- 起点和终点 -->
+  <circle cx="35" cy="55" r="4" fill="#4FD1C5" stroke="#FFFFFF" stroke-width="1"/>
+  <circle cx="110" cy="70" r="4" fill="#E53E3E" stroke="#FFFFFF" stroke-width="1"/>
+
+  <!-- 指南针元素：放置在右下角 -->
+  <!-- 外壳 -->
+  <circle cx="104" cy="104" r="28" fill="#2D3748" stroke="#FFFFFF" stroke-width="3"/>
+  <!-- 表盘 -->
+  <circle cx="104" cy="104" r="24" fill="#FFFFFF"/>
+  <!-- 刻度 -->
+  <rect x="103" y="82" width="2" height="4" rx="1" fill="#A0AEC0"/>
+  <rect x="103" y="122" width="2" height="4" rx="1" fill="#A0AEC0"/>
+  <rect x="122" y="103" width="4" height="2" rx="1" fill="#A0AEC0"/>
+  <rect x="82" y="103" width="4" height="2" rx="1" fill="#A0AEC0"/>
+  
+  <!-- 指针 -->
+  <!-- 北针 (红色) -->
+  <path d="M104 104 L104 86 L109 104 H104Z" fill="#FC8181"/>
+  <path d="M104 104 L104 86 L99 104 H104Z" fill="#F56565"/>
+  <!-- 南针 (灰色) -->
+  <path d="M104 104 L104 122 L109 104 H104Z" fill="#E2E8F0"/>
+  <path d="M104 104 L104 122 L99 104 H104Z" fill="#CBD5E0"/>
+  
+  <!-- 中心轴 -->
+  <circle cx="104" cy="104" r="3" fill="#2D3748"/>
+</svg>

@@ -1,0 +1,61 @@
+<view class="page">
+  <!-- Top Tabs -->
+  <view class="top-tabs">
+    <view class="tab-item" bindtap="goInput">
+      <view class="tab-icon"></view>
+      <text class="tab-text">输入</text>
+    </view>
+    <view class="tab-item active">
+      <view class="tab-icon"></view>
+      <text class="tab-text">路线</text>
+    </view>
+    <view class="tab-item" bindtap="goGuide">
+      <view class="tab-icon"></view>
+      <text class="tab-text">攻略</text>
+    </view>
+  </view>
+
+  <view class="module">
+    <scroll-view scroll-y class="module-scroll">
+      <!-- Route Map Card -->
+      <view class="card">
+        <text class="card-title">路线预览</text>
+        <view class="map-frame">
+          <map
+            id="routeMap"
+            class="map"
+            longitude="{{routeMap.lng}}"
+            latitude="{{routeMap.lat}}"
+            scale="{{routeMap.scale}}"
+            markers="{{markers}}"
+            polyline="{{polylines}}"
+            include-points="{{allPoints}}"
+            show-location
+          ></map>
+        </view>
+        <view class="badge" wx:if="{{routeData.legs.length > 0}}">最优路线已生成</view>
+      </view>
+
+      <!-- Route List Card -->
+      <view class="card">
+        <text class="card-title">路线列表</text>
+        <text class="hint">每段路线均提供导航入口（腾讯地图）</text>
+        
+        <view class="route-list">
+          <block wx:for="{{routeData.legs}}" wx:key="index">
+            <view class="route-item">
+              <text class="route-title">{{item.start.name}} → {{item.end.name}}</text>
+              <text class="route-addr">详细地址：{{item.end.address || item.end.name}}</text>
+              <view class="row-between">
+                <text class="route-meta">距离 {{item.distanceText}} · 预计 {{item.durationText}}</text>
+                <view class="pill" bindtap="onNavLeg" data-index="{{index}}">导航</view>
+              </view>
+            </view>
+          </block>
+        </view>
+        
+        <view wx:if="{{routeData.legs.length === 0}}" class="empty-hint">请先设置起点并添加目的地</view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

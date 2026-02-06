@@ -1,0 +1,22 @@
+/** input/index.wxss - Page Specific Styles **/
+
+/* Only page-specific overrides here */
+/* All common styles are in app.wxss */
+
+/* Map marker legend in map card */
+.map-legend {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.legend-text {
+  font-size: 22rpx;
+  color: #64748B;
+}

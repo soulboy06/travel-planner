@@ -1,0 +1,9 @@
+{
+  "name": "inputtips",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^1.13.4",
+    "wx-server-sdk": "^2.6.3"
+  }
+}
