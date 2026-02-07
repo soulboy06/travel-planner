@@ -65,7 +65,7 @@ export function ResultPanel({
                                 {opt.origin.name}
                             </span>
                             {opt.orderedPlaces.map((p, i) => (
-                                <React.Fragment key={i}>
+                                <React.Fragment key={`${p.name}-${p.location || i}`}>
                                     <ArrowRight className="w-3 h-3 mx-1.5 text-gray-300" />
                                     <span className="hover:text-[var(--primary)] transition-colors cursor-pointer">
                                         {p.name}
@@ -110,7 +110,7 @@ export function ResultPanel({
                         const isActive = activeLegIndex === idx;
 
                         return (
-                            <React.Fragment key={idx}>
+                            <React.Fragment key={`${place.name}-${place.location || idx}`}>
                                 {/* Route Leg Info (between nodes) */}
                                 {leg && (
                                     <div
