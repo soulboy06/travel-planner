@@ -4,9 +4,22 @@ type OriginInput =
   | { type: "coord"; lng: number; lat: number; name?: string }
   | { type: "text"; text: string };
 
+type InputPlace =
+  | string
+  | {
+    name?: string;
+    lng?: number;
+    lat?: number;
+    location?: string;
+    formatted_address?: string;
+    city?: string;
+    citycode?: string;
+    adcode?: string;
+  };
+
 type OptimizeReq = {
   origin: OriginInput;
-  places: string[];
+  places: InputPlace[];
   cityHint?: string;   // 例如：成都
   cityAdcode?: string; // 例如：510100（强烈建议前端传这个）
 };
@@ -40,6 +53,55 @@ function parseLocation(loc: string) {
   const [lng, lat] = loc.split(",").map(Number);
   if (!Number.isFinite(lng) || !Number.isFinite(lat)) throw new Error(`Bad location: ${loc}`);
   return { lng, lat };
+}
+
+function extractPlaceName(input: InputPlace): string {
+  if (typeof input === "string") return input.trim();
+  return String(input?.name ?? "").trim();
+}
+
+function toProvidedPoint(input: InputPlace): PlacePoint | null {
+  if (!input || typeof input === "string") return null;
+  const name = extractPlaceName(input);
+  if (!name) return null;
+
+  let lng: number | undefined;
+  let lat: number | undefined;
+  let location: string | undefined;
+
+  if (typeof input.location === "string" && input.location.trim()) {
+    try {
+      const parsed = parseLocation(input.location.trim());
+      lng = parsed.lng;
+      lat = parsed.lat;
+      location = input.location.trim();
+    } catch {
+      // ignore invalid location string, fallback to lng/lat fields
+    }
+  }
+
+  if (lng === undefined || lat === undefined) {
+    const lngNum = Number(input.lng);
+    const latNum = Number(input.lat);
+    if (Number.isFinite(lngNum) && Number.isFinite(latNum)) {
+      lng = lngNum;
+      lat = latNum;
+      location = `${lngNum},${latNum}`;
+    }
+  }
+
+  if (lng === undefined || lat === undefined || !location) return null;
+
+  return {
+    name,
+    lng,
+    lat,
+    location,
+    formatted_address: input.formatted_address ? String(input.formatted_address) : undefined,
+    city: input.city ? String(input.city) : undefined,
+    citycode: input.citycode ? String(input.citycode) : undefined,
+    adcode: input.adcode ? String(input.adcode) : undefined,
+  };
 }
 
 // Haversine distance
@@ -625,21 +687,36 @@ export async function POST(req: Request) {
       originPoint.name = body.origin.text;
     }
 
-    // 2) 地点：强制城市 + 选最可能
-    // 并发 Geocoding
+    // 2) 地点：优先使用前端已选坐标，缺失坐标的再做地理匹配
+    const providedPoints: PlacePoint[] = [];
+    const unresolvedNames: string[] = [];
+    const seenNames = new Set<string>();
+
+    body.places.forEach((input) => {
+      const point = toProvidedPoint(input);
+      const name = extractPlaceName(input);
+      if (!name) return;
+      const key = name.toLowerCase();
+      if (seenNames.has(key)) return;
+      seenNames.add(key);
+      if (point) providedPoints.push(point);
+      else unresolvedNames.push(name);
+    });
+
+    // 对没有坐标的地点并发 Geocoding
     const geocodedResults = await Promise.allSettled(
-      body.places.map(async (name) => {
+      unresolvedNames.map(async (name) => {
         const p = await geocodeStrict(queryCity, expectAdcodePrefix, body.cityHint, name);
         p.name = name;
         return p;
       })
     );
 
-    const geocoded: PlacePoint[] = [];
+    const geocoded: PlacePoint[] = [...providedPoints];
     const failed: { name: string; reason: string }[] = [];
 
     geocodedResults.forEach((res, idx) => {
-      const name = body.places[idx];
+      const name = unresolvedNames[idx];
       if (res.status === "fulfilled") {
         geocoded.push(res.value);
       } else {

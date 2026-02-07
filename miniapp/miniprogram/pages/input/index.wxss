@@ -1,22 +1,183 @@
-/** input/index.wxss - Page Specific Styles **/
+/** input/index.wxss - 页面特定样式（自适应深浅色） **/
 
-/* Only page-specific overrides here */
-/* All common styles are in app.wxss */
+/* 输入页特定调整 */
 
-/* Map marker legend in map card */
-.map-legend {
+/* 章节标签行 */
+.section-row {
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  justify-content: space-between;
+  margin-bottom: 24rpx; /* 增加呼吸感 */
 }
 
-.map-legend-item {
+/* 品牌头部 */
+.brand {
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  gap: 20rpx;
 }
 
-.legend-text {
-  font-size: 22rpx;
-  color: #64748B;
+.logo-box {
+  width: 72rpx;
+  height: 72rpx;
+  background: var(--primary);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-brand);
+}
+
+.logo-icon {
+  width: 48rpx;
+  height: 48rpx;
+  background-color: var(--bg-page); /* 使用页面背景色作为镂空颜色 */
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* 这里的特定 icon-plane 已移至 app.wxss，但如果 logo icon 需要特殊尺寸或位置，可在此微调，或直接依赖全局类。
+   为保持一致性，我们完全依赖 app.wxss 的定义，这里只定义容器样式。 */
+
+.brand-text {
+  font-size: 36rpx;
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.section-row .card-title {
+  margin-bottom: 0;
+  font-size: 30rpx; /* 章节标题稍大 */
+}
+
+/* 目的地输入行 */
+.add-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.add-row .input-box {
+  flex: 1;
+  /* 确保此处匹配深色内嵌外观 */
+  background: var(--bg-input);
+  border: 1px solid var(--border-light);
+}
+
+.add-btn {
+  width: 88rpx;
+  height: 88rpx;
+  background: var(--bg-card); /* 卡片背景 */
+  border: 1px solid var(--border-light);
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-tab);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.add-btn:active {
+  transform: scale(0.95);
+  background: var(--bg-input);
+}
+
+.add-btn::before {
+  content: '+';
+  font-size: 40rpx;
+  color: var(--primary);
+  font-weight: var(--font-bold);
+  text-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* 输入模式切换行 */
+.mode-row {
+  display: flex;
+  gap: 8rpx; /* 更紧凑的间距 */
+  padding: 8rpx;
+  background: var(--bg-input);
+  border-radius: 999rpx;
+  margin-bottom: 24rpx;
+  border: 1px solid var(--border-light);
+}
+
+.mode-item {
+  flex: 1;
+  height: 64rpx;
+  border-radius: 999rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.mode-item.active {
+  background: var(--bg-card); /* 比输入框稍亮 */
+  color: var(--primary); /* 霓虹蓝 */
+  font-weight: var(--font-bold);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-light);
+}
+
+/* 位置文本显示 */
+.loc-text {
+  font-size: 28rpx; /* 更大以提高可读性 */
+  color: var(--text-primary);
+  font-weight: var(--font-medium);
+  letter-spacing: 0.5px;
+}
+
+/* 覆盖卡片标题以作为章节标签 */
+.card .card-title {
+  margin-bottom: 12rpx; /* 标题和内容之间更多空间 */
+}
+
+/* 图例调整 */
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+  margin-top: 16rpx;
+  padding-left: 8rpx;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+/* 带图标的卡片头部 */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-header .icon {
+  width: 36rpx;
+  height: 36rpx;
+  background: var(--primary);
+  border-radius: 10rpx;
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.card-header text {
+  font-size: 30rpx;
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+
+/* 如果需要，确保地图框在此特定上下文中具有光晕或边框 */
+.map-frame {
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.05); /* 内部阴影增加深度 */
 }

@@ -1,4 +1,72 @@
 /** route/index.wxss - Page Specific Styles **/
 
-/* Only page-specific overrides here */
-/* All common styles are in app.wxss */
+/* Brand Header Styles (Duplicate from input for now, ideally in app.wxss) */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.logo-box {
+  width: 72rpx;
+  height: 72rpx;
+  background: var(--primary);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-brand);
+}
+
+.logo-icon {
+  width: 48rpx;
+  height: 48rpx;
+  background-color: var(--bg-page);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.brand-text {
+  font-size: 36rpx;
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* Route specific */
+.route-list {
+  margin-top: 8rpx;
+}
+
+.route-item .pill {
+  height: 56rpx; /* Match standard pill height */
+  padding: 0 32rpx;
+  font-size: 26rpx;
+  background: var(--bg-pill); /* Ensure contrast */
+  color: var(--primary);
+  border: 1px solid var(--border-light);
+}
+
+.empty-hint {
+  text-align: center;
+  padding: 40rpx;
+  color: var(--text-muted);
+  font-size: 26rpx;
+}
+
+.map-frame {
+  margin-top: 20rpx;
+}
+
+.badge {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx; /* Move to right for better map visibility */
+  left: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 99;
+}

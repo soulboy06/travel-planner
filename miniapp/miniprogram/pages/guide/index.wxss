@@ -1,4 +1,73 @@
 /** guide/index.wxss - Page Specific Styles **/
 
-/* Only page-specific overrides here */
-/* All common styles are in app.wxss */
+/* Brand Header Styles */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.logo-box {
+  width: 72rpx;
+  height: 72rpx;
+  background: var(--primary);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-brand);
+}
+
+.logo-icon {
+  width: 48rpx;
+  height: 48rpx;
+  background-color: var(--bg-page);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.brand-text {
+  font-size: 36rpx;
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* Guide form specifics */
+.input-group {
+  margin-bottom: 24rpx;
+}
+
+.input-label {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-bottom: 12rpx;
+  font-weight: var(--font-medium);
+  display: block;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.result-item {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  padding: 16rpx;
+  background: var(--bg-item);
+  border-radius: var(--radius-item);
+  border: 1px solid var(--border-light);
+}
+
+.result-text {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}

@@ -1,5 +1,5 @@
 {
-  "version": "2.6",
+  "version": "2.7",
   "children": [
     {
       "type": "frame",
@@ -7,23 +7,23 @@
       "x": 0,
       "y": 0,
       "name": "Input UI",
-      "width": 375,
-      "height": 1081,
-      "fill": "#F8FAFC",
+      "width": 420,
+      "height": 1191,
+      "fill": "#EEF2FF",
       "layout": "vertical",
-      "gap": 16,
-      "padding": 20,
+      "gap": 20,
+      "padding": 24,
       "children": [
         {
           "type": "frame",
           "id": "l0Vdi",
           "name": "tabs",
           "width": "fill_container",
-          "height": 56,
-          "fill": "rgba(255,255,255,0.85)",
-          "cornerRadius": 16,
-          "gap": 12,
-          "padding": 8,
+          "height": 60,
+          "fill": "#FFFFFF",
+          "cornerRadius": 18,
+          "gap": 10,
+          "padding": 10,
           "children": [
             {
               "type": "frame",
@@ -31,8 +31,8 @@
               "name": "tab_input",
               "width": 100,
               "height": 40,
-              "fill": "#E0F2FE",
-              "cornerRadius": 12,
+              "fill": "#E8EEFF",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -43,7 +43,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#0EA5E9",
+                  "fill": "#2563EB",
                   "cornerRadius": 9
                 },
                 {
@@ -53,7 +53,7 @@
                   "fill": "#0EA5E9",
                   "content": "输入",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "bold"
                 }
@@ -65,8 +65,8 @@
               "name": "tab_route",
               "width": 100,
               "height": 40,
-              "fill": "transparent",
-              "cornerRadius": 12,
+              "fill": "#F8FAFC",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -77,7 +77,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#94A3B8",
+                  "fill": "#9CA3AF",
                   "cornerRadius": 9
                 },
                 {
@@ -87,7 +87,7 @@
                   "fill": "#94A3B8",
                   "content": "路线",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -99,8 +99,8 @@
               "name": "tab_guide",
               "width": 100,
               "height": 40,
-              "fill": "transparent",
-              "cornerRadius": 12,
+              "fill": "#F8FAFC",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -111,7 +111,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#94A3B8",
+                  "fill": "#9CA3AF",
                   "cornerRadius": 9
                 },
                 {
@@ -121,7 +121,7 @@
                   "fill": "#94A3B8",
                   "content": "攻略",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -134,11 +134,11 @@
           "id": "pXJGL",
           "name": "cityCard",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 8,
-          "padding": 12,
+          "gap": 10,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -146,7 +146,7 @@
               "name": "cityTitle",
               "fill": "#0F172A",
               "content": "目标城市",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -155,10 +155,10 @@
               "id": "9cbXV",
               "name": "cityInput",
               "width": "fill_container",
-              "height": 40,
-              "fill": "#F1F5F9",
-              "cornerRadius": 12,
-              "padding": 10,
+              "height": 44,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -166,7 +166,7 @@
                   "name": "cityInputText",
                   "fill": "#64748B",
                   "content": "请输入城市名，如：成都",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -178,7 +178,7 @@
               "name": "cityHint",
               "fill": "#94A3B8",
               "content": "输入后自动定位地图（无需回车）",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             }
@@ -189,11 +189,11 @@
           "id": "oH0Zv",
           "name": "startCard",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 8,
-          "padding": 12,
+          "gap": 10,
+          "padding": 14,
           "children": [
             {
               "type": "frame",
@@ -208,7 +208,7 @@
                   "name": "startTitle",
                   "fill": "#0F172A",
                   "content": "出发点设置",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 14,
                   "fontWeight": "bold"
                 },
@@ -216,7 +216,7 @@
                   "type": "frame",
                   "id": "FqEAA",
                   "name": "locateBtn",
-                  "fill": "#E0F2FE",
+                  "fill": "#DBEAFE",
                   "cornerRadius": 999,
                   "padding": 6,
                   "children": [
@@ -226,7 +226,7 @@
                       "name": "locateText",
                       "fill": "#0284C7",
                       "content": "一键定位我的位置",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 11,
                       "fontWeight": "bold"
                     }
@@ -239,10 +239,10 @@
               "id": "IUH4Y",
               "name": "startInput",
               "width": "fill_container",
-              "height": 40,
-              "fill": "#F1F5F9",
-              "cornerRadius": 12,
-              "padding": 10,
+              "height": 44,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -250,7 +250,7 @@
                   "name": "startInputText",
                   "fill": "#64748B",
                   "content": "输入出发点地址",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -278,7 +278,7 @@
                   "name": "legendText",
                   "fill": "#64748B",
                   "content": "起点标记：蓝色",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 11,
                   "fontWeight": "normal"
                 }
@@ -291,11 +291,11 @@
           "id": "r9ieb",
           "name": "searchCard",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 8,
-          "padding": 12,
+          "gap": 10,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -303,7 +303,7 @@
               "name": "searchTitle",
               "fill": "#0F172A",
               "content": "目的地搜索",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -312,10 +312,10 @@
               "id": "I2r1o",
               "name": "searchInput",
               "width": "fill_container",
-              "height": 40,
-              "fill": "#F1F5F9",
-              "cornerRadius": 12,
-              "padding": 10,
+              "height": 44,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -323,7 +323,7 @@
                   "name": "searchInputText",
                   "fill": "#64748B",
                   "content": "输入关键词，实时弹出候选地点",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -335,7 +335,7 @@
               "name": "searchHint",
               "fill": "#94A3B8",
               "content": "搜索结果优先当前城市",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             },
@@ -345,7 +345,7 @@
               "name": "suggestHeader",
               "fill": "#0F172A",
               "content": "候选地点（示例）",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -355,7 +355,7 @@
               "name": "suggestList",
               "width": "fill_container",
               "layout": "vertical",
-              "gap": 6,
+              "gap": 8,
               "children": [
                 {
                   "type": "frame",
@@ -363,8 +363,8 @@
                   "name": "suggestItem1",
                   "width": "fill_container",
                   "fill": "#F8FAFC",
-                  "cornerRadius": 10,
-                  "padding": 8,
+                  "cornerRadius": 14,
+                  "padding": 10,
                   "children": [
                     {
                       "type": "text",
@@ -372,7 +372,7 @@
                       "name": "suggestText1",
                       "fill": "#0F172A",
                       "content": "人民公园 · 青羊区少城路",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 12,
                       "fontWeight": "normal"
                     }
@@ -384,8 +384,8 @@
                   "name": "suggestItem2",
                   "width": "fill_container",
                   "fill": "#F8FAFC",
-                  "cornerRadius": 10,
-                  "padding": 8,
+                  "cornerRadius": 14,
+                  "padding": 10,
                   "children": [
                     {
                       "type": "text",
@@ -393,7 +393,7 @@
                       "name": "suggestText2",
                       "fill": "#0F172A",
                       "content": "宽窄巷子 · 青羊区长顺街",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 12,
                       "fontWeight": "normal"
                     }
@@ -407,7 +407,7 @@
               "name": "searchNote",
               "fill": "#94A3B8",
               "content": "空输入不显示任何候选列表",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             }
@@ -418,11 +418,11 @@
           "id": "6Qx7I",
           "name": "mapCard",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 8,
-          "padding": 12,
+          "gap": 10,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -430,7 +430,7 @@
               "name": "mapTitle",
               "fill": "#0F172A",
               "content": "地图预览",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -452,7 +452,7 @@
                 "url": "https://images.unsplash.com/photo-1659533576085-c6bb80f7715c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk4NDkyODV8&ixlib=rb-4.1.0&q=80&w=1080",
                 "mode": "fill"
               },
-              "cornerRadius": 12,
+              "cornerRadius": 16,
               "layout": "none",
               "children": [
                 {
@@ -497,11 +497,11 @@
           "id": "hTeLR",
           "name": "destListCard",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 8,
-          "padding": 12,
+          "gap": 10,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -509,7 +509,7 @@
               "name": "listTitle",
               "fill": "#0F172A",
               "content": "目的地列表",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -519,9 +519,9 @@
               "name": "destItem1",
               "width": "fill_container",
               "fill": "#F8FAFC",
-              "cornerRadius": 12,
+              "cornerRadius": 14,
               "gap": 8,
-              "padding": 10,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -529,7 +529,7 @@
                   "name": "item1Text",
                   "fill": "#0F172A",
                   "content": "春熙路｜锦江区红星路三段",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 },
@@ -539,7 +539,7 @@
                   "name": "item1Del",
                   "fill": "#EF4444",
                   "content": "删除",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "bold"
                 }
@@ -551,9 +551,9 @@
               "name": "destItem2",
               "width": "fill_container",
               "fill": "#F8FAFC",
-              "cornerRadius": 12,
+              "cornerRadius": 14,
               "gap": 8,
-              "padding": 10,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -561,7 +561,7 @@
                   "name": "item2Text",
                   "fill": "#0F172A",
                   "content": "锦里古街｜武侯区武侯祠大街",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 },
@@ -571,7 +571,7 @@
                   "name": "item2Del",
                   "fill": "#EF4444",
                   "content": "删除",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "bold"
                 }
@@ -599,7 +599,7 @@
                   "name": "legendText2",
                   "fill": "#64748B",
                   "content": "目的地标记：红色；删除后地图标点同步更新",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 11,
                   "fontWeight": "normal"
                 }
@@ -615,23 +615,23 @@
       "x": 450,
       "y": 0,
       "name": "Route UI",
-      "width": 375,
+      "width": 420,
       "height": 812,
-      "fill": "#F8FAFC",
+      "fill": "#EEF2FF",
       "layout": "vertical",
-      "gap": 16,
-      "padding": 20,
+      "gap": 20,
+      "padding": 24,
       "children": [
         {
           "type": "frame",
           "id": "C4YRd",
           "name": "tabs",
           "width": "fill_container",
-          "height": 56,
-          "fill": "rgba(255,255,255,0.85)",
-          "cornerRadius": 16,
-          "gap": 12,
-          "padding": 8,
+          "height": 60,
+          "fill": "#FFFFFF",
+          "cornerRadius": 18,
+          "gap": 10,
+          "padding": 10,
           "children": [
             {
               "type": "frame",
@@ -639,8 +639,8 @@
               "name": "tab_input",
               "width": 100,
               "height": 40,
-              "fill": "transparent",
-              "cornerRadius": 12,
+              "fill": "#F8FAFC",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -651,7 +651,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#94A3B8",
+                  "fill": "#9CA3AF",
                   "cornerRadius": 9
                 },
                 {
@@ -661,7 +661,7 @@
                   "fill": "#94A3B8",
                   "content": "输入",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -673,8 +673,8 @@
               "name": "tab_route",
               "width": 100,
               "height": 40,
-              "fill": "#E0F2FE",
-              "cornerRadius": 12,
+              "fill": "#E8EEFF",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -685,7 +685,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#0EA5E9",
+                  "fill": "#2563EB",
                   "cornerRadius": 9
                 },
                 {
@@ -695,7 +695,7 @@
                   "fill": "#0EA5E9",
                   "content": "路线",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "bold"
                 }
@@ -707,8 +707,8 @@
               "name": "tab_guide",
               "width": 100,
               "height": 40,
-              "fill": "transparent",
-              "cornerRadius": 12,
+              "fill": "#F8FAFC",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -719,7 +719,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#94A3B8",
+                  "fill": "#9CA3AF",
                   "cornerRadius": 9
                 },
                 {
@@ -729,7 +729,7 @@
                   "fill": "#94A3B8",
                   "content": "攻略",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -742,11 +742,11 @@
           "id": "43GWw",
           "name": "routeMapCard",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 8,
-          "padding": 12,
+          "gap": 10,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -754,7 +754,7 @@
               "name": "routeMapTitle",
               "fill": "#0F172A",
               "content": "路线预览",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -776,23 +776,23 @@
                 "url": "https://images.unsplash.com/photo-1763462929966-23955f0a8a2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk4NDkzMzF8&ixlib=rb-4.1.0&q=80&w=1080",
                 "mode": "fill"
               },
-              "cornerRadius": 12
+              "cornerRadius": 16
             },
             {
               "type": "frame",
               "id": "025KH",
               "name": "routeBadge",
-              "fill": "#DCFCE7",
+              "fill": "#E8F5EA",
               "cornerRadius": 999,
-              "padding": 6,
+              "padding": 7,
               "children": [
                 {
                   "type": "text",
                   "id": "LUBw8",
                   "name": "routeBadgeText",
-                  "fill": "#16A34A",
+                  "fill": "#15803D",
                   "content": "最优路线已生成",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 11,
                   "fontWeight": "bold"
                 }
@@ -805,11 +805,11 @@
           "id": "vMUaR",
           "name": "routeList",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
           "gap": 10,
-          "padding": 12,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -817,7 +817,7 @@
               "name": "routeListTitle",
               "fill": "#0F172A",
               "content": "路线列表",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -827,7 +827,7 @@
               "name": "routeListNote",
               "fill": "#94A3B8",
               "content": "每段路线均提供导航入口（腾讯地图）",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             },
@@ -837,10 +837,10 @@
               "name": "routeItem1",
               "width": "fill_container",
               "fill": "#F8FAFC",
-              "cornerRadius": 12,
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 6,
-              "padding": 10,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -848,7 +848,7 @@
                   "name": "routeItem1Title",
                   "fill": "#0F172A",
                   "content": "起点 → 春熙路",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 13,
                   "fontWeight": "bold"
                 },
@@ -858,7 +858,7 @@
                   "name": "routeItem1Addr",
                   "fill": "#64748B",
                   "content": "详细地址：成都市锦江区红星路三段",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 11,
                   "fontWeight": "normal"
                 },
@@ -875,7 +875,7 @@
                       "name": "routeItem1MetaText",
                       "fill": "#0F172A",
                       "content": "距离 3.4km · 预计 12min",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 11,
                       "fontWeight": "normal"
                     },
@@ -883,7 +883,7 @@
                       "type": "frame",
                       "id": "HyLR6",
                       "name": "navBtn1",
-                      "fill": "#E0F2FE",
+                      "fill": "#DBEAFE",
                       "cornerRadius": 999,
                       "padding": 6,
                       "children": [
@@ -893,7 +893,7 @@
                           "name": "routeItem1BtnText",
                           "fill": "#0284C7",
                           "content": "导航",
-                          "fontFamily": "Inter",
+                          "fontFamily": "Manrope",
                           "fontSize": 11,
                           "fontWeight": "bold"
                         }
@@ -909,10 +909,10 @@
               "name": "routeItem2",
               "width": "fill_container",
               "fill": "#F8FAFC",
-              "cornerRadius": 12,
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 6,
-              "padding": 10,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -920,7 +920,7 @@
                   "name": "routeItem2Title",
                   "fill": "#0F172A",
                   "content": "春熙路 → 锦里古街",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 13,
                   "fontWeight": "bold"
                 },
@@ -930,7 +930,7 @@
                   "name": "routeItem2Addr",
                   "fill": "#64748B",
                   "content": "详细地址：成都市武侯区武侯祠大街",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 11,
                   "fontWeight": "normal"
                 },
@@ -947,7 +947,7 @@
                       "name": "routeItem2MetaText",
                       "fill": "#0F172A",
                       "content": "距离 2.1km · 预计 9min",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 11,
                       "fontWeight": "normal"
                     },
@@ -955,7 +955,7 @@
                       "type": "frame",
                       "id": "98hgz",
                       "name": "navBtn2",
-                      "fill": "#E0F2FE",
+                      "fill": "#DBEAFE",
                       "cornerRadius": 999,
                       "padding": 6,
                       "children": [
@@ -965,7 +965,7 @@
                           "name": "routeItem2BtnText",
                           "fill": "#0284C7",
                           "content": "导航",
-                          "fontFamily": "Inter",
+                          "fontFamily": "Manrope",
                           "fontSize": 11,
                           "fontWeight": "bold"
                         }
@@ -985,23 +985,23 @@
       "x": 900,
       "y": 0,
       "name": "Guide UI",
-      "width": 375,
-      "height": 812,
-      "fill": "#F8FAFC",
+      "width": 420,
+      "height": 968,
+      "fill": "#EEF2FF",
       "layout": "vertical",
-      "gap": 16,
-      "padding": 20,
+      "gap": 20,
+      "padding": 24,
       "children": [
         {
           "type": "frame",
           "id": "25LE7",
           "name": "tabs",
           "width": "fill_container",
-          "height": 56,
-          "fill": "rgba(255,255,255,0.85)",
-          "cornerRadius": 16,
-          "gap": 12,
-          "padding": 8,
+          "height": 60,
+          "fill": "#FFFFFF",
+          "cornerRadius": 18,
+          "gap": 10,
+          "padding": 10,
           "children": [
             {
               "type": "frame",
@@ -1009,8 +1009,8 @@
               "name": "tab_input",
               "width": 100,
               "height": 40,
-              "fill": "transparent",
-              "cornerRadius": 12,
+              "fill": "#F8FAFC",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -1021,7 +1021,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#94A3B8",
+                  "fill": "#9CA3AF",
                   "cornerRadius": 9
                 },
                 {
@@ -1031,7 +1031,7 @@
                   "fill": "#94A3B8",
                   "content": "输入",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -1043,8 +1043,8 @@
               "name": "tab_route",
               "width": 100,
               "height": 40,
-              "fill": "transparent",
-              "cornerRadius": 12,
+              "fill": "#F8FAFC",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -1055,7 +1055,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#94A3B8",
+                  "fill": "#9CA3AF",
                   "cornerRadius": 9
                 },
                 {
@@ -1065,7 +1065,7 @@
                   "fill": "#94A3B8",
                   "content": "路线",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -1077,8 +1077,8 @@
               "name": "tab_guide",
               "width": 100,
               "height": 40,
-              "fill": "#E0F2FE",
-              "cornerRadius": 12,
+              "fill": "#E8EEFF",
+              "cornerRadius": 14,
               "layout": "vertical",
               "gap": 4,
               "padding": 4,
@@ -1089,7 +1089,7 @@
                   "name": "icon",
                   "width": 18,
                   "height": 18,
-                  "fill": "#0EA5E9",
+                  "fill": "#2563EB",
                   "cornerRadius": 9
                 },
                 {
@@ -1099,7 +1099,7 @@
                   "fill": "#0EA5E9",
                   "content": "攻略",
                   "textAlign": "center",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "bold"
                 }
@@ -1112,11 +1112,11 @@
           "id": "lY1Ox",
           "name": "guideForm",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 10,
-          "padding": 12,
+          "gap": 12,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -1124,7 +1124,7 @@
               "name": "formTitle",
               "fill": "#0F172A",
               "content": "填写需求",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -1134,7 +1134,7 @@
               "name": "field1Label",
               "fill": "#0F172A",
               "content": "出行天数",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1143,10 +1143,10 @@
               "id": "bMp7H",
               "name": "daysInput",
               "width": "fill_container",
-              "height": 40,
-              "fill": "#F1F5F9",
-              "cornerRadius": 12,
-              "padding": 10,
+              "height": 44,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -1154,7 +1154,7 @@
                   "name": "field1Text",
                   "fill": "#64748B",
                   "content": "例如：3天2晚",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -1166,7 +1166,7 @@
               "name": "field2Label",
               "fill": "#0F172A",
               "content": "预算",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1175,10 +1175,10 @@
               "id": "tv2Wn",
               "name": "budgetInput",
               "width": "fill_container",
-              "height": 40,
-              "fill": "#F1F5F9",
-              "cornerRadius": 12,
-              "padding": 10,
+              "height": 44,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -1186,7 +1186,7 @@
                   "name": "field2Text",
                   "fill": "#64748B",
                   "content": "例如：¥3000/人",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -1198,7 +1198,7 @@
               "name": "field3Label",
               "fill": "#0F172A",
               "content": "偏好",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1207,10 +1207,10 @@
               "id": "uEZsv",
               "name": "prefInput",
               "width": "fill_container",
-              "height": 40,
-              "fill": "#F1F5F9",
-              "cornerRadius": 12,
-              "padding": 10,
+              "height": 44,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -1218,7 +1218,7 @@
                   "name": "field3Text",
                   "fill": "#64748B",
                   "content": "如：美食 / 拍照 / 亲子",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -1230,7 +1230,7 @@
               "name": "paceLabel",
               "fill": "#0F172A",
               "content": "节奏",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1239,7 +1239,7 @@
               "id": "W1Sxq",
               "name": "paceRow",
               "width": "fill_container",
-              "gap": 8,
+              "gap": 10,
               "children": [
                 {
                   "type": "frame",
@@ -1247,7 +1247,7 @@
                   "name": "paceSlow",
                   "fill": "#E2E8F0",
                   "cornerRadius": 999,
-                  "padding": 6,
+                  "padding": 7,
                   "children": [
                     {
                       "type": "text",
@@ -1255,7 +1255,7 @@
                       "name": "paceSlowText",
                       "fill": "#475569",
                       "content": "慢",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 11,
                       "fontWeight": "bold"
                     }
@@ -1265,9 +1265,9 @@
                   "type": "frame",
                   "id": "Of8q2",
                   "name": "paceNormal",
-                  "fill": "#E0F2FE",
+                  "fill": "#E8EEFF",
                   "cornerRadius": 999,
-                  "padding": 6,
+                  "padding": 7,
                   "children": [
                     {
                       "type": "text",
@@ -1275,7 +1275,7 @@
                       "name": "paceNormalText",
                       "fill": "#0284C7",
                       "content": "正常",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 11,
                       "fontWeight": "bold"
                     }
@@ -1287,7 +1287,7 @@
                   "name": "paceFast",
                   "fill": "#E2E8F0",
                   "cornerRadius": 999,
-                  "padding": 6,
+                  "padding": 7,
                   "children": [
                     {
                       "type": "text",
@@ -1295,7 +1295,7 @@
                       "name": "paceFastText",
                       "fill": "#475569",
                       "content": "紧凑",
-                      "fontFamily": "Inter",
+                      "fontFamily": "Manrope",
                       "fontSize": 11,
                       "fontWeight": "bold"
                     }
@@ -1309,7 +1309,7 @@
               "name": "otherLabel",
               "fill": "#0F172A",
               "content": "其他要求",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1318,10 +1318,10 @@
               "id": "jGrGT",
               "name": "otherInput",
               "width": "fill_container",
-              "height": 40,
-              "fill": "#F1F5F9",
-              "cornerRadius": 12,
-              "padding": 10,
+              "height": 44,
+              "fill": "#FFFFFF",
+              "cornerRadius": 14,
+              "padding": 12,
               "children": [
                 {
                   "type": "text",
@@ -1329,7 +1329,7 @@
                   "name": "otherText",
                   "fill": "#64748B",
                   "content": "如：避开人多景点、含亲子活动",
-                  "fontFamily": "Inter",
+                  "fontFamily": "Manrope",
                   "fontSize": 12,
                   "fontWeight": "normal"
                 }
@@ -1342,9 +1342,9 @@
           "id": "SJBUk",
           "name": "generateBtn",
           "width": "fill_container",
-          "fill": "#0EA5E9",
-          "cornerRadius": 12,
-          "padding": 12,
+          "fill": "#1D4ED8",
+          "cornerRadius": 14,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -1353,7 +1353,7 @@
               "fill": "white",
               "content": "生成攻略",
               "textAlign": "center",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             }
@@ -1364,11 +1364,11 @@
           "id": "ACzoY",
           "name": "resultCard",
           "width": "fill_container",
-          "fill": "white",
-          "cornerRadius": 16,
+          "fill": "#FFFFFF",
+          "cornerRadius": 20,
           "layout": "vertical",
-          "gap": 8,
-          "padding": 12,
+          "gap": 10,
+          "padding": 14,
           "children": [
             {
               "type": "text",
@@ -1376,7 +1376,7 @@
               "name": "resultTitle",
               "fill": "#0F172A",
               "content": "攻略展示",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 14,
               "fontWeight": "bold"
             },
@@ -1386,7 +1386,7 @@
               "name": "resultNote",
               "fill": "#94A3B8",
               "content": "生成成功才显示内容（示例）",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             },
@@ -1396,7 +1396,7 @@
               "name": "resultHeading",
               "fill": "#0F172A",
               "content": "标题：成都3天美食+拍照路线",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1406,7 +1406,7 @@
               "name": "resultSummary",
               "fill": "#64748B",
               "content": "摘要：覆盖市区精华与热门美食，节奏适中。",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             },
@@ -1416,7 +1416,7 @@
               "name": "itineraryTitle",
               "fill": "#0F172A",
               "content": "行程建议",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1426,7 +1426,7 @@
               "name": "itineraryText",
               "fill": "#64748B",
               "content": "Day1 市区经典；Day2 人文与美食；Day3 轻松拍照点",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             },
@@ -1436,7 +1436,7 @@
               "name": "keyTitle",
               "fill": "#0F172A",
               "content": "关键要点",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 12,
               "fontWeight": "bold"
             },
@@ -1446,7 +1446,7 @@
               "name": "keyText",
               "fill": "#64748B",
               "content": "交通：地铁优先；餐饮：提前预约热门店",
-              "fontFamily": "Inter",
+              "fontFamily": "Manrope",
               "fontSize": 11,
               "fontWeight": "normal"
             }

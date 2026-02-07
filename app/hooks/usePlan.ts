@@ -50,7 +50,17 @@ export function usePlan() {
 
             const payload = {
                 origin,
-                places: places.map(p => p.name),
+                // Keep the exact selected points so backend does not rematch same-name POIs.
+                places: places.map(p => ({
+                    name: p.name,
+                    lng: p.lng,
+                    lat: p.lat,
+                    location: p.location,
+                    formatted_address: p.formatted_address,
+                    city: p.city,
+                    citycode: p.citycode,
+                    adcode: p.adcode,
+                })),
                 cityHint: cityName.trim() || undefined,
                 cityAdcode: cityAdcode.trim() || undefined,
             };

@@ -1,26 +1,39 @@
 <view class="page">
-  <!-- Top Tabs -->
-  <view class="top-tabs">
-    <view class="tab-item active" bindtap="goTab" data-tab="input">
-      <view class="tab-icon"></view>
-      <text class="tab-text">输入</text>
+  <!-- 头部 -->
+  <view class="page-header">
+    <view class="brand">
+      <view class="logo-box">
+        <view class="logo-icon icon-paper-plane"></view>
+      </view>
+      <text class="brand-text">Travel Planner</text>
     </view>
-    <view class="tab-item" bindtap="goTab" data-tab="route">
-      <view class="tab-icon"></view>
-      <text class="tab-text">路线</text>
-    </view>
-    <view class="tab-item" bindtap="goTab" data-tab="guide">
-      <view class="tab-icon"></view>
-      <text class="tab-text">攻略</text>
+    
+    <!-- 顶部标签栏 -->
+    <view class="top-tabs">
+      <view class="tab-item active" bindtap="goTab" data-tab="input">
+        <view class="tab-icon icon-compass"></view>
+        <text class="tab-text">输入</text>
+      </view>
+      <view class="tab-item" bindtap="goTab" data-tab="route">
+        <view class="tab-icon icon-route"></view>
+        <text class="tab-text">路线</text>
+      </view>
+      <view class="tab-item" bindtap="goTab" data-tab="guide">
+        <view class="tab-icon icon-book"></view>
+        <text class="tab-text">攻略</text>
+      </view>
     </view>
   </view>
 
-  <!-- INPUT MODULE -->
+  <!-- 输入模块 -->
   <view class="module">
     <scroll-view scroll-y class="module-scroll">
       <!-- 目标城市 -->
       <view class="card">
-        <text class="card-title">目标城市</text>
+        <view class="card-title has-icon">
+          <view class="title-icon icon-globe"></view>
+          <text>目标城市</text>
+        </view>
         <view class="input-box">
           <input
             class="input"
@@ -30,14 +43,21 @@
           />
           <view class="loading-dot" wx:if="{{cityLoading}}"></view>
         </view>
-        <text class="hint">输入后自动定位地图（无需回车）</text>
       </view>
 
       <!-- 出发点设置 -->
       <view class="card">
         <view class="row-between">
-          <text class="card-title">出发点设置</text>
-          <view class="pill" bindtap="onLocateMe">一键定位我的位置</view>
+          <view class="card-title has-icon">
+            <view class="title-icon icon-navigation"></view>
+            <text>出发点设置</text>
+          </view>
+          <!-- Update to pill-green with GPS Icon -->
+          <view class="pill pill-green" bindtap="onLocateMe">
+            <!-- GPS Icon using currentColor (green) -->
+            <view class="icon-gps" style="width:28rpx;height:28rpx;background:currentColor;margin-right:8rpx;"></view>
+            <text>一键定位我的位置</text>
+          </view>
         </view>
         <view class="input-box">
           <block wx:if="{{originMode === 'location'}}">
@@ -73,11 +93,14 @@
 
       <!-- 目的地搜索 -->
       <view class="card">
-        <text class="card-title">目的地搜索</text>
+        <view class="card-title has-icon">
+          <view class="title-icon icon-search"></view>
+          <text>目的地搜索</text>
+        </view>
         <view class="input-box">
           <input
             class="input"
-            placeholder="输入关键词，实时弹出候选地点"
+            placeholder="输入关键词搜索地点"
             value="{{destQuery}}"
             bindinput="onDestInput"
           />
@@ -85,10 +108,7 @@
             <text class="text-link">清空</text>
           </view>
         </view>
-        <text class="hint">搜索结果优先当前城市</text>
-
         <view wx:if="{{suggestions.length > 0}}">
-          <text class="card-subtitle">候选地点</text>
           <view class="suggestion-list">
             <block wx:for="{{suggestions}}" wx:key="id">
               <view class="suggestion-item" bindtap="onSelectSuggestion" data-index="{{index}}">
@@ -98,12 +118,14 @@
             </block>
           </view>
         </view>
-        <text class="hint">空输入不显示任何候选列表</text>
       </view>
 
       <!-- 地图预览 -->
       <view class="card">
-        <text class="card-title">地图预览</text>
+        <view class="card-title has-icon">
+          <view class="title-icon icon-map"></view>
+          <text>地图预览</text>
+        </view>
         <view class="map-frame">
           <map
             id="inputMap"
@@ -125,7 +147,10 @@
 
       <!-- 目的地列表 -->
       <view class="card">
-        <text class="card-title">目的地列表</text>
+        <view class="card-title has-icon">
+          <view class="title-icon icon-list"></view>
+          <text>目的地列表</text>
+        </view>
         <view class="dest-list">
           <block wx:for="{{places}}" wx:key="id">
             <view class="dest-item">
@@ -143,7 +168,7 @@
         </view>
       </view>
 
-      <button class="btn-primary" bindtap="goRoute">生成最优路线</button>
+      <button class="btn-accent" bindtap="goRoute">生成最优路线</button>
     </scroll-view>
   </view>
 </view>

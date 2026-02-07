@@ -1,17 +1,27 @@
 <view class="page">
-  <!-- Top Tabs -->
-  <view class="top-tabs">
-    <view class="tab-item" bindtap="goInput">
-      <view class="tab-icon"></view>
-      <text class="tab-text">输入</text>
+  <!-- 头部 -->
+  <view class="page-header">
+    <view class="brand">
+      <view class="logo-box">
+        <view class="logo-icon icon-paper-plane"></view>
+      </view>
+      <text class="brand-text">Travel Planner</text>
     </view>
-    <view class="tab-item active">
-      <view class="tab-icon"></view>
-      <text class="tab-text">路线</text>
-    </view>
-    <view class="tab-item" bindtap="goGuide">
-      <view class="tab-icon"></view>
-      <text class="tab-text">攻略</text>
+    
+    <!-- 顶部标签栏 -->
+    <view class="top-tabs">
+      <view class="tab-item" bindtap="goInput">
+        <view class="tab-icon icon-compass"></view>
+        <text class="tab-text">输入</text>
+      </view>
+      <view class="tab-item active">
+        <view class="tab-icon icon-route"></view>
+        <text class="tab-text">路线</text>
+      </view>
+      <view class="tab-item" bindtap="goGuide">
+        <view class="tab-icon icon-book"></view>
+        <text class="tab-text">攻略</text>
+      </view>
     </view>
   </view>
 
@@ -19,7 +29,10 @@
     <scroll-view scroll-y class="module-scroll">
       <!-- Route Map Card -->
       <view class="card">
-        <text class="card-title">路线预览</text>
+        <view class="card-title has-icon">
+          <view class="title-icon icon-map"></view>
+          <text>路线预览</text>
+        </view>
         <view class="map-frame">
           <map
             id="routeMap"
@@ -38,18 +51,20 @@
 
       <!-- Route List Card -->
       <view class="card">
-        <text class="card-title">路线列表</text>
-        <text class="hint">每段路线均提供导航入口（腾讯地图）</text>
+        <view class="card-title has-icon">
+          <view class="title-icon icon-list"></view>
+          <text>路线列表</text>
+        </view>
         
         <view class="route-list">
           <block wx:for="{{routeData.legs}}" wx:key="index">
             <view class="route-item">
-              <text class="route-title">{{item.start.name}} → {{item.end.name}}</text>
-              <text class="route-addr">详细地址：{{item.end.address || item.end.name}}</text>
-              <view class="row-between">
-                <text class="route-meta">距离 {{item.distanceText}} · 预计 {{item.durationText}}</text>
-                <view class="pill" bindtap="onNavLeg" data-index="{{index}}">导航</view>
+              <view class="route-info">
+                <text class="route-title">{{item.start.name}} → {{item.end.name}}</text>
+                <text class="route-addr">详细地址：{{item.end.address || item.end.name}}</text>
+                <text class="route-meta">距离 {{item.distanceText}}</text>
               </view>
+              <view class="pill" bindtap="onNavLeg" data-index="{{index}}">导航</view>
             </view>
           </block>
         </view>
